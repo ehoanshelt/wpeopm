@@ -1,3 +1,7 @@
+{% extends 'projects/base_template.html' %}
+{% block title %}{{ project.acctName }} Tasks{% endblock %}
+
+{% block body %}
 <h3>Tasks for {{ project.acctName }}</h1>
 <ul>
 	{% for task in project.task_set.all %}
@@ -6,3 +10,4 @@
 </ul>
 
 <p><a href="{% url 'task_add' project.id %}">Add task</a></p>
+{% endblock %}

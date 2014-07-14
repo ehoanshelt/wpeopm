@@ -1,0 +1,21 @@
+{% extends 'projects/base_template.html' %}
+{% block title %}Manage Task Lists{% endblock %}
+
+{% block body %}
+<h3>Template Task Lists</h1>
+<p>Use these task list templates to more easily add groups of related tasks to your project.</p>
+<ul>
+	{% for tasklist in tasklist_template_list %}
+		<li>{{ tasklist.name }} <a class="btn btn-info btn-xs" href="{% url 'tasklist_edit' 0 tasklist.id %}">Edit Details</a> <a class="btn btn-warning btn-xs" href="{% url 'tasklist_tasks' tasklist.id %}">View/Add Tasks</a></li>
+		{% if tasklist.task_set.all %}
+		<ul>
+		{% for task in tasklist.task_set.all %}
+			<li>{{ task.name }}</li>
+		{% endfor %}
+		</ul>
+		{% endif %}
+	{% endfor %}
+</ul>
+
+<p><a class="btn btn-primary" href="{% url 'tasklist_add' 0 %}">Add tasklist</a></p>
+{% endblock %}

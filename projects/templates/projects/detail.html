@@ -1,24 +1,44 @@
+{% extends 'projects/base_template.html' %}
+{% load staticfiles %}
+{% block projectdetaillink %}#{% endblock %}
+{% block title %}Project detail - {{ project.acctName }}{% endblock %}
+{% block projectname %}{{ project.acctName }}{% endblock %}
+
+{% block body %}
 <h1>{{ project.acctName }}</h1>
 <h2>{{ project.category }}</h2>
 <p><a href="{% url 'project_edit' project.id %}">Edit project</a></p>
 <p>Project Manager: {{ project.PM }}</p>
+{% if project.AM %}
+<p>Account Manager: {{ project.AM }}</p>
+{% endif %}
 <p>{{ project.startDate }} - {{ project.endDate }}</p>
-<p>
+<p class="completed">
 {% if project.isCompleted %}
 Completed on {{ project.completedDate }}
 {% else %}
-<a href="#">Mark project completed</a>
+<a id="mark_complete" href="#">Mark project completed</a>
 {% endif %}
 {% if not project.isArchived %}
-<p><a href="#">Archive project</a></p>
+<p class="archived">
+<a id="archive_project" href="#">Archive project</a>
+</p>
 {% endif %}
 <h3>Tasks</h3>
 <ul>
-	{% for task in project.task_set.all %}
-		<li><a href="{% url 'task_detail' project.id task.id %}">{{ task.name }}</a> <a href="{% url 'task_edit' project.id task.id %}">(Edit)</a></li>
+	{% for tasklist in project.tasklist_set.all %}
+		<li><a href="{% url 'tasklist_detail' project.id tasklist.id %}">{{ tasklist.name }}</a> <a href="{% url 'tasklist_edit' project.id tasklist.id %}">(Edit)</a></li>
+		{% if tasklist.task_set.all %}
+		<ul>
+		{% for task in tasklist.task_set.all %}
+			<li><a href="{% url 'task_edit' tasklist.id task.id %}">{{ task.name }}</a></li>
+		{% endfor %}
+		</ul>
+		{% endif %}
 	{% endfor %}
 </ul>
-<p><a href="{% url 'task_add' project.id %}">Add task</a></p>
+
+<p><a class="btn btn-primary" href="{% url 'tasklist_add' project.id %}">Add tasklist</a></p>
 <h3>Risks</h3>
 <ul>
 	{% for risk in project.risk_set.all %}
@@ -28,7 +48,54 @@ Completed on {{ project.completedDate }}
 <h3>Links</h3>
 <ul>
 	{% for link in project.link_set.all %}
-		<li><a href="{{ link.code }}">{{ link.name }}</a></li>
+		<li><a target="blank" href="{{ link.code }}">{{ link.name }}</a> <a href="{% url 'link_detail' project.id link.id %}">(Detail)</a></li>
 	{% endfor %}
 </ul>
-<p><a href="{% url 'link_add' project.id %}">Add link</a></p>
+<p><a class="btn btn-info" href="{% url 'link_add' project.id %}">Add link</a></p>
+{% csrf_token %}
+{% endblock %}
+
+{% block body_js %}
+<script src="{% static 'projects/js/jquery.cookie.js' %}"></script>
+<script type="text/javascript">
+	function csrfSafeMethod(method) {
+	    // these HTTP methods do not require CSRF protection
+	    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+	}
+
+	$.ajaxSetup({
+	    beforeSend: function(xhr, settings) {
+			var csrftoken = $.cookie('csrftoken');
+	        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+	            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+	        }
+	    }
+	});
+
+	$('#archive_project').click(function() {
+		$.ajax({
+			type: "POST",
+			url: "/projects/{{ project.id }}/archive/",
+			success: function(result, textStatus, xmlhttprequest) {
+				code = $.parseJSON(xmlhttprequest.responseText).HTTPRESPONSE;
+				if (code == 1) {
+					$('.archived').html('Project archived.');
+				}
+			}
+		});
+	});
+
+	$('#mark_complete').click(function() {
+		$.ajax({
+			type: "POST",
+			url: "/projects/{{ project.id }}/complete/",
+			success: function(result, textStatus, xmlhttprequest) {
+				code = $.parseJSON(xmlhttprequest.responseText).HTTPRESPONSE;
+				if (code == 1) {
+					$('.completed').html('Project complete!');
+				}
+			}
+		});
+	});
+</script>
+{% endblock %}

@@ -1,5 +1,14 @@
+{% extends 'projects/base_template.html' %}
+{% block title %}Link Detail{% endblock %}
+{% block projectdetaillink %}{% url 'project_detail' link.project.id %}{% endblock %}
+{% block projectname %}{{ link.project.acctName }}{% endblock %}
+
+{% block body %}
 <h1>{{ link.name }}</h1>
-<h2>{{ link.project.acctName }}</h2>
-<p>{{ link.name }}</p>
+{% if link.description %}
 <p>{{ link.description }}</p>
-<p><a href="{{ link.code }}">{{ link.code }}</a></p>
+{% endif %}
+<p><a target="blank" href="{{ link.code }}">{{ link.code }}</a></p>
+<p><a class="btn btn-primary" href="{% url 'link_edit' link.project.id link.id %}">Edit link</a></p>
+<p><a class="btn btn-success" href="{% url 'project_links' link.project.id %}">Show all links</a></p>
+{% endblock %}

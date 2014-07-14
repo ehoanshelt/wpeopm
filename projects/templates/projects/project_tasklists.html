@@ -1,0 +1,20 @@
+{% extends 'projects/base_template.html' %}
+{% block title %}{{ project.acctName }} Task Lists{% endblock %}
+
+{% block body %}
+<h3>Task Lists for {{ project.acctName }}</h1>
+<ul>
+	{% for tasklist in project.tasklist_set.all %}
+		<li>{{ tasklist.name }}</li>
+		{% if tasklist.task_set.all %}
+		<ul>
+		{% for task in tasklist.task_set.all %}
+			<li>{{ task.name }}</li>
+		{% endfor %}
+		</ul>
+		{% endif %}
+	{% endfor %}
+</ul>
+
+<p><a href="{% url 'tasklist_add' project.id %}">Add tasklist</a></p>
+{% endblock %}

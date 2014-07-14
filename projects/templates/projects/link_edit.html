@@ -1,4 +1,11 @@
+{% extends 'projects/base_template.html' %}
+{% block title %}Edit Link{% endblock %}
+{% block projectdetaillink %}{% url 'project_detail' link.project.id %}{% endblock %}
+{% block projectname %}{{ link.project.acctName }}{% endblock %}
+
+{% block body %}
 <form method="post" action="">{% csrf_token %}
 {{ form.as_p }}
-<input type="submit" value="submit">
+<button class="btn btn-primary" type="submit" value="submit">Submit</button> <a href="{% if link.id %}{% url 'link_detail' link.project.id link.id %}{% else %}{% url 'project_links' link.project.id %}{% endif %}">Cancel</a>
 </form>
+{% endblock %}

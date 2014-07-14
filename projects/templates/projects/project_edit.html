@@ -1,6 +1,7 @@
 {% extends 'projects/base_template.html' %}
 {% block title %}Edit Project{% endblock %}
-{% block projectname %}{{ project.accountName }}{% endblock %}
+{% block projectdetaillink %}{% if project.id %}{% url 'project_detail' project.id %}{% else %}{% url 'index' %}{% endif %}{% endblock %}
+{% block projectname %}{{ project.acctName }}{% endblock %}
 
 {% block body %}
 <h1>Edit project</h1>

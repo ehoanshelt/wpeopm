@@ -1,5 +1,10 @@
+{% extends 'projects/base_template.html' %}
+{% block title %}Task{% endblock %}
+
+{% block body %}
 <h1>{{ task.name }}</h1>
 <h2>{{ task.project.acctName }}</h2>
 <p>Project Manager: {{ task.PM }}</p>
 <p>{{ task.startDate }} - {{ task.endDate }}</p>
 <p>{{ task.description }}</p>
+{% endblock %}

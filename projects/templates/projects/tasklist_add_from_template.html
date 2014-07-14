@@ -1,0 +1,22 @@
+{% extends 'projects/base_template.html' %}
+{% block projectdetaillink %}{% url 'project_detail' project.id %}{% endblock %}
+{% block title %}Add Task List from Template{% endblock %}
+
+{% block body %}
+<h3>Available Template Task Lists</h1>
+<p>Use these task list templates to more easily add groups of related tasks to your project.</p>
+<ul>
+	{% for tasklist in tasklist_template_list %}
+		<li><input type="checkbox" name="templates" value="{{ tasklist.id }}" id="tasklist_checkbox_{{ tasklist.id }}"/><label for="tasklist_checkbox_{{ tasklist.id }}">{{ tasklist.name }}</label></li>
+		{% if tasklist.task_set.all %}
+		<ul>
+		{% for task in tasklist.task_set.all %}
+			<li>{{ task.name }}</li>
+		{% endfor %}
+		</ul>
+		{% endif %}
+	{% endfor %}
+</ul>
+
+<p><a class="btn btn-primary" href="{% url 'tasklist_add' 0 %}">Add tasklist</a></p>
+{% endblock %}

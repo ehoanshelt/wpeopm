@@ -1,3 +1,8 @@
+{% extends 'projects/base_template.html' %}
+{% block title %}Home{% endblock %}
+{% block projectname %}Dashboard{% endblock %}
+
+{% block body %}
 <h1>Latest projects</h1>
 {% if latest_project_list %}
 <ul>
@@ -8,7 +13,7 @@
 {% else %}
 <p>No projects are available.</p>
 {% endif %}
-<p><a href="{% url 'project_add' %}">Add project</a></p>
+<p><a class="btn btn-primary" href="{% url 'project_add' %}">Add project</a></p>
 {% if active_project_list %}
 <h1>Active projects</h1>
 <ul>
@@ -25,3 +30,4 @@
 	{% endfor %}
 </ul>
 {% endif %}
+{% endblock %}
