@@ -28,3 +28,9 @@ class Risk(models.Model):
 	doesImpactPerformance: models.BooleanField()
 	plan: models.TextField()
 
+class Link(models.Model):
+	project: models.ForeignKey(Project)
+	name: models.CharField(max_length=30)
+	description: models.CharField(max_length=200)
+	code: models.CharField(max_length=255)
+	
