@@ -1,0 +1,27 @@
+<h1>Latest projects</h1>
+{% if latest_project_list %}
+<ul>
+	{% for project in latest_project_list %}
+	<li><a href="{% url 'project_detail' project.id %}">{{ project.acctName }}</a></li>
+	{% endfor %}
+</ul>
+{% else %}
+<p>No projects are available.</p>
+{% endif %}
+<p><a href="{% url 'project_add' %}">Add project</a></p>
+{% if active_project_list %}
+<h1>Active projects</h1>
+<ul>
+	{% for project in active_project_list %}
+	<li><a href="{% url 'project_detail' project.id %}">{{ project.acctName }}</a></li>
+	{% endfor %}
+</ul>
+{% endif %}
+{% if archived_project_list %}
+<h1>Archived projects</h1>
+<ul>
+	{% for project in archived_project_list %}
+	<li><a href="{% url 'project_detail' project.id %}">{{ project.acctName }}</a></li>
+	{% endfor %}
+</ul>
+{% endif %}

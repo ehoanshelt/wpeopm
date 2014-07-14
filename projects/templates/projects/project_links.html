@@ -1,0 +1,8 @@
+<h3>Links for {{ project.acctName }}</h1>
+<ul>
+	{% for link in project.link_set.all %}
+		<li><a href="{{ link.code }}">{{ link.name }}</a></li>
+	{% endfor %}
+</ul>
+
+<p><a href="{% url 'link_add' project.id %}">Add link</a></p>
