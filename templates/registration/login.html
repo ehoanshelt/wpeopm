@@ -1,0 +1,25 @@
+{% extends "projects/base_template.html" %}
+{% block title %}Login{% endblock %}
+
+{% block body %}
+{% if form.errors %}
+<div class="alert alert-danger">Please check your username and password and try again.</div>
+{% endif %}
+
+<form method="post" action="{% url 'django.contrib.auth.views.login' %}">
+{% csrf_token %}
+<table>
+<tr>
+    <td>{{ form.username.label_tag }}</td>
+    <td>{{ form.username }}</td>
+</tr>
+<tr>
+    <td>{{ form.password.label_tag }}</td>
+    <td>{{ form.password }}</td>
+</tr>
+</table>
+
+<button class="btn btn-default" type="submit" value="login">Login</button>
+<input type="hidden" name="next" value="{{ next }}" />
+</form>
+{% endblock %}

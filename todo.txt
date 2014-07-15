@@ -1,0 +1,13 @@
+* Ability to filter projects by PM
+* Ability to filter projects by AM
+* List tasks by due date
+* Assign all tasks in project to project PM
+* JSON API (see http://stackoverflow.com/questions/18344385/how-to-get-the-end-of-a-url-in-django)
+* Implement Risk
+* Export project tasks to Google Calendar format
+* Better styling
+* Implement Comment
+* UI enhancement: Calendar picklist
+* Make AM a User
++ Mark tasks as complete from project detail page
+* Add login functionality
