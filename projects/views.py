@@ -17,7 +17,7 @@ def index(request):
 	active_project_list = Project.objects.filter(isCompleted=False).order_by('acctName')
 	archived_project_list = Project.objects.filter(isArchived=True).order_by('acctName')
 	latest_project_list = Project.objects.order_by('-created')[:5]
-	PM_list = Project.objects.values_list('PM__username', flat=True).distinct()
+	PM_list = Project.objects.order_by('PM__username').values('PM__username').distinct()
 	AM_list = Project.objects.values_list('AM', flat=True).distinct()
 	context = {
 		'latest_project_list': latest_project_list,

@@ -68,6 +68,7 @@ class Task(models.Model):
 	PM = models.ForeignKey(User)
 	startDate = models.DateField(blank=True, null=True)
 	endDate = models.DateField(blank=True, null=True)
+	dueDate = models.DateField(blank=True, null=True)
 	description = models.TextField()
 	isCompleted = models.BooleanField()
 	completedDate = models.DateField(blank=True, null=True)
