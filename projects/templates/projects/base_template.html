@@ -29,11 +29,27 @@
 			    		<li><a href="{% url 'index' %}">Dashboard</a></li>
 			    		<li><a href="{% url 'tasklist_manage' %}">Task List Templates</a></li>
 			    		<li><a href="/admin/">Admin</a></li>
-			      </ul>
+			    	</ul>
+			    	<ul class="nav navbar-nav navbar-right">
+			    		<li>
+			    			{% if user.is_authenticated %}
+			    			<a href="{% url 'django.contrib.auth.views.logout' %}">Logout</a>
+			    			{% else %}
+			    			<a href="{% url 'django.contrib.auth.views.login' %}">Login</a>
+			    			{% endif %}
+		    			</li>
+		    		</ul>
 			    </div><!-- /.navbar-collapse -->
 			</div><!-- /.container-fluid -->
 		</nav>
-{% block body %}{% endblock %}
+		<div class="row">
+			<div class="col-sm-2" id="sidebar">
+			{% block sidebar %}{% endblock %}
+			</div>
+			<div class="col-sm-10" id="content">
+			{% block body %}{% endblock %}
+			</div>
+		</div>
 	</div>
 	<script src="{% static 'projects/js/jquery-1.11.1.min.js' %}"></script>
 	<script src="{% static 'projects/js/bootstrap.min.js' %}"></script>

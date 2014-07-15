@@ -2,6 +2,26 @@
 {% block title %}Home{% endblock %}
 {% block projectname %}Dashboard{% endblock %}
 
+{% block sidebar %}
+{% if PM_list %}
+<p><strong>Project Managers</strong></p>
+<ul>
+	{% for PM in PM_list %}
+	<li><a href="#">{{ PM }}</a></li>
+	{% endfor %}
+</ul>
+{% endif %}
+{% if AM_list %}
+<p><strong>Account Managers</strong></p>
+<ul>
+	{% for AM in AM_list %}
+	<li><a href="#">{{ AM }}</a></li>
+	{% endfor %}
+</ul>
+{% endif %}
+
+{% endblock %}
+
 {% block body %}
 <h1>Latest projects</h1>
 {% if latest_project_list %}

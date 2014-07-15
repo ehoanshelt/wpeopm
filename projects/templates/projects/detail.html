@@ -5,9 +5,8 @@
 {% block projectname %}{{ project.acctName }}{% endblock %}
 
 {% block body %}
-<h1>{{ project.acctName }}</h1>
-<h2>{{ project.category }}</h2>
-<p><a href="{% url 'project_edit' project.id %}">Edit project</a></p>
+<h1>{{ project.acctName }}<span><a class="edit-project btn btn-xs btn-info" href="{% url 'project_edit' project.id %}">Edit Project</a></span></h1>
+<p><strong>{{ project.category }}</strong></p>
 <p>Project Manager: {{ project.PM }}</p>
 {% if project.AM %}
 <p>Account Manager: {{ project.AM }}</p>
@@ -27,18 +26,21 @@ Completed on {{ project.completedDate }}
 <h3>Tasks</h3>
 <ul>
 	{% for tasklist in project.tasklist_set.all %}
-		<li><a href="{% url 'tasklist_detail' project.id tasklist.id %}">{{ tasklist.name }}</a> <a href="{% url 'tasklist_edit' project.id tasklist.id %}">(Edit)</a></li>
+		<li><a href="{% url 'tasklist_detail' project.id tasklist.id %}">{{ tasklist.name }}</a> <a class="tasklist_edit btn btn-xs btn-info" href="{% url 'tasklist_edit' project.id tasklist.id %}">Edit</a></li>
 		{% if tasklist.task_set.all %}
 		<ul>
 		{% for task in tasklist.task_set.all %}
-			<li><a href="{% url 'task_edit' tasklist.id task.id %}">{{ task.name }}</a></li>
+			{% if not task.isCompleted %}
+			<li><a href="{% url 'task_detail' tasklist.id task.id %}">{{ task.name }}</a> <a class="task_edit btn btn-xs btn-info" href="{% url 'task_edit' tasklist.id task.id %}">Edit</a> <a class="task_complete btn btn-xs btn-warning" id="task_{{ task.id }}" aria-tasklistid="{{ tasklist.id }}" aria-taskid="{{ task.id }}">Done</a></li>
+		  	{% endif %}
 		{% endfor %}
 		</ul>
 		{% endif %}
 	{% endfor %}
 </ul>
 
-<p><a class="btn btn-primary" href="{% url 'tasklist_add' project.id %}">Add tasklist</a></p>
+<div><a class="btn btn-primary" href="{% url 'tasklist_add' project.id %}">Add tasklist</a>
+<a class="btn btn-success" href="{% url 'tasklist_add_from_template' project.id %}">Add tasklist from template</a></div>
 <h3>Risks</h3>
 <ul>
 	{% for risk in project.risk_set.all %}
@@ -47,11 +49,11 @@ Completed on {{ project.completedDate }}
 </ul>
 <h3>Links</h3>
 <ul>
-	{% for link in project.link_set.all %}
-		<li><a target="blank" href="{{ link.code }}">{{ link.name }}</a> <a href="{% url 'link_detail' project.id link.id %}">(Detail)</a></li>
+	{% for link in project.link_set.all %} 
+		<li><a target="blank" href="{{ link.code }}">{{ link.name }}</a> <a class="link-edit btn btn-xs btn-info" href="{% url 'link_edit' project.id link.id %}">Edit</a> <a class="link-detail btn btn-xs btn-warning" href="{% url 'link_detail' project.id link.id %}">Detail</a></li>
 	{% endfor %}
 </ul>
-<p><a class="btn btn-info" href="{% url 'link_add' project.id %}">Add link</a></p>
+<p><a class="btn btn-primary" href="{% url 'link_add' project.id %}">Add link</a></p> 
 {% csrf_token %}
 {% endblock %}
 
@@ -93,6 +95,22 @@ Completed on {{ project.completedDate }}
 				code = $.parseJSON(xmlhttprequest.responseText).HTTPRESPONSE;
 				if (code == 1) {
 					$('.completed').html('Project complete!');
+				}
+			}
+		});
+	});
+
+	$('.task_complete').click(function() {
+		var tasklistid = $(this).attr('aria-tasklistid');
+		var taskid = $(this).attr('aria-taskid');
+		$.ajax({
+			type: "POST",
+			url: "/projects/tasklist/" + tasklistid + "/task/" + taskid + "/complete/",
+			success: function(result, textStatus, xmlhttprequest) {
+				code = $.parseJSON(xmlhttprequest.responseText).HTTPRESPONSE;
+				if (code == 1) {
+					$('#task_' + taskid).hide(); // hide Done button
+					$(this).parent().addClass('strike'); // strike out text
 				}
 			}
 		});

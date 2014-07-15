@@ -9,16 +9,34 @@ urlpatterns = patterns('',
 	url(r'^(?P<project_id>\d+)/$', views.project_detail, name='project_detail'),
 	# /projects/5/edit/
 	url(r'^(?P<project_id>\d+)/edit/$', views.project_edit, name='project_edit'),
+	# /projects/5/complete/ -- AJAX ONLY --
+	url(r'^(?P<project_id>\d+)/complete/$', views.project_complete, name='project_complete'),
+	# /projects/5/archive/ -- AJAX ONLY --
+	url(r'^(?P<project_id>\d+)/archive/$', views.project_archive, name='project_archive'),
 	# /projects/add/
-	url(r'^/add/$', views.project_edit, name='project_add'),
-	# /projects/5/tasks/
-	url(r'^(?P<project_id>\d+)/tasks/$', views.project_tasks, name='project_tasks'),
-	# /project/5/task/2/
-	url(r'^(?P<project_id>\d+)/task/(?P<task_id>\d+)/$', views.task_detail, name='task_detail'),
-	# /projects/5/task_add/
-	url(r'^(?P<project_id>\d+)/task_add/$', views.task_edit, name='task_add'),
-	# /projects/5/task/2/edit/
-	url(r'^(?P<project_id>\d+)/task/(?P<task_id>\d+)/edit/$', views.task_edit, name='task_edit'),
+	url(r'^add/$', views.project_edit, name='project_add'),
+	# /projects/tasklists/
+	url(r'^tasklists/$', views.tasklist_manage, name='tasklist_manage'),
+	# /projects/tasklist/5/tasks/
+	url(r'^tasklist/(?P<tasklist_id>\d+)/tasks/$', views.tasklist_tasks, name='tasklist_tasks'),
+	# /projects/tasklist/5/task/2/
+	url(r'^tasklist/(?P<tasklist_id>\d+)/task/(?P<task_id>\d+)/$', views.task_detail, name='task_detail'),
+	# /projects/tasklist/5/task_add/
+	url(r'^tasklist/(?P<tasklist_id>\d+)/task_add/$', views.task_edit, name='task_add'),
+	# /projects/tasklist/5/task/2/edit/
+	url(r'^tasklist/(?P<tasklist_id>\d+)/task/(?P<task_id>\d+)/edit/$', views.task_edit, name='task_edit'),
+	# /projects/tasklist/5/task/2/complete/ -- AJAX ONLY --
+	url(r'^tasklist/(?P<tasklist_id>\d+)/task/(?P<task_id>\d+)/complete/$', views.task_complete, name='task_complete'),
+	# /projects/5/tasklists/
+	url(r'^(?P<project_id>\d+)/tasklists/$', views.project_tasklists, name='project_tasklists'),
+	# /projects/5/tasklist/2/
+	url(r'^(?P<project_id>\d+)/tasklist/<?(?P<tasklist_id>\d+)/$', views.tasklist_detail, name='tasklist_detail'),
+	# /projects/5/tasklist_add/
+	url(r'^(?P<project_id>\d+)/tasklist_add/$', views.tasklist_edit, name='tasklist_add'),
+	# /projects/5/tasklist/add_from_template/
+	url(r'^(?P<project_id>\d+)/tasklist/add_from_template/$', views.tasklist_add_from_template, name='tasklist_add_from_template'),
+	# /projects/5/tasklist/2/edit/
+	url(r'^(?P<project_id>\d+)/tasklist/(?P<tasklist_id>\d+)/edit/$', views.tasklist_edit, name='tasklist_edit'),
 	# /projects/5/links/
 	url(r'^(?P<project_id>\d+)/links/$', views.project_links, name='project_links'),
 	# /project/5/link/2/

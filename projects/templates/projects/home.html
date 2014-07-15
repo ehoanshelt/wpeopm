@@ -4,5 +4,5 @@
 {% block body %}
 You must log in to access the system.
 
-Please log in or request access.
+Please <a href="{% url 'django.contrib.auth.views.login' %}">log in</a> or request access.
 {% endblock %}

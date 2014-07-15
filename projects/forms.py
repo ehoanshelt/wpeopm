@@ -1,17 +1,22 @@
 from django import forms
 
-from projects.models import Project, Task, Link
+from projects.models import Project, TaskList, Task, Link
 
 class ProjectForm(forms.ModelForm):
 
 	class Meta:
 		model = Project
 
+class TaskListForm(forms.ModelForm):
+
+	class Meta:
+		model = TaskList
+		exclude = ['project',]
+
 class TaskForm(forms.ModelForm):
 
 	class Meta:
 		model = Task
-		exclude = ['project',]
 
 class LinkForm(forms.ModelForm):
 
