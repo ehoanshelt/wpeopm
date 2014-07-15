@@ -1,0 +1,21 @@
+{% extends 'projects/base_template.html' %}
+{% block title %}Comment Detail{% endblock %}
+
+{% block body %}
+<p>{{ comment.description }}</p>
+{% if comment.attachment %}
+<p>{{ comment.attachment }}</p>
+{% endif %}
+{% if comment.project %}
+<p><a href="{% url 'project_detail' comment.project.id %}">Return to project</a></p>
+{% endif %}
+{% if comment.task %}
+<p><a href="{% url 'task_detail' comment.project.id %}">Return to task</a></p>
+{% endif %}
+{% if comment.risk %}
+<p><a href="{% url 'risk_detail' comment.project.id %}">Return to risk</a></p>
+{% endif %}
+{% if comment.link %}
+<p><a href="{% url 'link_detail' comment.project.id %}">Return to link</a></p>
+{% endif %}
+{% endblock %}

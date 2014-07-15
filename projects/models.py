@@ -105,6 +105,12 @@ class Link(models.Model):
 	def __unicode__(self):
 		return "%s (%s)" % (self.name, self.project)
 
+COMMENT_CHOICES = (
+	('P', 'Project'),
+	('T', 'Task'),
+	('R', 'Risk'),
+	('L', 'Link'),
+)
 
 class Comment(models.Model):
 	"""
@@ -112,12 +118,14 @@ class Comment(models.Model):
 
 	NOTE: I'm certain there is a better way to do this association.
 	"""
+	type_of_comment = models.CharField(max_length=1, choices=COMMENT_CHOICES)
 	created = models.DateField()
-	description = models.CharField(max_length=200)
-	project = models.ForeignKey(Project)
-	task = models.ForeignKey(Task)
-	risk = models.ForeignKey(Risk)
-	link = models.ForeignKey(Link)
+	description = models.TextField()
+	project = models.ForeignKey(Project, blank=True, null=True)
+	task = models.ForeignKey(Task, blank=True, null=True)
+	risk = models.ForeignKey(Risk, blank=True, null=True)
+	link = models.ForeignKey(Link, blank=True, null=True)
+	attachment = models.FileField(upload_to='uploads', blank=True, null=True)
 
 	def __unicode__(self):
 		return "%s (%s)" % (self.description, self.project)

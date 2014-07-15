@@ -91,7 +91,16 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# Template directories
+
 TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
+
+# Login and logout URLs for django.contrib.auth
 
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/projects/'
+
+# Media upload path and URL
+
+MEDIA_ROOT = '/home/matthew/pm/uploads/'
+MEDIA_URL = 'http://localhost:8000/files/'

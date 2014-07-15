@@ -1,0 +1,10 @@
+{% extends 'projects/base_template.html' %}
+{% block title %}Edit Comment{% endblock %}
+
+
+{% block body %}
+<form method="post" action="">{% csrf_token %}
+{{ form.as_p }}
+<button class="btn btn-primary" type="submit" value="submit">Submit</button> 
+</form>
+{% endblock %}

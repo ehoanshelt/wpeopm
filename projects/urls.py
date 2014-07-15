@@ -17,6 +17,8 @@ urlpatterns = patterns('',
 	url(r'^add/$', views.project_edit, name='project_add'),
 	# /projects/PM/matthew/
 	url(r'^PM/(?P<pm_name>\w+)/$', views.project_by_pm, name='project_by_pm'),
+	# /projects/5/all_tasks_to_project_pm/
+	url(r'^(?P<project_id>\d+)/all_tasks_to_project_pm/$', views.all_tasks_to_project_pm, name='all_tasks_to_project_pm'),
 	# /projects/tasklists/
 	url(r'^tasklists/$', views.tasklist_manage, name='tasklist_manage'),
 	# /projects/tasklist/5/tasks/
@@ -47,5 +49,12 @@ urlpatterns = patterns('',
 	url(r'^(?P<project_id>\d+)/link_add/$', views.link_edit, name='link_add'),
 	# /projects/5/link/2/edit/
 	url(r'^(?P<project_id>\d+)/link/(?P<link_id>\d+)/edit/$', views.link_edit, name='link_edit'),
-	
+	# /projects/<object_type>/5/comment/add
+	url(r'^(?P<object_type>\w+)/(?P<object_id>\d+)/comment/add/$', views.comment_edit, name='comment_add'),	
+	# /projects/<object_type>/5/comment/2/edit
+	url(r'^(?P<object_type>\w+)/(?P<object_id>\d+)/comment/(?P<comment_id>\d+)/edit/$', views.comment_edit, name='comment_edit'),
+	# /projects/<object_type>/5/comment/2/
+	url(r'^(?P<object_type>\w+)/(?P<object_id>\d+)/comment/(?P<comment_id>\d+)/$', views.comment_detail, name='comment_detail'),
+	###### placeholder for risk detail
+	url(r'^riskdetail/$', views.index, name='risk_detail'),
 )

@@ -2,11 +2,12 @@ import json
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.http import HttpResponse, HttpResponseForbidden
+from django.core.urlresolvers import reverse
+from django.http import HttpResponse, HttpResponseForbidden, HttpResponseNotFound
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 
-from projects.forms import ProjectForm, TaskListForm, TaskForm, LinkForm
+from projects.forms import ProjectForm, TaskListForm, TaskForm, LinkForm, CommentForm
 from projects.models import Category, Project, TaskList, Task, Risk, Link, Comment
 
 # Create your views here.
@@ -122,6 +123,20 @@ def task_complete(request, tasklist_id, task_id):
 	return HttpResponse(json_data, mimetype="application/json")
 
 @login_required
+def all_tasks_to_project_pm(request, project_id):
+	if not request.is_ajax():
+		return HttpResponseForbidden
+	project = get_object_or_404(Project, pk=project_id)
+	tasklists = TaskList.objects.filter(project__id=project_id)
+	for tasklist in tasklists:
+		tasks = Task.objects.filter(tasklist=tasklist)
+		for task in tasks:
+			task.PM = project.PM
+			task.save()
+	json_data = json.dumps({"HTTPRESPONSE":1})
+	return HttpResponse(json_data, mimetype="application/json")
+
+@login_required
 def project_tasklists(request, project_id):
 	project = get_object_or_404(Project, pk=project_id)
 	return render(request, 'projects/project_tasklists.html', {'project': project})
@@ -225,3 +240,86 @@ def link_edit(request, project_id, link_id=None):
 		form = LinkForm(instance=link)
 	
 	return render(request, 'projects/link_edit.html', {'form': form, 'link': link})
+
+def f(x):
+	"""
+	This is to emulate a switch statement for comment_[action](). This is outside the comment_action() function to avoid the dictionary 
+	having to be re-built whenever the comment_action() functions are called.
+	"""
+	return {
+		'project': 'P',
+		'task': 'T',
+		'risk': 'R',
+		'link': 'L',
+	}.get(x, '0') # return 0 if it's not a valid entry
+
+@login_required
+def comment_edit(request, object_type, object_id, comment_id=None):
+	"""
+	Extensible and generic template based on the object_type.
+	"""
+	parent_type = f(object_type)
+	if parent_type == '0':
+		return HttpResponseNotFound
+	project = None
+	task = None
+	risk = None
+	link = None
+	if parent_type == 'P':
+		project = get_object_or_404(Project, pk=object_id)
+		return_url = reverse('project_detail', kwargs={'project_id': object_id})
+	if parent_type == 'T':
+		task = get_object_or_404(Task, pk=object_id)
+		return_url = reverse('task_detail', kwargs={'task_id': object_id})
+	if parent_type == 'R':
+		risk = get_object_or_404(Risk, pk=object_id)
+		return_url = reverse('risk_detail', kwargs={'risk_id': object_id})
+	if parent_type == 'L':
+		link = get_object_or_404(Link, pk=object_id)
+		return_url = reverse('link_detail', kwargs={'link_id': object_id})
+	if comment_id:
+		comment = get_object_or_404(Comment, pk=comment_id)
+	else:
+		comment = Comment()
+		comment.created = timezone.now()
+		if parent_type == 'P':
+			comment.project = project
+		if parent_type == 'T':
+			comment.task = task
+		if parent_type == 'R':
+			comment.risk = risk
+		if parent_type == 'L':
+			comment.link = link
+	if request.POST:
+		form = CommentForm(request.POST, instance=comment, parent_object=parent_type)
+		if form.is_valid():
+			form.save()
+			return redirect(return_url)
+	else:
+		form = CommentForm(instance=comment, parent_object=parent_type)
+	return render(request, 'projects/comment_edit.html', {'form': form})
+
+@login_required
+def comment_detail(request, object_type, object_id, comment_id):
+	parent_type = f(object_type)
+	if parent_type == '0':
+		return HttpResponseNotFound
+	project = None
+	task = None
+	risk = None
+	link = None
+	if parent_type == 'P':
+		project = get_object_or_404(Project, pk=object_id)
+		return_url = reverse('project_detail', kwargs={'project_id': object_id})
+	if parent_type == 'T':
+		task = get_object_or_404(Task, pk=object_id)
+		return_url = reverse('task_detail', kwargs={'tasklist_id': task.tasklist.id, 'task_id': object_id})
+	if parent_type == 'R':
+		risk = get_object_or_404(Risk, pk=object_id)
+		return_url = reverse('risk_detail', kwargs={'risk_id': object_id})
+	if parent_type == 'L':
+		link = get_object_or_404(Link, pk=object_id)
+		return_url = reverse('link_detail', kwargs={'project_id': link.project.id, 'link_id': object_id})
+	if comment_id:
+		comment = get_object_or_404(Comment, pk=comment_id)
+	return render(request, 'projects/comment_detail.html', {'comment': comment, 'project': project, 'task': task, 'risk': risk, 'link': link})
