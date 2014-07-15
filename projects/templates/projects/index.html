@@ -7,7 +7,7 @@
 <p><strong>Project Managers</strong></p>
 <ul>
 	{% for PM in PM_list %}
-	<li><a href="#">{{ PM }}</a></li>
+	<li><a href="{% url 'project_by_pm' PM %}">{{ PM }}</a></li>
 	{% endfor %}
 </ul>
 {% endif %}

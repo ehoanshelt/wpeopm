@@ -1,0 +1,25 @@
+{% extends "projects/base_template.html" %}
+{% block title %}Projects for {{ PM.username }}{% endblock %}
+{% block projectname %}{{ PM.username }}{% endblock %}
+
+{% block body %}
+<h2>Projects for {{ PM }}</h2>
+{% if not project_list %}
+<p>There are no projects assigned to this PM.</p>
+{% else %}
+<div class="row">
+	<div class="col-sm-4"><strong>Account Name</strong></div>
+	<div class="col-sm-4"><strong>Category</strong></div>
+	<div class="col-sm-2"><strong>Start Date</strong></div>
+	<div class="col-sm-2"><strong>End Date</strong></div>
+</div>
+{% for project in project_list %}
+<div class="row">
+	<div class="col-sm-4"><a href="{% url 'project_detail' project.id %}">{{ project.acctName }}</a></div>
+	<div class="col-sm-4">{{ project.category }}</div>
+	<div class="col-sm-2">{{ project.startDate }}</div>
+	<div class="col-sm-2">{{ project.endDate }}</div>
+</div>
+{% endfor %}
+{% endif %}
+{% endblock %}

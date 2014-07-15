@@ -1,6 +1,7 @@
 import json
 
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
@@ -15,8 +16,8 @@ def index(request):
 	active_project_list = Project.objects.filter(isCompleted=False).order_by('acctName')
 	archived_project_list = Project.objects.filter(isArchived=True).order_by('acctName')
 	latest_project_list = Project.objects.order_by('-created')[:5]
-	PM_list = Project.objects.values_list('PM').distinct()
-	AM_list = Project.objects.values_list('AM').distinct()
+	PM_list = Project.objects.values_list('PM__username', flat=True).distinct()
+	AM_list = Project.objects.values_list('AM', flat=True).distinct()
 	context = {
 		'latest_project_list': latest_project_list,
 		'active_project_list': active_project_list,
@@ -25,6 +26,11 @@ def index(request):
 		'AM_list': AM_list,
 	}
 	return render(request, 'projects/index.html', context)
+
+@login_required
+def project_by_pm(request, pm_name):
+	project_list = Project.objects.filter(PM__username=pm_name).order_by('acctName')
+	return render(request, 'projects/projects_by_pm.html', {'PM': pm_name, 'project_list': project_list})
 
 @login_required
 def project_detail(request, project_id):

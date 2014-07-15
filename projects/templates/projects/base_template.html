@@ -5,7 +5,7 @@
 <head>
 	<title>{% block title %}{% endblock %} | WPEOPM</title>
 	<link rel="stylesheet" type="text/css" href="{% static 'projects/css/reset.min.css' %}">
-	<link rel="stylesheet" type="text/css" href="{% static 'projects/css/bootstrap-spacelab.min.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'projects/css/bootstrap.min.css' %}">
 	<link rel="stylesheet" type="text/css" href="{% static 'projects/css/base.css' %}">
 </head>
 <body>
@@ -20,7 +20,7 @@
 			        <span class="icon-bar"></span>
 			        <span class="icon-bar"></span>
 			      </button>
-			      <a class="navbar-brand" href="{% block projectdetaillink %}#{% endblock %}">WPEOPM - {% block projectname %}{% endblock %}</a>
+			      <a class="navbar-brand" href="{% block projectdetaillink %}#{% endblock %}">{% block projectname %}WPEOPM{% endblock %}</a>
 			    </div>
 
 			    <!-- Collect the nav links, forms, and other content for toggling -->

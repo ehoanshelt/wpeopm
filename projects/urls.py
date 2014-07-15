@@ -15,6 +15,8 @@ urlpatterns = patterns('',
 	url(r'^(?P<project_id>\d+)/archive/$', views.project_archive, name='project_archive'),
 	# /projects/add/
 	url(r'^add/$', views.project_edit, name='project_add'),
+	# /projects/PM/matthew/
+	url(r'^PM/(?P<pm_name>\w+)/$', views.project_by_pm, name='project_by_pm'),
 	# /projects/tasklists/
 	url(r'^tasklists/$', views.tasklist_manage, name='tasklist_manage'),
 	# /projects/tasklist/5/tasks/
