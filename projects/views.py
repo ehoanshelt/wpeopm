@@ -9,6 +9,7 @@ from django.utils import timezone
 
 from projects.forms import ProjectForm, TaskListForm, TaskForm, LinkForm, CommentForm
 from projects.models import Category, Project, TaskList, Task, Risk, Link, Comment
+from projects.utils import notify_webhook
 
 # Create your views here.
 def index(request):
@@ -55,6 +56,7 @@ def project_edit(request, project_id=None):
 		form = ProjectForm(request.POST, instance=project)
 		if form.is_valid():
 			form.save()
+			notify_webhook('project', project.id)
 			return redirect('index')
 	else:
 		form = ProjectForm(instance=project)
@@ -77,6 +79,7 @@ def project_clone(request, project_id):
 	new_project.isArchived = False
 	new_project.isDeleted = False
 	new_project.save()
+	notify_webhook('project', new_project.id)
 	tasklists = TaskList.objects.filter(project=project)
 	for tasklist in tasklists:
 		new_tasklist = TaskList()
@@ -109,6 +112,7 @@ def project_complete(request, project_id):
 	if project.endDate is None:
 		project.endDate = project.completedDate
 	project.save()
+	notify_webhook('project', project.id)
 	json_data = json.dumps({"HTTPRESPONSE":1})
 	return HttpResponse(json_data, mimetype="application/json")
 
@@ -119,6 +123,7 @@ def project_archive(request, project_id):
 	project = get_object_or_404(Project, pk=project_id)
 	project.isArchived = True
 	project.save()
+	notify_webhook('project', project.id)
 	json_data = json.dumps({"HTTPRESPONSE":1})
 	return HttpResponse(json_data, mimetype="application/json")
 
@@ -129,6 +134,7 @@ def project_delete(request, project_id):
 	project = get_object_or_404(Project, pk=project_id)
 	project.isDeleted = True
 	project.save()
+	notify_webhook('project', project.id)
 	json_data = json.dumps({"HTTPRESPONSE":1})
 	return HttpResponse(json_data, mimetype="application/json")
 
@@ -156,6 +162,7 @@ def task_edit(request, tasklist_id, task_id=None):
 		form = TaskForm(request.POST, instance=task)
 		if form.is_valid():
 			form.save()
+			notify_webhook('task', task.id)
 			return redirect('tasklist_detail', project_id=task.tasklist.project.id, tasklist_id=task.tasklist.id)
 	else:
 		form = TaskForm(instance=task)
@@ -172,6 +179,7 @@ def task_complete(request, tasklist_id, task_id):
 	if task.endDate is None:
 		task.endDate = task.completedDate
 	task.save()
+	notify_webhook('task', task.id)
 	json_data = json.dumps({"HTTPRESPONSE":1})
 	return HttpResponse(json_data, mimetype="application/json")
 
@@ -186,6 +194,7 @@ def all_tasks_to_project_pm(request, project_id):
 		for task in tasks:
 			task.PM = project.PM
 			task.save()
+			notify_webhook('task', task.id)
 	json_data = json.dumps({"HTTPRESPONSE":1})
 	return HttpResponse(json_data, mimetype="application/json")
 
@@ -210,6 +219,7 @@ def tasklist_add_from_template(request, project_id):
 				tasklist.project = project
 				tasklist.isDeleted = False
 				tasklist.save()
+				notify_webhook('tasklist', tasklist.id)
 				tasks = Task.objects.filter(tasklist=template)
 				for each_task in tasks:
 					task = Task()
@@ -249,6 +259,7 @@ def tasklist_delete(request, project_id, tasklist_id):
 	tasklist = get_object_or_404(TaskList, pk=tasklist_id)
 	tasklist.isDeleted = True
 	tasklist.save()
+	notify_webhook('tasklist', tasklist.id)
 	json_data = json.dumps({"HTTPRESPONSE":1})
 	return HttpResponse(json_data, mimetype="application/json")
 
@@ -271,6 +282,7 @@ def tasklist_edit(request, project_id, tasklist_id=None):
 		form = TaskListForm(request.POST, instance=tasklist)
 		if form.is_valid():
 			form.save()
+			notify_webhook('tasklist', tasklist.id)
 			if project:
 				return redirect('project_detail', project_id=tasklist.project.id)
 			else:
@@ -304,6 +316,7 @@ def link_edit(request, project_id, link_id=None):
 		form = LinkForm(request.POST, instance=link)
 		if form.is_valid():
 			form.save()
+			notify_webhook('link', link.id)
 			return redirect('project_detail', project_id=link.project.id)
 	else:
 		form = LinkForm(instance=link)

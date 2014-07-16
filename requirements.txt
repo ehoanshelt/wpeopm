@@ -4,4 +4,5 @@ South==1.0
 argparse==1.2.1
 django-piston==0.2.3
 paramiko==1.14.0
+requests==2.3.0
 wsgiref==0.1.2

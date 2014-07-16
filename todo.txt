@@ -1,6 +1,6 @@
 + Ability to filter projects by PM
 * Ability to filter projects by AM
-* Selecting distinct AM names should discard empty strings
+* BUG - Selecting distinct AM names should discard empty strings
 + List tasks by due date
 + Assign all tasks in project to project PM
 + JSON API
@@ -22,3 +22,8 @@
 + 404 page
 + 500 page
 + Turn DEBUG off
+* sign on with WPEngine email
++ webhooks (see below):
+webhook info:
+hit a url implementation.wpengine.com/web-hook
+send type of object and object id and unix timestamp
