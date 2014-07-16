@@ -73,9 +73,26 @@ class ProjectsHandler(BaseHandler):
 		Handles the processing of the API call.
 		Filters are passed via query string parameter.
 		Valid filters are:
+			PM -- string, will match Project.PM.username and return projects assigned to that PM
+			completed -- 'true' or 'false', will match Project.isCompleted and return projects that match that boolean
 			[currently none]
 		"""
-		projects = Project.objects.all()
+		try:
+			pm_name = request.GET['PM']
+		except:
+			pm_name = None
+		try:
+			completed = request.GET['completed']
+		except:
+			completed = None
+		if pm_name:
+			projects = Project.objects.filter(PM__username=pm_name)
+		else:
+			projects = Project.objects.all()
+		if completed == 'true':
+			projects = projects.filter(isCompleted=True)
+		elif completed: # if the string has anything other than 'true'
+			projects = projects.filter(isCompleted=False)
 		project_list = list(projects)
 
 		return project_list

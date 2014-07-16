@@ -2,7 +2,7 @@
 * Ability to filter projects by AM
 + List tasks by due date
 + Assign all tasks in project to project PM
-* JSON API (see http://stackoverflow.com/questions/18344385/how-to-get-the-end-of-a-url-in-django)
++ JSON API
 * Implement Risk
 * Export project tasks to Google Calendar format
 - Better styling
