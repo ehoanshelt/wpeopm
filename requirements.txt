@@ -1,4 +1,7 @@
 Django==1.6.5
+Fabric==1.9.0
 South==1.0
 argparse==1.2.1
+django-piston==0.2.3
+paramiko==1.14.0
 wsgiref==0.1.2
