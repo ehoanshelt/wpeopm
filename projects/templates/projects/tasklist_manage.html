@@ -1,12 +1,24 @@
 {% extends 'projects/base_template.html' %}
+{% load staticfiles %}
 {% block title %}Manage Task Lists{% endblock %}
 
+{% block subnavlinks %}
+<li><a href="{% url 'tasklist_add' 0 %}">Add Task List Template</a></li>
+{% endblock %}
+
 {% block body %}
-<h3>Template Task Lists</h1>
+<h2>Template Task Lists</h2>
 <p>Use these task list templates to more easily add groups of related tasks to your project.</p>
-<ul>
+{% if tasklist_template_list %}
+
 	{% for tasklist in tasklist_template_list %}
-		<li>{{ tasklist.name }} <a class="btn btn-info btn-xs" href="{% url 'tasklist_edit' 0 tasklist.id %}">Edit Details</a> <a class="btn btn-warning btn-xs" href="{% url 'tasklist_tasks' tasklist.id %}">View/Add Tasks</a></li>
+<div class="tasklist-row row {% if forloop.counter|divisibleby:2 %}even{% else %}odd{% endif %}">
+	<div class="col-sm-3">{{ tasklist.name }}</div>
+	<div class="col-sm-1"><a class="btn btn-info btn-xs" href="{% url 'tasklist_edit' 0 tasklist.id %}">Edit Details</a></div>
+	<div class="col-sm-2"><a class="btn btn-warning btn-xs" href="{% url 'tasklist_tasks' tasklist.id %}">View/Add Tasks</a></div>
+	<div class="col-sm-2"><a class="btn btn-danger btn-xs delete_tasklist" aria-tasklistid="{{ tasklist.id }}" href="#">Delete Task List</a></div>
+</div>
+<div class="tasklist-description-row row {% if forloop.counter|divisibleby:2 %}even{% else %}odd{% endif %}"><div class="col-sm-12">{{ tasklist.description }}</div></div>
 		{% if tasklist.task_set.all %}
 		<ul>
 		{% for task in tasklist.task_set.all %}
@@ -15,7 +27,41 @@
 		</ul>
 		{% endif %}
 	{% endfor %}
-</ul>
+{% else %}
+<p>There are no task list templates.</p>
+{% endif %}
+{% endblock %}
 
-<p><a class="btn btn-primary" href="{% url 'tasklist_add' 0 %}">Add tasklist</a></p>
+{% block body_js %}
+<script src="{% static 'projects/js/jquery.cookie.js' %}"></script>
+<script type="text/javascript">
+	function csrfSafeMethod(method) {
+	    // these HTTP methods do not require CSRF protection
+	    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+	}
+
+	$.ajaxSetup({
+		// add the CSRF token to the request header by default for all POST requests
+	    beforeSend: function(xhr, settings) {
+			var csrftoken = $.cookie('csrftoken');
+	        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+	            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+	        }
+	    }
+	});
+
+	$('.delete_tasklist').click(function() {
+		var tasklistid = $(this).attr('aria-tasklistid');
+		$.ajax({
+			type: "POST",
+			url: "/projects/0/tasklist/" + tasklistid + "/delete/",
+			success: function(result, textStatus, xmlhttprequest) {
+				code = $.parseJSON(xmlhttprequest.responseText).HTTPRESPONSE;
+				if (code == 1) {
+					location.reload()
+				}
+			}
+		});
+	});
+</script>
 {% endblock %}

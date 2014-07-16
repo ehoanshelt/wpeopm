@@ -1,6 +1,7 @@
 {% extends 'projects/base_template.html' %}
 {% block title %}Home{% endblock %}
-{% block projectname %}Dashboard{% endblock %}
+{% block projectdetaillink %}{% endblock %}
+{% block projectname %}WPEOPM{% endblock %}
 
 {% block sidebar %}
 {% if PM_list %}
@@ -19,7 +20,10 @@
 	{% endfor %}
 </ul>
 {% endif %}
+{% endblock %}
 
+{% block subnavlinks %}
+<li><a href="{% url 'project_add' %}">Add project</a></li>
 {% endblock %}
 
 {% block body %}
@@ -33,7 +37,7 @@
 {% else %}
 <p>No projects are available.</p>
 {% endif %}
-<p><a class="btn btn-primary" href="{% url 'project_add' %}">Add project</a></p>
+
 {% if active_project_list %}
 <h1>Active projects</h1>
 <ul>

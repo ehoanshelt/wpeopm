@@ -12,3 +12,5 @@
 * Make AM a User
 + Mark tasks as complete from project detail page
 + Add login functionality
++ Add clone project functionality
+* Clicking label of PM name should filter projects or tasks by PM

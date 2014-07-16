@@ -13,6 +13,10 @@ urlpatterns = patterns('',
 	url(r'^(?P<project_id>\d+)/complete/$', views.project_complete, name='project_complete'),
 	# /projects/5/archive/ -- AJAX ONLY --
 	url(r'^(?P<project_id>\d+)/archive/$', views.project_archive, name='project_archive'),
+	# /projects/5/delete/ -- AJAX ONLY --
+	url(r'^(?P<project_id>\d+)/delete/$', views.project_delete, name='project_delete'),
+	# /projects/5/clone/ 
+	url(r'^(?P<project_id>\d+)/clone/$', views.project_clone, name='project_clone'),
 	# /projects/add/
 	url(r'^add/$', views.project_edit, name='project_add'),
 	# /projects/PM/matthew/
@@ -35,6 +39,8 @@ urlpatterns = patterns('',
 	url(r'^(?P<project_id>\d+)/tasklists/$', views.project_tasklists, name='project_tasklists'),
 	# /projects/5/tasklist/2/
 	url(r'^(?P<project_id>\d+)/tasklist/<?(?P<tasklist_id>\d+)/$', views.tasklist_detail, name='tasklist_detail'),
+	# /projects/5/tasklist/2/delete/
+	url(r'^(?P<project_id>\d+)/tasklist/<?(?P<tasklist_id>\d+)/delete/$', views.tasklist_delete, name='tasklist_delete'),
 	# /projects/5/tasklist_add/
 	url(r'^(?P<project_id>\d+)/tasklist_add/$', views.tasklist_edit, name='tasklist_add'),
 	# /projects/5/tasklist/add_from_template/

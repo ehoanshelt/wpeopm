@@ -1,9 +1,11 @@
+import datetime
 import hashlib
 import random
 import string
 
 from django.contrib.auth.models import User
 from django.db import models
+from django.utils import timezone
 
 # Create your models here.
 class Category(models.Model):
@@ -51,6 +53,7 @@ class TaskList(models.Model):
 	description = models.CharField(max_length=200, blank=True, null=True)
 	isTemplate = models.BooleanField()
 	project = models.ForeignKey(Project, blank=True, null=True)
+	isDeleted = models.BooleanField()
 
 	def __unicode__(self):
 		if self.project:
@@ -65,7 +68,7 @@ class Task(models.Model):
 	created = models.DateField()
 	tasklist = models.ForeignKey(TaskList)
 	name = models.CharField(max_length=50)
-	PM = models.ForeignKey(User)
+	PM = models.ForeignKey(User, blank=True, null=True)
 	startDate = models.DateField(blank=True, null=True)
 	endDate = models.DateField(blank=True, null=True)
 	dueDate = models.DateField(blank=True, null=True)
@@ -76,6 +79,12 @@ class Task(models.Model):
 	def __unicode__(self):
 		return "%s (%s)" % (self.name, self.tasklist)
 
+	@property
+	def is_past_due(self):
+	    if (not self.isCompleted) and (timezone.now().date() > self.dueDate):
+	    	return True
+	    return False
+	
 class Risk(models.Model):
 	"""
 	Risks associated with the project.

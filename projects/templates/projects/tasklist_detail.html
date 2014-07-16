@@ -1,20 +1,31 @@
 {% extends 'projects/base_template.html' %}
-{% block title %}TaskList{% endblock %}
+{% block title %}Task List{% endblock %}
+
+{% block subnavlinks %}
+<li><a href="{% url 'task_add' tasklist.id %}">Add task</a></li>
+{% endblock %}
 
 {% block body %}
-<h1>{{ tasklist.name }}</h1>
-<h2>{{ task.project.acctName }}</h2>
-<p>Project Manager: {{ task.project.PM }}</p>
+
+	<h2>{{ tasklist.name }}</h2>
+<div class="row">
+	<div class="col-sm-4"><span class="label label-info">{% if tasklist.project %}{{ tasklist.project.acctName }}{% else %}Template{% endif %}</span></div>
+</div>
 {% if tasklist.description %}
 <p>{{ tasklist.description }}</p>
 {% endif %}
 {% if tasklist.task_set.all %}
 <h3>Tasks</h3>
-<ul>
 {% for task in tasklist.task_set.all %}
-<li><a href="{% url 'task_detail' tasklist.project.id task.id %}">{{ task.name }}</a></li>
+<div class="row {% if forloop.counter|divisibleby:2 %}even{% else %}odd{% endif %}">
+<div class="col-sm-2"><span class="label label-primary">{% if task.PM %}{{ task.PM }}{% endif %}</span></div>
+<div class="col-sm-2">{% if task.dueDate %}due {{ task.dueDate }}{% endif %}</div>
+<div class="col-sm-1"><span class="label label-success">{% if task.isCompleted %}Completed{% endif %}</span></div>
+<div class="col-sm-1"><span class="label label-danger">{% if task.is_past_due %}Overdue{% endif %}</span></div>
+<div class="col-sm-4"><a href="{% url 'task_detail' tasklist.id task.id %}">{{ task.name }}</a></div>
+
+</div>
 {% endfor %}
-</ul>
 {% endif %}
-<p><a href="{% url 'task_add' tasklist.id %}">Add task</a></p>
+
 {% endblock %}

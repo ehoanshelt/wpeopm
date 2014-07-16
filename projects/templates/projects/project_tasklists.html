@@ -1,12 +1,19 @@
 {% extends 'projects/base_template.html' %}
 {% block title %}{{ project.acctName }} Task Lists{% endblock %}
+ 
+{% block subnavlinks %}
+<li><a href="{% url 'tasklist_add' project.id %}">Add task list</a></li>
+{% endblock %}
 
 {% block body %}
-<h3>Task Lists for {{ project.acctName }}</h1>
+<h2>Task Lists for {{ project.acctName }}</h2>
 {% if project.tasklist_set.all %}
 
 	{% for tasklist in project.tasklist_set.all %}
-		<h4>{{ tasklist.name }}</h4>
+		<div class="row">
+			<div class="col-sm-3"><strong>{{ tasklist.name }}</strong></div>
+			<div class="col-sm-4"><a href="{% url 'task_add' tasklist.id %}" class="btn btn-xs btn-info">Add tasks to this task list</a></div>
+		</div>
 		{% if tasklist.task_set.all %}
 		<ul>
 		{% for task in tasklist.task_set.all %}
@@ -18,5 +25,5 @@
 {% else %}
 <p>No tasklists!</p>
 {% endif %}
-<p><a class="btn btn-primary" href="{% url 'tasklist_add' project.id %}">Add tasklist</a></p>
+
 {% endblock %}

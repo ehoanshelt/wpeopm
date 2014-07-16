@@ -11,7 +11,7 @@ class TaskListForm(forms.ModelForm):
 
 	class Meta:
 		model = TaskList
-		exclude = ['project',]
+		exclude = ['created', 'project', 'isTemplate', 'isDeleted',]
 
 class TaskForm(forms.ModelForm):
 

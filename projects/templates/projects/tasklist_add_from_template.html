@@ -9,6 +9,7 @@
 <ul>
 	{% for tasklist in tasklist_template_list %}
 		<li><input type="checkbox" name="templates" value="{{ tasklist.id }}" id="tasklist_checkbox_{{ tasklist.id }}"/><label for="tasklist_checkbox_{{ tasklist.id }}">{{ tasklist.name }}</label></li>
+		{% if tasklist.description %}<li>{{ tasklist.description }}</li>{% endif %}
 		{% if tasklist.task_set.all %}
 		<ul>
 		{% for task in tasklist.task_set.all %}
@@ -19,6 +20,6 @@
 	{% endfor %}
 </ul>
 
-<p><button type="submit" class="btn btn-primary" href="{% url 'tasklist_add_from_template' project.id %}">Add tasklist</button></p>
+<p><button type="submit" class="btn btn-primary" href="{% url 'tasklist_add_from_template' project.id %}">Add selected task lists</button></p>
 </form>
 {% endblock %}

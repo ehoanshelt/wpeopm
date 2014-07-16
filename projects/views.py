@@ -14,9 +14,9 @@ from projects.models import Category, Project, TaskList, Task, Risk, Link, Comme
 def index(request):
 	if not request.user.is_authenticated():
 		return render(request, 'projects/home.html', {})
-	active_project_list = Project.objects.filter(isCompleted=False).order_by('acctName')
-	archived_project_list = Project.objects.filter(isArchived=True).order_by('acctName')
-	latest_project_list = Project.objects.order_by('-created')[:5]
+	active_project_list = Project.objects.filter(isCompleted=False, isDeleted=False).order_by('acctName')
+	archived_project_list = Project.objects.filter(isArchived=True, isDeleted=False).order_by('acctName')
+	latest_project_list = Project.objects.filter(isDeleted=False).order_by('-created')[:5]
 	PM_list = Project.objects.order_by('PM__username').values('PM__username').distinct()
 	AM_list = Project.objects.values_list('AM', flat=True).distinct()
 	context = {
@@ -36,7 +36,7 @@ def project_by_pm(request, pm_name):
 @login_required
 def project_detail(request, project_id):
 	project = get_object_or_404(Project, pk=project_id)
-	return render(request, 'projects/detail.html', {'project': project})
+	return render(request, 'projects/project_detail.html', {'project': project})
 
 @login_required
 def project_edit(request, project_id=None):
@@ -57,6 +57,44 @@ def project_edit(request, project_id=None):
 	return render(request, 'projects/project_edit.html', {'form': form, 'project': project})
 
 @login_required
+def project_clone(request, project_id):
+	"""
+	Clones a project to a new project, setting the PM to request.user and unassigning all tasks and removing all dates.
+	"""
+	project = get_object_or_404(Project, pk=project_id)
+	new_project = Project()
+	new_project.created = timezone.now()
+	new_project.category = project.category
+	new_project.PM = request.user
+	new_project.AM = project.AM
+	new_project.startDate = timezone.now().date()
+	new_project.isCompleted = False
+	new_project.isArchived = False
+	new_project.isDeleted = False
+	new_project.save()
+	tasklists = TaskList.objects.filter(project=project)
+	for tasklist in tasklists:
+		new_tasklist = TaskList()
+		new_tasklist.created = timezone.now()
+		new_tasklist.name = tasklist.name
+		new_tasklist.description = tasklist.description
+		new_tasklist.isTemplate = False
+		new_tasklist.project = new_project
+		new_tasklist.isDeleted = False
+		new_tasklist.save()
+		tasks = Task.objects.filter(tasklist=tasklist)
+		for task in tasks:
+			new_task = Task()
+			new_task.created = timezone.now()
+			new_task.tasklist = new_tasklist
+			new_task.name = task.name
+			new_task.PM = None
+			new_task.description = task.description
+			new_task.isCompleted = False
+			new_task.save()
+	return redirect(reverse('project_edit', kwargs={'project_id': new_project.id}))
+
+@login_required
 def project_complete(request, project_id):
 	if not request.is_ajax():
 		return HttpResponseForbidden()
@@ -75,6 +113,16 @@ def project_archive(request, project_id):
 		return HttpResponseForbidden()
 	project = get_object_or_404(Project, pk=project_id)
 	project.isArchived = True
+	project.save()
+	json_data = json.dumps({"HTTPRESPONSE":1})
+	return HttpResponse(json_data, mimetype="application/json")
+
+@login_required
+def project_delete(request, project_id):
+	if not request.is_ajax():
+		return HttpResponseForbidden()
+	project = get_object_or_404(Project, pk=project_id)
+	project.isDeleted = True
 	project.save()
 	json_data = json.dumps({"HTTPRESPONSE":1})
 	return HttpResponse(json_data, mimetype="application/json")
@@ -127,7 +175,7 @@ def all_tasks_to_project_pm(request, project_id):
 	if not request.is_ajax():
 		return HttpResponseForbidden
 	project = get_object_or_404(Project, pk=project_id)
-	tasklists = TaskList.objects.filter(project__id=project_id)
+	tasklists = TaskList.objects.filter(project__id=project_id, isDeleted=False)
 	for tasklist in tasklists:
 		tasks = Task.objects.filter(tasklist=tasklist)
 		for task in tasks:
@@ -155,6 +203,7 @@ def tasklist_add_from_template(request, project_id):
 				tasklist.description = template.description
 				tasklist.isTemplate = False
 				tasklist.project = project
+				tasklist.isDeleted = False
 				tasklist.save()
 				tasks = Task.objects.filter(tasklist=template)
 				for each_task in tasks:
@@ -167,7 +216,7 @@ def tasklist_add_from_template(request, project_id):
 					task.isCompleted = False
 					task.save()
 		return redirect('project_tasklists', project_id=project.id)
-	tasklist_template_list = TaskList.objects.filter(isTemplate=True)
+	tasklist_template_list = TaskList.objects.filter(isTemplate=True, isDeleted=False)
 	return render(request, 'projects/tasklist_add_from_template.html', {'project': project, 'tasklist_template_list': tasklist_template_list})
 
 @login_required
@@ -175,7 +224,7 @@ def tasklist_manage(request):
 	"""
 	This may be a misnomer -- this is to configure globally-accessible tasklist templates.
 	"""
-	tasklist_template_list = TaskList.objects.filter(isTemplate=True)
+	tasklist_template_list = TaskList.objects.filter(isTemplate=True, isDeleted=False)
 	return render(request, 'projects/tasklist_manage.html', {'tasklist_template_list': tasklist_template_list})
 
 @login_required
@@ -183,7 +232,20 @@ def tasklist_detail(request, project_id, tasklist_id):
 	if (project_id != '0'):
 		project = get_object_or_404(Project, pk=project_id)
 	tasklist = get_object_or_404(TaskList, pk=tasklist_id)
-	return render(request, 'projects/tasklist_detail.html', {'tasklist': tasklist})
+	today = timezone.now()
+	return render(request, 'projects/tasklist_detail.html', {'tasklist': tasklist, 'today': today})
+
+@login_required
+def tasklist_delete(request, project_id, tasklist_id):
+	if not request.is_ajax():
+		return HttpResponseForbidden
+	if (project_id != '0'):
+		project = get_object_or_404(Project, pk=project_id)
+	tasklist = get_object_or_404(TaskList, pk=tasklist_id)
+	tasklist.isDeleted = True
+	tasklist.save()
+	json_data = json.dumps({"HTTPRESPONSE":1})
+	return HttpResponse(json_data, mimetype="application/json")
 
 @login_required
 def tasklist_edit(request, project_id, tasklist_id=None):
@@ -198,6 +260,8 @@ def tasklist_edit(request, project_id, tasklist_id=None):
 		tasklist.created = timezone.now()
 		if project is not None:
 			tasklist.project = project
+		else:
+			tasklist.isTemplate = True
 	if request.POST:
 		form = TaskListForm(request.POST, instance=tasklist)
 		if form.is_valid():
@@ -209,7 +273,7 @@ def tasklist_edit(request, project_id, tasklist_id=None):
 	else:
 		form = TaskListForm(instance=tasklist)
 	
-	return render(request, 'projects/tasklist_edit.html', {'form': form})
+	return render(request, 'projects/tasklist_edit.html', {'form': form, 'project': project, 'tasklist': tasklist})
 
 @login_required
 def project_links(request, project_id):

@@ -1,10 +1,27 @@
 {% extends 'projects/base_template.html' %}
 {% block title %}Task{% endblock %}
 
+{% block subnavlinks %}
+<li><a href="{% url 'task_edit' task.tasklist.id task.id %}">Edit this task</a></li>
+{% endblock %}
+
 {% block body %}
-<h1>{{ task.name }}</h1>
-<h2>{{ task.project.acctName }}</h2>
-<p>Project Manager: {{ task.PM }}</p>
-<p>{{ task.startDate }} - {{ task.endDate }}</p>
-<p>{{ task.description }}</p>
+<div class="row">
+	<h2 class="col-sm-8">{{ task.name }}</h2>
+	{% if task.isCompleted %}
+	<span class="label label-primary col-sm-2">Completed</span>
+	{% endif %}
+</div>
+<div class="row">
+	<div class="col-sm-6">Belongs to
+	{% if task.tasklist.project %}
+	<strong>{{ task.tasklist.project.acctName }}</strong>
+	{% else %}
+	{{ task.tasklist.name }} (Template)
+	{% endif %}
+	</div>
+</div>
+<div class="row"><div class="col-sm-12">Project Manager: {% if task.PM %}{{ task.PM }}{% else %}None assigned{% endif %}</div></div>
+<div class="row"><div class="col-sm-12">{% if task.startDate %}{{ task.startDate }} - {{ task.endDate }}{% else %}No dates assigned{% endif %}</div></div>
+<p>{{ task.description }}</p>	
 {% endblock %}

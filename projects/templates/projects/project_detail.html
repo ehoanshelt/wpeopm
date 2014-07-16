@@ -4,8 +4,16 @@
 {% block title %}Project detail - {{ project.acctName }}{% endblock %}
 {% block projectname %}{{ project.acctName }}{% endblock %}
 
+{% block subnavlinks %}
+	<li><a href="{% url 'project_edit' project.id %}">Edit</a></li>
+	{% if not project.isCompleted %}<li id="complete_link"><a id="mark_complete" href="#">Mark Complete</a></li>{% endif %}
+	{% if not project.isArchived %}<li id="archive_link"><a id="archive_project" href="#">Archive</a></li>{% endif %}
+	{% if not project.isDeleted %}<li id="delete_link"><a id="delete_project" href="#">Delete</a></li>{% endif %}
+	<li id="clone_link"><a id="clone_project" href="{% url 'project_clone' project.id %}">Clone</a></li>
+{% endblock %}
+
 {% block body %}
-<h1>{{ project.acctName }}<span><a class="edit-project btn btn-xs btn-info" href="{% url 'project_edit' project.id %}">Edit Project</a></span></h1>
+<h1>{{ project.acctName }}<span class="project-label small-text label label-primary" id="is_archived">{% if project.isArchived %}Archived{% endif %}</span><span class="project-label small-text label label-danger" id="is_deleted">{% if project.isDeleted %}Deleted{% endif %}</span></h1>
 <p><strong>{{ project.category }}</strong></p>
 <p>Project Manager: {{ project.PM }}</p>
 {% if project.AM %}
@@ -15,15 +23,16 @@
 <p class="completed">
 {% if project.isCompleted %}
 Completed on {{ project.completedDate }}
-{% else %}
-<a id="mark_complete" href="#">Mark project completed</a>
 {% endif %}
-{% if not project.isArchived %}
-<p class="archived">
-<a id="archive_project" href="#">Archive project</a>
-</p>
-{% endif %}
-<h3>Tasks</h3>
+<div class="row">
+<div class="col-md-2"><h3>Tasks</h3></div>
+<div class="col-md-10 task-buttons">
+	<button class="btn btn-warning" id="assign_all_tasks">Assign all tasks to project PM</button>
+	<a class="btn btn-primary" href="{% url 'tasklist_add' project.id %}">Add tasklist</a>
+	<a class="btn btn-success" href="{% url 'tasklist_add_from_template' project.id %}">Add tasklist from template</a>
+</div>
+</div>
+{% if project.tasklist_set.all %}
 <ul>
 	{% for tasklist in project.tasklist_set.all %}
 		<li><a href="{% url 'tasklist_detail' project.id tasklist.id %}">{{ tasklist.name }}</a> <a class="tasklist_edit btn btn-xs btn-info" href="{% url 'tasklist_edit' project.id tasklist.id %}">Edit</a></li>
@@ -31,35 +40,50 @@ Completed on {{ project.completedDate }}
 		<ul>
 		{% for task in tasklist.task_set.all %}
 			{% if not task.isCompleted %}
-			<li><a href="{% url 'task_detail' tasklist.id task.id %}">{{ task.name }}, assigned to {{ task.PM }} {% if task.dueDate %}due {{ task.dueDate }}{% else %}with no due date{% endif %}</a> <a class="task_edit btn btn-xs btn-info" href="{% url 'task_edit' tasklist.id task.id %}">Edit</a> <a class="task_complete btn btn-xs btn-warning" id="task_{{ task.id }}" aria-tasklistid="{{ tasklist.id }}" aria-taskid="{{ task.id }}">Done</a></li>
+			<li><span class="label label-default">{{ task.PM }}</span> <a href="{% url 'task_detail' tasklist.id task.id %}">{{ task.name }}</a> <span>{% if task.dueDate %}due {{ task.dueDate }}{% else %}no due date{% endif %}</span> <a class="task_edit btn btn-xs btn-info" href="{% url 'task_edit' tasklist.id task.id %}">Edit</a> <a class="task_complete btn btn-xs btn-warning" id="task_{{ task.id }}" aria-tasklistid="{{ tasklist.id }}" aria-taskid="{{ task.id }}">Done</a></li>
 		  	{% endif %}
 		{% endfor %}
 		</ul>
 		{% endif %}
 	{% endfor %}
 </ul>
-<div><button class="btn btn-danger" id="assign_all_tasks">Assign all tasks to project PM</button></div>
-<div><a class="btn btn-primary" href="{% url 'tasklist_add' project.id %}">Add tasklist</a>
-<a class="btn btn-success" href="{% url 'tasklist_add_from_template' project.id %}">Add tasklist from template</a></div>
+{% else %}
+<p>This project has no tasks.</p>
+{% endif %}
+{% comment %}
 <h3>Risks</h3>
 <ul>
 	{% for risk in project.risk_set.all %}
 		<li>{{ risk.name }}</li>
 	{% endfor %}
 </ul>
-<h3>Links</h3>
+{% endcomment %}
+<div class="row">
+	<div class="col-md-2"><h3>Links</h3></div>
+	<div class="link-buttons col-md-10"><a class="btn btn-primary" href="{% url 'link_add' project.id %}">Add link</a></div>
+</div>
+{% if project.link_set.all %}
 <ul>
 	{% for link in project.link_set.all %} 
 		<li><a target="blank" href="{{ link.code }}">{{ link.name }}</a> <a class="link-edit btn btn-xs btn-info" href="{% url 'link_edit' project.id link.id %}">Edit</a> <a class="link-detail btn btn-xs btn-warning" href="{% url 'link_detail' project.id link.id %}">Detail</a></li>
 	{% endfor %}
 </ul>
-<p><a class="btn btn-primary" href="{% url 'link_add' project.id %}">Add link</a></p> 
-<h3>Comments</h3>
+{% else %}
+<p>This project has no links.</p>
+{% endif %}
+<div class="row">
+	<div class="col-md-2"><h3>Comments</h3></div>
+	<div class="comment-buttons col-md-10"><a class="btn btn-primary" href="{% url 'comment_add' 'project' project.id %}">Add comment</a></div>
+</div>
+{% if project.comment_set.all %}
 <ul>
 	{% for comment in project.comment_set.all %}
 		<li>{{ comment.description }} <a class="btn btn-xs btn-info" href="{% url 'comment_edit' 'project' project.id comment.id %}">Edit</a> <a class="btn btn-xs btn-warning" href="{% url 'comment_detail' 'project' project.id comment.id %}">Detail</a></li>
 	{% endfor %}
 </ul>
+{% else %}
+<p>This project has no comments.</p>
+{% endif %}
 {% csrf_token %}
 {% endblock %}
 
@@ -88,7 +112,22 @@ Completed on {{ project.completedDate }}
 			success: function(result, textStatus, xmlhttprequest) {
 				code = $.parseJSON(xmlhttprequest.responseText).HTTPRESPONSE;
 				if (code == 1) {
-					$('.archived').html('Project archived.');
+					$('#archive_link').hide();
+					$('#is_archived').html('Archived');		
+				}
+			}
+		});
+	});
+
+	$('#delete_project').click(function() {
+		$.ajax({
+			type: "POST",
+			url: "/projects/{{ project.id }}/delete/",
+			success: function(result, textStatus, xmlhttprequest) {
+				code = $.parseJSON(xmlhttprequest.responseText).HTTPRESPONSE;
+				if (code == 1) {
+					$('#delete_link').hide();
+					$('#is_deleted').html('Deleted');		
 				}
 			}
 		});
@@ -101,6 +140,7 @@ Completed on {{ project.completedDate }}
 			success: function(result, textStatus, xmlhttprequest) {
 				code = $.parseJSON(xmlhttprequest.responseText).HTTPRESPONSE;
 				if (code == 1) {
+					$('#complete_link').hide();
 					$('.completed').html('Project complete!');
 				}
 			}

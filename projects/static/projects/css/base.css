@@ -1,3 +1,5 @@
+.navbar-inverse .navbar-nav>li>a {color: #ddd;}
+
 ul {
 	margin-left: 10px;
 	margin-top: 4px;
@@ -19,4 +21,32 @@ ul ul {
 
 .strike {
 	text-decoration: line-through;
+}
+
+#sidebar {
+	border-right: 1px solid black;
+}
+
+.small-text {
+	font-size: 12px;
+}
+
+.project-label {
+	margin-left: 6px;
+}
+
+.task-buttons, .link-buttons, .comment-buttons {
+	padding-top: 16px;
+}
+
+.even {
+	background-color: #eee;
+}
+
+.tasklist-row {
+	padding-top: 5px;
+}
+
+.tasklist-description-row {
+	padding-bottom: 5px;
 }

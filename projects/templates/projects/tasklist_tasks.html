@@ -1,6 +1,10 @@
 {% extends 'projects/base_template.html' %}
 {% block title %}{{ tasklist.name }} Tasks{% endblock %}
 
+{% block subnavlinks %}
+<li><a href="{% url 'task_add' tasklist.id %}">Add task</a></li>
+{% endblock %}
+
 {% block body %}
 <h3>Tasks for {{ tasklist.name }}</h1>
 <ul>
@@ -9,5 +13,5 @@
 	{% endfor %}
 </ul>
 
-<p><a class="btn btn-primary" href="{% url 'task_add' tasklist.id %}">Add task</a></p>
+
 {% endblock %}
