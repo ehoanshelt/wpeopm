@@ -19,6 +19,16 @@ ul ul {
 	margin-left: 20px;
 }
 
+.signboard {
+	font-size: 48px;
+	font-weight: bold;
+	text-shadow: 1px 1px 1px #ccc;
+}
+
+.message {
+	font-size: 24px;	
+}
+
 .strike {
 	text-decoration: line-through;
 }

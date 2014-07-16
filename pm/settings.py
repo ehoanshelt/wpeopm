@@ -20,11 +20,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = 'qy!*%gmw&-cplyk0d7m)x-l@+7=^%d+ogv(*dshb!29!re@u!t'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost',]
 
 
 # Application definition
@@ -67,10 +67,12 @@ WSGI_APPLICATION = 'pm.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
+# Production: change database name to '/var/www/vhosts/wpeopm.wpengine.com/wpeopm/db/db.sqlite3'
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.path.join(BASE_DIR, 'db/db.sqlite3'),
     }
 }
 
@@ -92,6 +94,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+# Development
+STATIC_ROOT = '/home/matthew/pm/static/'
+# Production
+#STATIC_ROOT = '/var/www/vhosts/wpeopm.wpengine.com/static/'
 
 # Template directories
 

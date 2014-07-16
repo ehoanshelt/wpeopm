@@ -1,5 +1,6 @@
 *.pyc
 .*swp
-db.sqlite3
+db/
 projects/migrations/*
 uploads/
+static/

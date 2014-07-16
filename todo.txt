@@ -1,5 +1,6 @@
 + Ability to filter projects by PM
 * Ability to filter projects by AM
+* Selecting distinct AM names should discard empty strings
 + List tasks by due date
 + Assign all tasks in project to project PM
 + JSON API
@@ -16,3 +17,8 @@
 * Clicking label of PM name should filter projects or tasks by PM
 * Add MRR for projects
 * Calculate risk for projects based on how many fields are set up -- IE projects are at a higher risk if they have no start date/no end date, etc.
+
++ Make production settings (i.e database path)
++ 404 page
+* 500 page
+* Turn DEBUG off
