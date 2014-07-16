@@ -20,5 +20,5 @@
 
 + Make production settings (i.e database path)
 + 404 page
-* 500 page
-* Turn DEBUG off
++ 500 page
++ Turn DEBUG off
