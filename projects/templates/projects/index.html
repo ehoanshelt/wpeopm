@@ -31,7 +31,7 @@
 {% if latest_project_list %}
 <ul>
 	{% for project in latest_project_list %}
-	<li><a href="{% url 'project_detail' project.id %}">{{ project.acctName }}</a></li>
+	<li><a href="{% url 'project_detail' project.id %}">{{ project.acctName }}</a> <span class="label label-primary">{% if project.PM %}{{ project.PM }}{% else %}Unassigned{% endif %}</span></li>
 	{% endfor %}
 </ul>
 {% else %}
@@ -42,7 +42,7 @@
 <h1>Active projects</h1>
 <ul>
 	{% for project in active_project_list %}
-	<li><a href="{% url 'project_detail' project.id %}">{{ project.acctName }}</a></li>
+	<li><a href="{% url 'project_detail' project.id %}">{{ project.acctName }}</a> <span class="label label-primary">{% if project.PM %}{{ project.PM }}{% else %}Unassigned{% endif %}</span></li>
 	{% endfor %}
 </ul>
 {% endif %}
@@ -50,7 +50,7 @@
 <h1>Archived projects</h1>
 <ul>
 	{% for project in archived_project_list %}
-	<li><a href="{% url 'project_detail' project.id %}">{{ project.acctName }}</a></li>
+	<li><a href="{% url 'project_detail' project.id %}">{{ project.acctName }}</a> <span class="label label-primary">{% if project.PM %}{{ project.PM }}{% else %}Unassigned{% endif %}</span></li>
 	{% endfor %}
 </ul>
 {% endif %}

@@ -14,3 +14,5 @@
 + Add login functionality
 + Add clone project functionality
 * Clicking label of PM name should filter projects or tasks by PM
+* Add MRR for projects
+* Calculate risk for projects based on how many fields are set up -- IE projects are at a higher risk if they have no start date/no end date, etc.
