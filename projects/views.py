@@ -34,6 +34,11 @@ def project_by_pm(request, pm_name):
 	return render(request, 'projects/projects_by_pm.html', {'PM': pm_name, 'project_list': project_list})
 
 @login_required
+def tasks_by_pm(request, pm_name):
+	task_list = Task.objects.filter(PM__username=pm_name).order_by('dueDate')
+	return render(request, 'projects/tasks_by_pm.html', {'PM': pm_name, 'task_list': task_list})
+
+@login_required
 def project_detail(request, project_id):
 	project = get_object_or_404(Project, pk=project_id)
 	return render(request, 'projects/project_detail.html', {'project': project})
