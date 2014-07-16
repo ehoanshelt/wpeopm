@@ -40,10 +40,12 @@ DEFAULT_APPS = (
 
 THIRD_PARTY_APPS = (
     'south',
+    'piston',
 )
 
 MY_APPS = (
     'projects',
+    'api',
 )
 
 INSTALLED_APPS = DEFAULT_APPS + THIRD_PARTY_APPS + MY_APPS

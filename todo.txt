@@ -5,7 +5,7 @@
 * JSON API (see http://stackoverflow.com/questions/18344385/how-to-get-the-end-of-a-url-in-django)
 * Implement Risk
 * Export project tasks to Google Calendar format
-* Better styling
+- Better styling
 + Implement Comment
 * Add ability to attach files (as part of Comments?)
 * UI enhancement: Calendar picklist
