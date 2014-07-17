@@ -26,7 +26,7 @@ class Project(models.Model):
 	"""
 	The actual project.
 	"""
-	created = models.DateField()
+	created = models.DateField(auto_now_add=True)
 	acctName = models.CharField(max_length=30)
 	category = models.ForeignKey(Category)
 	PM = models.ForeignKey(User)
@@ -48,7 +48,7 @@ class TaskList(models.Model):
 	"""
 	A list of tasks.
 	"""
-	created = models.DateField()
+	created = models.DateField(auto_now_add=True)
 	name = models.CharField(max_length=50)
 	description = models.CharField(max_length=200, blank=True, null=True)
 	isTemplate = models.BooleanField()
@@ -65,7 +65,7 @@ class Task(models.Model):
 	"""
 	Tasks for each project.
 	"""
-	created = models.DateField()
+	created = models.DateField(auto_now_add=True)
 	tasklist = models.ForeignKey(TaskList)
 	name = models.CharField(max_length=50)
 	PM = models.ForeignKey(User, blank=True, null=True)
@@ -89,7 +89,7 @@ class Risk(models.Model):
 	"""
 	Risks associated with the project.
 	"""
-	created = models.DateField()
+	created = models.DateField(auto_now_add=True)
 	project = models.ForeignKey(Project)
 	name = models.CharField(max_length=50)
 	probability = models.IntegerField(default=5)
@@ -106,7 +106,7 @@ class Link(models.Model):
 	"""
 	Links associated with the project.
 	"""
-	created = models.DateField()
+	created = models.DateField(auto_now_add=True)
 	project = models.ForeignKey(Project)
 	name = models.CharField(max_length=30)
 	description = models.CharField(max_length=200, blank=True, null=True)
@@ -129,7 +129,7 @@ class Comment(models.Model):
 	NOTE: I'm certain there is a better way to do this association.
 	"""
 	type_of_comment = models.CharField(max_length=1, choices=COMMENT_CHOICES)
-	created = models.DateField()
+	created = models.DateField(auto_now_add=True)
 	description = models.TextField()
 	project = models.ForeignKey(Project, blank=True, null=True)
 	task = models.ForeignKey(Task, blank=True, null=True)

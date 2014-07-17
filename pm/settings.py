@@ -41,6 +41,7 @@ DEFAULT_APPS = (
 THIRD_PARTY_APPS = (
     'south',
     'piston',
+    'rest_framework',
 )
 
 MY_APPS = (

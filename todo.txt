@@ -1,7 +1,7 @@
 + Ability to filter projects by PM
 ? Ability to filter projects by AM
 + BUG - Selecting distinct AM names should discard empty strings
-* BUG - can't add tasklist
++ BUG - can't add tasklist
 + List tasks by due date
 + Assign all tasks in project to project PM
 + JSON API
@@ -18,7 +18,7 @@
 + Clicking label of PM name should filter projects or tasks by PM
 * Add MRR for projects
 * Calculate risk for projects based on how many fields are set up -- IE projects are at a higher risk if they have no start date/no end date, etc.
-
+* Task dependencies
 + Make production settings (i.e database path)
 + 404 page
 + 500 page
@@ -28,3 +28,13 @@
 webhook info:
 hit a url implementation.wpengine.com/web-hook
 send type of object and object id and unix timestamp
+* POST-based API
+
+
+Notes from actually spending a day entering data:
+* Description field could be better-used. And consistent. Some times it's required, others it's not.
+* Add a tasklist screen does not have any indication telling me what I'm doing.
+* Would be nice to add tasks to tasklist by clicking a button on project detail.
+* There is no way to get to the project from the tasklist detail page.
+* Cloning projects is the way to go. Maybe parlay this into project templates?
+* Latest projects -- is this useful? We move at such a fast speed that it's mostly the same as active projects. Plus, the sorting on Latest projects is off.
