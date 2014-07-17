@@ -20,6 +20,7 @@ def index(request):
 	latest_project_list = Project.objects.filter(isDeleted=False).order_by('-created')[:5]
 	PM_list = Project.objects.order_by('PM__username').values('PM__username').distinct()
 	AM_list = Project.objects.values_list('AM', flat=True).distinct()
+	AM_list = filter(None, AM_list)
 	context = {
 		'latest_project_list': latest_project_list,
 		'active_project_list': active_project_list,
@@ -274,8 +275,10 @@ def tasklist_edit(request, project_id, tasklist_id=None):
 	else:
 		tasklist = TaskList()
 		tasklist.created = timezone.now()
+		tasklist.isDeleted = False
 		if project is not None:
 			tasklist.project = project
+			tasklist.isTemplate = False
 		else:
 			tasklist.isTemplate = True
 	if request.POST:

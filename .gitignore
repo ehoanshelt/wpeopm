@@ -4,3 +4,5 @@ db/
 projects/migrations/*
 uploads/
 static/
+pm/settings.py
+

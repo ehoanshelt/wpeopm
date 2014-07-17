@@ -1,6 +1,7 @@
 + Ability to filter projects by PM
-* Ability to filter projects by AM
-* BUG - Selecting distinct AM names should discard empty strings
+? Ability to filter projects by AM
++ BUG - Selecting distinct AM names should discard empty strings
+* BUG - can't add tasklist
 + List tasks by due date
 + Assign all tasks in project to project PM
 + JSON API
@@ -14,7 +15,7 @@
 + Mark tasks as complete from project detail page
 + Add login functionality
 + Add clone project functionality
-* Clicking label of PM name should filter projects or tasks by PM
++ Clicking label of PM name should filter projects or tasks by PM
 * Add MRR for projects
 * Calculate risk for projects based on how many fields are set up -- IE projects are at a higher risk if they have no start date/no end date, etc.
 
