@@ -134,3 +134,13 @@ REST_FRAMEWORK = {
 }
 
 HTTPS_SUPPORT = True
+
+#### Nothing should go below this line!!
+
+# Local setting overrides are stored in local_settings.py and are specific to the environment
+# local_settings.py is not under version control
+
+try:
+    from local_settings import *
+except ImportError, e:
+    pass

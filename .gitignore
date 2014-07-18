@@ -7,4 +7,4 @@ static/
 pm/settings.py
 stunnel/
 stunnel.log
-
+pm/local_settings.py
