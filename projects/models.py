@@ -139,27 +139,3 @@ class Comment(models.Model):
 
 	def __unicode__(self):
 		return "%s (%s)" % (self.description, self.project)
-
-class APIUser(models.Model):
-	"""
-	Extends the contrib.auth.User model via one-to-one relationship.
-
-	docs.djangoproject.com/en/1.6/topics/auth/customizing
-	"""
-	user = models.OneToOneField(User)
-	APIKey = models.CharField(max_length=100)
-
-	def generateAPIKey(self):
-		"""
-		Generates and returns an API key, stores the hash value in self.APIKey
-
-		stackoverflow.com/questions/2257441
-		stackoverflow.com/questions/5297448
-
-		"""
-		size = 15 # unrelated to max_length of APIKey, which will store a hash
-		chars = string.ascii_letters + string.digits # choose from uppercase/lowercase letters and 0-9
-		key = ''.join(random.choice(chars) for _ in range(size))
-		self.APIKey = hashlib.md5(key).hexdigest() # md5 encode
-		self.save()
-		return key

@@ -42,6 +42,8 @@ THIRD_PARTY_APPS = (
     'south',
     'piston',
     'rest_framework',
+    'rest_framework.authtoken',
+    'sslserver',
 )
 
 MY_APPS = (
@@ -113,3 +115,20 @@ LOGIN_REDIRECT_URL = '/projects/'
 
 MEDIA_ROOT = '/home/matthew/pm/uploads/'
 MEDIA_URL = 'http://localhost:8000/files/'
+
+# API settings
+REST_FRAMEWORK = {
+    # Use hyperlinked styles by default
+    # Only used if the 'serializer_class' attribute is not set on a view
+#    'DEFAULT_MODEL_SERIALIZER_CLASS': 'rest_framework.serializers.HyperlinkedModelSerializer',
+
+    # Use Django's standard 'django.contrib.auth' permissions,
+    # or allow read-only access for unauthenticated users.
+#    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
+#    'PAGINATE_BY': 10
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    )
+}

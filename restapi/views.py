@@ -1,61 +1,36 @@
-from django.http import HttpResponse
-from django.views.decorators.csrf import csrf_exempt
+from rest_framework import generics, permissions, viewsets
 
-from rest_framework.renderers import JSONRenderer
-from rest_framework.parsers import JSONParser
+from projects.models import Project, Link, TaskList, Task
+from restapi.serializers import ProjectSerializer, LinkSerializer, TaskListSerializer, TaskSerializer
 
-from projects.models import Link
-from restapi.serializers import LinkSerializer
-
-class JSONResponse(HttpResponse):
+class LinkViewSet(viewsets.ModelViewSet):
 	"""
-	An HttpResponse that renders its content into JSON.
+	API endpoint that allows links to be viewed or edited.
 	"""
-	def __init__(self, data, **kwargs):
-		content = JSONRenderer().render(data)
-		kwargs['content_type'] = 'application/json'
-		super(JSONResponse, self).__init__(content, **kwargs)
+	queryset = Link.objects.all()
+	serializer_class = LinkSerializer
+	permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
-@csrf_exempt
-def link_list(request):
+class ProjectViewSet(viewsets.ModelViewSet):
 	"""
-	List all links, or create a new link.
+	API endpoint that allows projects to be viewed or edited.
 	"""
-	if request.method == 'GET':
-		links = Link.objects.all()
-		serializer = LinkSerializer(links, many=True)
-		return JSONResponse(serializer.data)
+	queryset = Project.objects.all()
+	serializer_class = ProjectSerializer
+	permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
-	elif request.method == 'POST':
-		data = JSONParser().parse(request)
-		serializer = LinkSerializer(data=data)
-		if serializer.is_valid():
-			serializer.save()
-			return JSONResponse(serializer.data, status=201)
-		return JSONResponse(serializer.errors, status=400)
-
-@csrf_exempt
-def link_detail(request, pk):
+class TaskListViewSet(viewsets.ModelViewSet):
 	"""
-	Retrieve, update, or delete a link.
+	API endpoint that allows task lists to be viewed or edited.
 	"""
-	try:
-		link = Link.objects.get(pk=pk)
-	except Link.DoesNotExist:
-		return HttpResponse(status=404)
+	queryset = TaskList.objects.all()
+	serializer_class = TaskListSerializer
+	permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
-	if request.method == 'GET':
-		serializer = LinkSerializer(link)
-		return JSONResponse(serializer.data)
-
-	elif request.method == 'PUT':
-		data = JSONParser().parse(request)
-		serializer = LinkSerializer(link, data=data)
-		if serializer.is_valid():
-			serializer.save()
-			return JSONResponse(serializer.data)
-		return JSONResponse(serializer.errors, status=400)
-
-	elif request.method == 'DELETE':
-		link.delete()
-		return HttpResponse(status=204)
+class TaskViewSet(viewsets.ModelViewSet):
+	"""
+	API endpoint that allows tasks to be viewed or edited.
+	"""
+	queryset = Task.objects.all()
+	serializer_class = TaskSerializer
+	permission_classes = (permissions.IsAuthenticatedOrReadOnly,)

@@ -35,7 +35,7 @@ Completed on {{ project.completedDate }}
 {% if project.tasklist_set.all %}
 <ul>
 	{% for tasklist in project.tasklist_set.all %}
-		<li><a href="{% url 'tasklist_detail' project.id tasklist.id %}">{{ tasklist.name }}</a> <a class="tasklist_edit btn btn-xs btn-info" href="{% url 'tasklist_edit' project.id tasklist.id %}">Edit</a></li>
+		<li><a href="{% url 'tasklist_detail' project.id tasklist.id %}">{{ tasklist.name }}</a> <a class="tasklist_edit btn btn-xs btn-info" href="{% url 'tasklist_edit' project.id tasklist.id %}">Edit</a> <a class="tasklist_tasks_add btn btn-xs btn-success" href="{% url 'task_add' tasklist.id %}">Add task</a></li>
 		{% if tasklist.task_set.all %}
 		<ul>
 		{% for task in tasklist.task_set.all %}

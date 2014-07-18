@@ -2,6 +2,7 @@
 {% block title %}Edit Task{% endblock %}
 
 {% block body %}
+<h2>Edit Task</h2>
 <form method="post" action="">{% csrf_token %}
 {{ form.as_p }}
 <button class="btn btn-primary" type="submit" value="submit">Submit</button>

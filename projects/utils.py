@@ -14,4 +14,4 @@ def notify_webhook(object_type, object_id):
 		'object_id': object_id,
 		'timestamp': int(time.time())
 	}
-	r = requests.post(URL, data=data)
+	#r = requests.post(URL, data=data)

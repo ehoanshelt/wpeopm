@@ -33,8 +33,8 @@ send type of object and object id and unix timestamp
 
 Notes from actually spending a day entering data:
 * Description field could be better-used. And consistent. Some times it's required, others it's not.
-* Add a tasklist screen does not have any indication telling me what I'm doing.
-* Would be nice to add tasks to tasklist by clicking a button on project detail.
-* There is no way to get to the project from the tasklist detail page.
++ Add a tasklist screen does not have any indication telling me what I'm doing.
++ Would be nice to add tasks to tasklist by clicking a button on project detail.
++ There is no way to get to the project from the tasklist detail page.
 * Cloning projects is the way to go. Maybe parlay this into project templates?
-* Latest projects -- is this useful? We move at such a fast speed that it's mostly the same as active projects. Plus, the sorting on Latest projects is off.
++ Latest projects -- is this useful? We move at such a fast speed that it's mostly the same as active projects. Plus, the sorting on Latest projects is off.
