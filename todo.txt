@@ -28,7 +28,7 @@
 webhook info:
 hit a url implementation.wpengine.com/web-hook
 send type of object and object id and unix timestamp
-* POST-based API
++ POST-based API
 
 
 Notes from actually spending a day entering data:
