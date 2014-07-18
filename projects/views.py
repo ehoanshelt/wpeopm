@@ -2,14 +2,25 @@ import json
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.contrib.auth.views import login
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseForbidden, HttpResponseNotFound
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 
+from projects.decorators import secure_required
 from projects.forms import ProjectForm, TaskListForm, TaskForm, LinkForm, CommentForm
 from projects.models import Category, Project, TaskList, Task, Risk, Link, Comment
 from projects.utils import notify_webhook
+
+@secure_required
+def ssl_login(request, *args, **kwargs):
+	# Creating this view to force /login/ page to https.
+	if request.method == 'POST':
+		if not request.POST.get('remember', None):
+			request.session.set_expiry(0)
+
+	return login(request, *args, **kwargs)
 
 # Create your views here.
 def index(request):

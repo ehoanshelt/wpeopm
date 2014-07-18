@@ -132,3 +132,5 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     )
 }
+
+HTTPS_SUPPORT = True

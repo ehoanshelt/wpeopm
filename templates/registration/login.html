@@ -6,7 +6,7 @@
 <div class="alert alert-danger">Please check your username and password and try again.</div>
 {% endif %}
 
-<form method="post" action="{% url 'django.contrib.auth.views.login' %}">
+<form method="post" action="{% url 'login_view' %}">
 {% csrf_token %}
 <table>
 <tr>

@@ -23,6 +23,6 @@ urlpatterns = patterns('',
     url(r'^api/2.0/', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^login/$', 'django.contrib.auth.views.login'),
-    url(r'^logout/$', 'django.contrib.auth.views.logout'),
+    url(r'^login/$', 'projects.views.ssl_login', name='login_view'),
+    url(r'^logout/$', 'django.contrib.auth.views.logout', name='logout_view'),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

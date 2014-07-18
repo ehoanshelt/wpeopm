@@ -3,11 +3,15 @@ import hashlib
 import random
 import string
 
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.utils import timezone
 
-# Create your models here.
+from rest_framework.authtoken.models import Token
+
 class Category(models.Model):
 	"""
 	The Category that Projects have.
@@ -139,3 +143,9 @@ class Comment(models.Model):
 
 	def __unicode__(self):
 		return "%s (%s)" % (self.description, self.project)
+
+# Ensures API auth token is created for each user upon User creation
+@receiver(post_save, sender=get_user_model())
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+	if created:
+		Token.objects.create(user=instance)

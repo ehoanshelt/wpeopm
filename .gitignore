@@ -6,4 +6,5 @@ uploads/
 static/
 pm/settings.py
 stunnel/
+stunnel.log
 
