@@ -20,7 +20,7 @@
 </div>
 {% for project in project_list %}
 <div class="row {% if forloop.counter|divisibleby:2 %}even{% else %}odd{% endif %}">
-	<div class="col-sm-3"><a href="{% url 'project_detail' project.id %}">{{ project.acctName }}</a></div>
+	<div class="col-sm-3"><a href="{% url 'project_detail' project.id %}">{{ project.acctName }}</a> <span class="label label-{% if project.riskScore >= 2 %}danger{% elif project.riskScore > 0 %}warning{% else %}success{% endif %}">Risk Score: {{ project.riskScore }}</span></div>
 	<div class="col-sm-3">{{ project.category }}</div>
 	<div class="col-sm-2">{{ project.startDate }}</div>
 	<div class="col-sm-2">{{ project.endDate }}</div>

@@ -26,6 +26,10 @@ class Category(models.Model):
 	def __unicode__(self):
 		return self.name
 
+PROJECT_RISK_GREEN = 0
+PROJECT_RISK_YELLOW = 1
+PROJECT_RISK_RED = 2
+
 class Project(models.Model):
 	"""
 	The actual project.
@@ -41,9 +45,54 @@ class Project(models.Model):
 	completedDate = models.DateField(blank=True, null=True)
 	isArchived = models.BooleanField()
 	isDeleted = models.BooleanField()
+	customerLaunchDate = models.DateField(blank=True, null=True)
 
 	class Meta:
 		ordering = ["acctName"]
+
+	@property
+	def lastTicketResponseDate(self):
+		"""
+		Queries ZenDesk to get the last response date for a ticket with the sitename associated with self.acctName.
+		Used to measure customer engagement.
+		"""
+		return timezone.now()
+		# placeholder - today
+
+	@property
+	def recentLastTicketResponseDate(self):
+		"""
+		Returns True if the last ticket response date is within two days ago.
+		"""
+		return (self.lastTicketResponseDate < (timezone.now() - datetime.timedelta(days=2)))
+
+	@property
+	def otherTickets(self):
+		"""
+		Queries ZenDesk to get the number of tickets the customer has submitted. Generally if the customer is engaging Support
+		instead of Onboarding, they should be funneled back into the Onboarding queue.
+		"""
+		return 2
+		# placeholder - the customer has the handoff ticket plus the initial inquiry ticket
+
+	@property
+	def riskScore(self):
+		"""
+		Looks at the following conditions:
+		** Customer has not responded to a ticket in the past two days
+		** Customer has more than two tickets open in ZenDesk
+		** Customer has not provided a launch date
+
+		The more conditions are True, the more the customer needs attention
+
+		See http://stackoverflow.com/questions/12765833/ for a code explanation
+		"""
+		conditions = [
+			(self.recentLastTicketResponseDate),
+			(self.otherTickets > 2),
+			(self.customerLaunchDate is None)
+		]
+		return len(conditions) - sum(bool(x) for x in conditions) # returns 0..n..len(conditions)
 
 	def __unicode__(self):
 		return "%s (%s)" % (self.acctName, self.category)

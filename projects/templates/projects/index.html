@@ -31,7 +31,7 @@
 {% if active_project_list %}
 <ul>
 	{% for project in active_project_list %}
-	<li><a href="{% url 'project_detail' project.id %}">{{ project.acctName }}</a> <span class="label label-primary">{% if project.PM %}{{ project.PM }}{% else %}Unassigned{% endif %}</span></li>
+	<li><a href="{% url 'project_detail' project.id %}">{{ project.acctName }}</a> <span class="label label-primary">{% if project.PM %}{{ project.PM }}{% else %}Unassigned{% endif %}</span> <span class="label label-{% if project.riskScore >= 2 %}danger{% elif project.riskScore > 0 %}warning{% else %}success{% endif %}">Risk Score: {{ project.riskScore }}</span></li>
 	{% endfor %}
 </ul>
 {% else %}

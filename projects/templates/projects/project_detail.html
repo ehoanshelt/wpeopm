@@ -24,6 +24,15 @@
 {% if project.isCompleted %}
 Completed on {{ project.completedDate }}
 {% endif %}
+<p class="project-risk">
+	<div class="label label-{% if project.riskScore >= 2 %}danger{% elif project.riskScore > 0 %}warning{% else %}success{% endif %}">Risk Score: {{ project.riskScore }}</div>
+	<h4>Risk indicators</h4>
+	<div class="row">
+		<div class="col-sm-4"><strong>Last ticket response:</strong><span class="label label-{% if project.recentLastTicketResponseDate %}success{% else %}danger{% endif %}">{{ project.lastTicketResponseDate }}</span></div>
+		<div class="col-sm-4"><strong>Number of ZenDesk tickets:</strong><span class="label label-{% if project.otherTickets <= 2 %}success{% else %}danger{% endif %}">{{ project.otherTickets }}</span></div>
+		<div class="col-sm-4"><strong>Launch date:</strong><span class="label label-{% if project.customerLaunchDate %}success{% else %}danger{% endif %}">{{ project.customerLaunchDate }}</span></div>
+	</div>
+</p>
 <div class="row">
 <div class="col-md-2"><h3>Tasks</h3></div>
 <div class="col-md-10 task-buttons">
