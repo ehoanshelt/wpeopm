@@ -1,10 +1,23 @@
 {% extends 'projects/base_template.html' %}
+{% load widget_tweaks %}
 {% block title %}Edit Task List{% endblock %}
 
 {% block body %}
 <h2>Edit a Task List</h2>
 <form method="post" action="">{% csrf_token %}
-{{ form.as_p }}
+{% if form.non_field_errors %}
+<div class="alert alert-danger">
+{{ form.non_field_errors }}
+</div>
+{% endif %}
+<div class="fieldWrapper form-group" style="width:50%">
+	{% if form.name.errors %}<div class="alert alert-danger">{{ form.name.errors }}</div>{% endif %}
+	<label class="" for="id_name">Task List Name:</label>{{ form.name|add_class:"form-control" }}
+</div>
+<div class="fieldWrapper form-group" style="width:50%">
+	{% if form.description.errors %}<div class="alert alert-danger">{{ form.description.errors }}</div>{% endif %}
+	<label class="" for="id_description">Description:</label>{{ form.description|add_class:"form-control" }}
+</div>
 <button class="btn btn-primary" type="submit" value="submit">Submit</button> <a href="{% if project %}{% url 'project_detail' tasklist.project.id %}{% else %}{% url 'tasklist_manage' %}{% endif %}">Cancel</a>
 </form>
 {% endblock %}

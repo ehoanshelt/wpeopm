@@ -37,6 +37,7 @@ THIRD_PARTY_APPS = (
     'rest_framework',
     'rest_framework.authtoken',
     'sslserver',
+    'widget_tweaks',
 )
 
 MY_APPS = (

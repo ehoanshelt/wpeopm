@@ -1,10 +1,24 @@
 {% extends 'projects/base_template.html' %}
+{% load widget_tweaks %}
 {% block title %}Edit Comment{% endblock %}
 
-
 {% block body %}
+<h2>Edit Comment</h2>
 <form method="post" action="">{% csrf_token %}
-{{ form.as_p }}
+{% if form.non_field_errors %}
+<div class="alert alert-danger">
+{{ form.non_field_errors }}
+</div>
+{% endif %}
+<div class="fieldWrapper form-group" style="width:50%">
+	{% if form.description.errors %}<div class="alert alert-danger">{{ form.description.errors }}</div>{% endif %}
+	{{ form.description|add_class:"form-control" }}
+</div>
+<div class="fieldWrapper form-group" style="width:50%">
+	{% if form.attachment.errors %}<div class="alert alert-danger">{{ form.attachment.errors }}</div>{% endif %}
+	<label class="" for="id_name">Attachment:</label>{{ form.attachment|add_class:"form-control" }}
+</div>
+
 <button class="btn btn-primary" type="submit" value="submit">Submit</button> 
 </form>
 {% endblock %}

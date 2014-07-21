@@ -7,7 +7,7 @@
 <h3>Links for {{ project.acctName }}</h1>
 <ul>
 	{% for link in project.link_set.all %}
-		<li><a href="{{ link.code }}">{{ link.name }}</a></li>
+		<li><a href="{{ link.code }}">{{ link.name }}</a> <a class="btn btn-xs btn-info" href="{% url 'link_edit' link.project.id link.id %}">Edit</a></li>
 	{% endfor %}
 </ul>
 

@@ -1,12 +1,96 @@
 {% extends 'projects/base_template.html' %}
+{% load staticfiles %}
+{% load widget_tweaks %}
 {% block title %}Edit Project{% endblock %}
+
+{% block head_styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'projects/css/bootstrap-datetimepicker.min.css' %}">
+{% endblock %}
+
 {% block projectdetaillink %}{% if project.id %}{% url 'project_detail' project.id %}{% else %}{% url 'index' %}{% endif %}{% endblock %}
 {% block projectname %}{{ project.acctName }}{% endblock %}
 
+
 {% block body %}
+
 <h1>Edit project</h1>
-<form method="post" action="">{% csrf_token %}
-{{ form.as_p }}
+<form method="post" action="" role="form">{% csrf_token %}
+{% if form.non_field_errors %}
+<div class="alert alert-danger">
+{{ form.non_field_errors }}
+</div>
+{% endif %}
+<div class="fieldWrapper form-group" style="width:50%">
+	{% if form.acctName.errors %}<div class="alert alert-danger">{{ form.acctName.errors }}</div>{% endif %}
+	<label class="" for="id_acctName">Account Name:</label>{{ form.acctName|add_class:"form-control" }}
+</div>
+<div class="fieldWrapper form-group" style="width:50%">
+	{% if form.category.errors %}<div class="alert alert-danger">{{ form.category.errors }}</div>{% endif %}
+	<label class="" for="id_category">Category:</label>{{ form.category|add_class:"form-control" }}
+</div>
+<div class="fieldWrapper form-group" style="width:50%"> 
+	{% if form.PM.errors %}<div class="alert alert-danger">{{ form.PM.errors }}</div>{% endif %}
+	<label class="" for="id_PM">Project Manager:</label>{{ form.PM|add_class:"form-control" }}
+</div>
+<div class="fieldWrapper form-group" style="width:50%">
+	{% if form.AM.errors %}<div class="alert alert-danger">{{ form.AM.errors }}</div>{% endif %}
+	<label class="" for="id_AM">Account Manager:</label>{{ form.AM|add_class:"form-control" }}
+</div>
+<div class="fieldWrapper form-group" style="width:50%">
+	{% if form.startDate.errors %}<div class="alert alert-danger">{{ form.startDate.errors }}</div>{% endif %}
+	<label class="" for="id_startDate">Project Start Date:</label>
+	<div class="input-group date" id="startDate_datetimepicker" data-date="{{ project.startDate|date:"m-d-y" }}" data-date-format="MM-DD-YY">
+		<input class="form-control" type="text" value="{{ project.startDate|date:"m-d-y" }}">
+		<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+	</div>
+</div>
+<div class="fieldWrapper form-group" style="width:50%">
+	{% if form.endDate.errors %}<div class="alert alert-danger">{{ form.endDate.errors }}</div>{% endif %}
+	<label class="" for="id_endDate">Project End Date:</label>
+	<div class="input-group date" id="endDate_datetimepicker" data-date="{{ project.endDate|date:"m-d-y" }}" data-date-format="MM-DD-YY">
+		<input class="form-control" type="text" value="{{ project.endDate|date:"m-d-y" }}">
+		<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+	</div>
+</div>
+<div class="fieldWrapper form-group" style="width:50%">
+	{% if form.isCompleted.errors %}<div class="alert alert-danger">{{ form.isCompleted.errors }}</div>{% endif %}
+	<label class="" for="id_isCompleted">Is Project Completed?:</label>{{ form.isCompleted|add_class:"form-control" }}
+</div>
+<div class="fieldWrapper form-group" style="width:50%">
+	{% if form.completedDate.errors %}<div class="alert alert-danger">{{ form.completedDate.errors }}</div>{% endif %}
+	<label class="" for="id_completedDate">Project Completed Date:</label>
+	<div class="input-group date" id="completedDate_datetimepicker" data-date="{{ project.completedDate|date:"m-d-y" }}" data-date-format="MM-DD-YY">
+		<input class="form-control" type="text" value="{{ project.completedDate|date:"m-d-y" }}">
+		<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+	</div>
+</div>
+</div><div class="fieldWrapper form-group" style="width:50%">
+	{% if form.isArchived.errors %}<div class="alert alert-danger">{{ form.isArchived.errors }}</div>{% endif %}
+	<label class="" for="id_isArchived">Is Project Archived?:</label>{{ form.isArchived|add_class:"form-control" }}
+</div>
+<div class="fieldWrapper form-group" style="width:50%">
+	{% if form.isDeleted.errors %}<div class="alert alert-danger">{{ form.isDeleted.errors }}</div>{% endif %}
+	<label class="" for="id_isDeleted">Is Project Deleted?:</label>{{ form.isDeleted|add_class:"form-control" }}
+</div>
 <button class="btn btn-success" type="submit" value="submit">Submit</button> <a href="{% url 'index' %}">Cancel</a>
 </form>
+
+{% endblock %}
+
+{% block body_js %}
+<script src="{% static 'projects/js/moment.min.js' %}"></script>
+<script src="{% static 'projects/js/bootstrap-datetimepicker.js' %}"></script>
+<script type="text/javascript">
+	$(function() {
+		$('#startDate_datetimepicker').datetimepicker({
+			pickTime: false
+		});
+		$('#endDate_datetimepicker').datetimepicker({
+			pickTime: false
+		});
+		$('#completedDate_datetimepicker').datetimepicker({
+			pickTime: false
+		});
+	});
+</script>
 {% endblock %}

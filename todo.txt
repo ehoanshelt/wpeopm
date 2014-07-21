@@ -8,7 +8,7 @@
 * Implement Risk
 * Export project tasks to Google Calendar format
 - Better styling
-+ Implement Comment
+- Implement Comment
 * Add ability to attach files (as part of Comments?)
 * UI enhancement: Calendar picklist
 * Make AM a User
@@ -19,7 +19,7 @@
 * Add MRR for projects
 * Calculate risk for projects based on how many fields are set up -- IE projects are at a higher risk if they have no start date/no end date, etc.
 * Task dependencies
-* Make production settings (i.e database path)
++ Make production settings (i.e database path)
 + 404 page
 + 500 page
 + Turn DEBUG off

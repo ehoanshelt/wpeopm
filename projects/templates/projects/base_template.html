@@ -4,11 +4,13 @@
 <html lang="en">
 <head>
 	<title>{% block title %}{% endblock %} | WPEOPM</title>
-	<link rel="stylesheet" type="text/css" href="{% static 'projects/css/reset.min.css' %}">
-	<link rel="stylesheet" type="text/css" href="{% static 'projects/css/bootstrap.min.css' %}">
+	
+	<link rel="stylesheet" type="text/css" href="{% static 'projects/css/bootstrap.css' %}">
 	<link rel="stylesheet" type="text/css" href="{% static 'projects/css/base.css' %}">
+	{% block head_styles %}{% endblock %}
 </head>
 <body>
+	
 		<nav class="navbar navbar-default navbar-static-top" role="navigation">
 			<div class="container-fluid">
 			    <!-- Brand and toggle get grouped for better mobile display -->
@@ -57,9 +59,14 @@
 					    </div><!-- /.navbar-collapse -->
 					</div><!-- /.container-fluid -->
 				</nav>
-				{% block body %}{% endblock %}
+				
+				{% block body %}
+
+				{% endblock %}
+				
 			</div>
 		</div>
+
 	<script src="{% static 'projects/js/jquery-1.11.1.min.js' %}"></script>
 	<script src="{% static 'projects/js/bootstrap.min.js' %}"></script>
 {% block body_js %}{% endblock %}

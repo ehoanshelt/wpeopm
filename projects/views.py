@@ -179,7 +179,7 @@ def task_edit(request, tasklist_id, task_id=None):
 	else:
 		form = TaskForm(instance=task)
 	
-	return render(request, 'projects/task_edit.html', {'form': form})
+	return render(request, 'projects/task_edit.html', {'form': form, 'task': task})
 
 @login_required
 def task_complete(request, tasklist_id, task_id):
@@ -372,12 +372,9 @@ def comment_edit(request, object_type, object_id, comment_id=None):
 		return_url = reverse('risk_detail', kwargs={'risk_id': object_id})
 	if parent_type == 'L':
 		link = get_object_or_404(Link, pk=object_id)
-		return_url = reverse('link_detail', kwargs={'link_id': object_id})
+		return_url = reverse('link_detail', kwargs={'project_id': link.project.id, 'link_id': object_id})
 	if comment_id:
 		comment = get_object_or_404(Comment, pk=comment_id)
-	else:
-		comment = Comment()
-		comment.created = timezone.now()
 		if parent_type == 'P':
 			comment.project = project
 		if parent_type == 'T':
@@ -386,6 +383,9 @@ def comment_edit(request, object_type, object_id, comment_id=None):
 			comment.risk = risk
 		if parent_type == 'L':
 			comment.link = link
+	else:
+		comment = Comment()
+		comment.created = timezone.now()
 	if request.POST:
 		form = CommentForm(request.POST, instance=comment, parent_object=parent_type)
 		if form.is_valid():
