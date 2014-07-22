@@ -4,6 +4,8 @@ db/
 projects/migrations/*
 uploads/
 pm/settings.py
+pm/settings.pyc
 stunnel/
 stunnel.log
 pm/local_settings.py
+
