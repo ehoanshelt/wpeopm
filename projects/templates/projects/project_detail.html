@@ -20,8 +20,9 @@
 <p>Account Manager: {{ project.AM }}</p>
 {% endif %}
 <p>{{ project.startDate }} - {{ project.endDate }}</p>
-<p class="completed">
-{% if project.isCompleted %}
+<p class="status">
+<p class="status-label-container"><span class="small-text label label-{% if project.status == 'N' %}warning">Not started{% elif project.status == 'I' %}info">In progress{% else %}success">Complete{% endif %}</span></p>
+{% if project.status == 'C' %}
 Completed on {{ project.completedDate }}
 {% endif %}
 <p class="project-risk">

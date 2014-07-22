@@ -33,6 +33,7 @@ send type of object and object id and unix timestamp
 * Add edit task to tasklist detail screen
 * reload tasks upon task completion to resolve dependencies
 * move clone from views to utils for DRY
++ tasks/projects need "not started" "in progress" "completed" status
 
 Notes from actually spending a day entering data:
 * Description field could be better-used. And consistent. Some times it's required, others it's not.
@@ -41,3 +42,8 @@ Notes from actually spending a day entering data:
 + There is no way to get to the project from the tasklist detail page.
 * Cloning projects is the way to go. Maybe parlay this into project templates?
 + Latest projects -- is this useful? We move at such a fast speed that it's mostly the same as active projects. Plus, the sorting on Latest projects is off.
+
+Reporting possibilities:
+* Project has a start date in the past but is not marked as In Progress
+* Project has a due date in the past but is not marked Complete
+* Project end date after due date

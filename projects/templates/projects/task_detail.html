@@ -8,9 +8,13 @@
 
 {% block body %}
 <div class="row">
-	<h2 class="col-sm-8">{{ task.name }}</h2>
-	{% if task.isCompleted %}
-	<span class="label label-primary col-sm-2">Completed</span>
+	<h2>{{ task.name }}</h2>
+	{% if task.status == 'C' %}
+	<span class="label label-danger col-sm-2">Not Started</span>
+	{% elif task.status == 'I' %}
+	<span class="label label-warning col-sm-2">In Progress</span>
+	{% elif task.status == 'C' %}
+	<span class="label label-success col-sm-2">Completed</span>
 	{% endif %}
 </div>
 <div class="row">

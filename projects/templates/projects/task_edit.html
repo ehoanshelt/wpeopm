@@ -59,6 +59,10 @@
 	<label class="" for="id_description">Description:</label>{{ form.description|add_class:"form-control" }}
 </div>
 <div class="fieldWrapper form-group">
+	{% if form.status.errors %}<div class="alert alert-danger">{{ form.status.errors }}</div>{% endif %}
+	<label class="" for="id_status">Task Status:</label>{{ form.status|add_class:"form-control" }}
+</div>
+<div class="fieldWrapper form-group">
 	{% if form.completedDate.errors %}<div class="alert alert-danger">{{ form.completedDate.errors }}</div>{% endif %}
 	<label class="" for="id_completedDate">Task Completed Date:</label>
 	<div class="input-group date" id="completedDate_datetimepicker" data-date="{{ task.completedDate|date:"m-d-y" }}" data-date-format="MM-DD-YY">

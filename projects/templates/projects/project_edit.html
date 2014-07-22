@@ -53,8 +53,8 @@
 	</div>
 </div>
 <div class="fieldWrapper form-group" style="width:50%">
-	{% if form.isCompleted.errors %}<div class="alert alert-danger">{{ form.isCompleted.errors }}</div>{% endif %}
-	<label class="" for="id_isCompleted">Is Project Completed?:</label>{{ form.isCompleted|add_class:"form-control" }}
+	{% if form.status.errors %}<div class="alert alert-danger">{{ form.status.errors }}</div>{% endif %}
+	<label class="" for="id_status">Project Status:</label>{{ form.status|add_class:"form-control" }}
 </div>
 <div class="fieldWrapper form-group" style="width:50%">
 	{% if form.completedDate.errors %}<div class="alert alert-danger">{{ form.completedDate.errors }}</div>{% endif %}

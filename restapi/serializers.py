@@ -10,6 +10,7 @@ class ProjectSerializer(serializers.ModelSerializer):
 		model = Project
 		fields = ('id', 'acctName', 'category', 'PM', 'AM', 'startDate', 'isCompleted', 'completedDate', 'isArchived', 'isDeleted')
 
+
 class TaskListSerializer(serializers.ModelSerializer):
 
 	class Meta:
@@ -21,6 +22,7 @@ class TaskSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Task
 		fields = ('id', 'tasklist', 'name', 'PM', 'startDate', 'endDate', 'dueDate', 'description', 'isCompleted', 'completedDate')
+		depth = 3
 
 class LinkSerializer(serializers.ModelSerializer):
 

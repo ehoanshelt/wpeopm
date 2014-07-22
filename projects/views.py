@@ -11,7 +11,7 @@ from django.utils import timezone
 
 from projects.decorators import secure_required
 from projects.forms import ProjectForm, TaskListForm, TaskForm, LinkForm, CommentForm
-from projects.models import Category, Project, TaskList, Task, Dependency, Risk, Link, Comment
+from projects.models import Category, STATUS_CHOICES, Project, TaskList, Task, Dependency, Risk, Link, Comment
 from projects.utils import notify_webhook
 
 @secure_required
@@ -27,7 +27,7 @@ def ssl_login(request, *args, **kwargs):
 def index(request):
 	if not request.user.is_authenticated():
 		return render(request, 'projects/home.html', {})
-	active_project_list = Project.objects.filter(isCompleted=False, isDeleted=False).order_by('acctName')
+	active_project_list = Project.objects.filter(isDeleted=False).filter(~Q(status='C')).order_by('acctName')
 	archived_project_list = Project.objects.filter(isArchived=True, isDeleted=False).order_by('acctName')
 	latest_project_list = Project.objects.filter(isDeleted=False).order_by('-created')[:5]
 	PM_list = Project.objects.order_by('PM__username').values('PM__username').distinct()
@@ -130,7 +130,7 @@ def project_complete(request, project_id):
 	if not request.is_ajax():
 		return HttpResponseForbidden()
 	project = get_object_or_404(Project, pk=project_id)
-	project.isCompleted = True
+	project.status = 'C'
 	project.completedDate = timezone.now()
 	if project.endDate is None:
 		project.endDate = project.completedDate

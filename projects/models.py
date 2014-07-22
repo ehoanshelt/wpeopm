@@ -26,9 +26,13 @@ class Category(models.Model):
 	def __unicode__(self):
 		return self.name
 
-PROJECT_RISK_GREEN = 0
-PROJECT_RISK_YELLOW = 1
-PROJECT_RISK_RED = 2
+STATUS_CHOICES = (
+	('N', 'Not Started'),
+	('I', 'In Progress'),
+	('C', 'Complete'),
+)
+
+DEFAULT_STATUS_CHOICE = 'N'
 
 class Project(models.Model):
 	"""
@@ -41,11 +45,11 @@ class Project(models.Model):
 	AM = models.CharField(max_length=30, blank=True, null=True)
 	startDate = models.DateField(blank=True, null=True)
 	endDate = models.DateField(blank=True, null=True)
-	isCompleted = models.BooleanField()
 	completedDate = models.DateField(blank=True, null=True)
 	isArchived = models.BooleanField()
 	isDeleted = models.BooleanField()
 	customerLaunchDate = models.DateField(blank=True, null=True)
+	status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=DEFAULT_STATUS_CHOICE)
 
 	class Meta:
 		ordering = ["acctName"]
@@ -128,7 +132,7 @@ class Task(models.Model):
 	description = models.TextField()
 	isCompleted = models.BooleanField()
 	completedDate = models.DateField(blank=True, null=True)
-	#dependsOn = models.ManyToManyField("self", symmetrical=False, blank=True, null=True)
+	status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=DEFAULT_STATUS_CHOICE)
 
 	def __unicode__(self):
 		return "%s (%s)" % (self.name, self.tasklist)

@@ -8,7 +8,7 @@ class ProjectsHandler(BaseHandler):
 	"""
 	allowed_methods = ('GET',)
 	model = Project
-	fields = ('id', 'created', 'acctName', 'category', 'PM', 'AM', 'startDate', 'endDate', 'isCompleted', 'completedDate', 'isArchived', 'isDeleted', 'tasklists', 'tasks')
+	fields = ('id', 'created', 'acctName', 'category', 'PM', 'AM', 'startDate', 'endDate', 'status', 'completedDate', 'isArchived', 'isDeleted', 'tasklists', 'tasks')
 
 	@classmethod
 	def id(cls, model):
@@ -43,8 +43,8 @@ class ProjectsHandler(BaseHandler):
 		return model.endDate
 
 	@classmethod
-	def isCompleted(cls, model):
-		return model.isCompleted
+	def status(cls, model):
+		return model.status
 
 	@classmethod
 	def completedDate(cls, model):
