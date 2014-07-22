@@ -5,6 +5,8 @@ from projects import views
 urlpatterns = patterns('',
 	# /projects/
 	url(r'^$', views.index, name='index'),
+	# /projects/audit/
+	url(r'^audit/$', views.audit, name='audit'),
 	# /projects/5/
 	url(r'^(?P<project_id>\d+)/$', views.project_detail, name='project_detail'),
 	# /projects/5/edit/

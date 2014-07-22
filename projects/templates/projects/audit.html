@@ -1,0 +1,14 @@
+{% extends "projects/base_template.html" %}
+
+{% block title %}Active Projects Audit{% endblock %}
+
+{% block body %}
+<h1>Projects Audit</h1>
+{% for project in active_projects %}
+<div class="row {% if forloop.counter|divisibleby:2 %}even{% else %}odd{% endif %}">
+	{% if project.status == 'N' and project.startDate < today.date %}<span class="label label-danger">Not started</span>{% endif %}
+	{% if project.dueDate < today.date %}<span class="label label-info">Past due</span>{% endif %}
+	{{ project.acctName }}
+</div>
+{% endfor %}
+{% endblock %}

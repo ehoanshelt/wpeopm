@@ -1,3 +1,4 @@
+import datetime
 import json
 
 from django.contrib.auth.decorators import login_required
@@ -23,24 +24,32 @@ def ssl_login(request, *args, **kwargs):
 
 	return login(request, *args, **kwargs)
 
-# Create your views here.
 def index(request):
 	if not request.user.is_authenticated():
 		return render(request, 'projects/home.html', {})
 	active_project_list = Project.objects.filter(isDeleted=False).filter(~Q(status='C')).order_by('acctName')
 	archived_project_list = Project.objects.filter(isArchived=True, isDeleted=False).order_by('acctName')
-	latest_project_list = Project.objects.filter(isDeleted=False).order_by('-created')[:5]
 	PM_list = Project.objects.order_by('PM__username').values('PM__username').distinct()
 	AM_list = Project.objects.values_list('AM', flat=True).distinct()
 	AM_list = filter(None, AM_list)
 	context = {
-		'latest_project_list': latest_project_list,
 		'active_project_list': active_project_list,
 		'archived_project_list': archived_project_list,
 		'PM_list': PM_list,
 		'AM_list': AM_list,
 	}
 	return render(request, 'projects/index.html', context)
+
+# keeping this outside of login for this point until we do google apps SSO
+def audit(request):
+	"""
+	Audits the projects in the system. Looks for danger signs or other incompletions:
+	* Project has a start date in the past but is not marked as In Progress
+	* Project has a due date in the past but is not marked Complete
+	"""
+	active_projects = Project.objects.filter(isDeleted=False).filter(~Q(status='C')).order_by('acctName')
+	today = datetime.datetime.now()
+	return render(request, 'projects/audit.html', {'active_projects': active_projects, 'today': today})
 
 @login_required
 def project_by_pm(request, pm_name):
