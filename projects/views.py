@@ -4,13 +4,14 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.views import login
 from django.core.urlresolvers import reverse
+from django.db.models import Q
 from django.http import HttpResponse, HttpResponseForbidden, HttpResponseNotFound
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 
 from projects.decorators import secure_required
 from projects.forms import ProjectForm, TaskListForm, TaskForm, LinkForm, CommentForm
-from projects.models import Category, Project, TaskList, Task, Risk, Link, Comment
+from projects.models import Category, Project, TaskList, Task, Dependency, Risk, Link, Comment
 from projects.utils import notify_webhook
 
 @secure_required
@@ -164,28 +165,59 @@ def task_detail(request, tasklist_id, task_id):
 @login_required
 def task_edit(request, tasklist_id, task_id=None):
 	tasklist = get_object_or_404(TaskList, pk=tasklist_id)
+	other_tasks = Task.objects.filter(tasklist=tasklist)
 	if task_id:
 		task = get_object_or_404(Task, pk=task_id)
+		other_tasks = other_tasks.filter(~Q(id=task_id))
 	else:
 		task = Task()
 		task.created = timezone.now()
 		task.tasklist = tasklist
+	rt_ids = [rt.dependsOn.id for rt in task.task_set.all()]
 	if request.POST:
 		form = TaskForm(request.POST, instance=task)
 		if form.is_valid():
 			form.save()
+			otList = request.POST.getlist("other-tasks")
+			for ot in otList:
+				# add checked tasks
+				try:
+					dep = Dependency.objects.get(task__id=task.id, dependsOn__id=ot)
+				except:
+					dep = None
+				if not dep:
+					# we have to add the dependency because it's not there
+					dep = Dependency()
+					dep.task = task
+					do = get_object_or_404(Task, pk=ot)
+					dep.dependsOn = do
+					dep.save()
+			removed_tasks = list(set(rt_ids) - set(otList))	
+			# remove any tasks that were unchecked
+			for removed in removed_tasks:
+
+				try:
+					r = Dependency.objects.get(task__id=task.id, dependsOn__id=removed)
+				except:
+					r = None # invalid data, ignore
+				if r:
+					r.delete()
+		
 			notify_webhook('task', task.id)
 			return redirect('tasklist_detail', project_id=task.tasklist.project.id, tasklist_id=task.tasklist.id)
 	else:
 		form = TaskForm(instance=task)
 	
-	return render(request, 'projects/task_edit.html', {'form': form, 'task': task})
+	return render(request, 'projects/task_edit.html', {'form': form, 'task': task, 'other_tasks': other_tasks, 'rt_ids': rt_ids})
 
 @login_required
 def task_complete(request, tasklist_id, task_id):
 	if not request.is_ajax():
 		return HttpResponseForbidden()
 	task = get_object_or_404(Task, pk=task_id)
+	if not task.can_be_completed:
+		json_data = json.dumps({"HTTPRESPONSE":2})
+		return HttpResponse(json_data, mimetype="application/json")
 	task.isCompleted = True
 	task.completedDate = timezone.now()
 	if task.endDate is None:

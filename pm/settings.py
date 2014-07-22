@@ -40,6 +40,11 @@ THIRD_PARTY_APPS = (
     'widget_tweaks',
 )
 
+if DEBUG:
+    THIRD_PARTY_APPS += (
+        'debug_toolbar',
+)
+
 MY_APPS = (
     'projects',
     'api',

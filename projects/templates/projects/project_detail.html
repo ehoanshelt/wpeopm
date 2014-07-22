@@ -49,7 +49,12 @@ Completed on {{ project.completedDate }}
 		<ul>
 		{% for task in tasklist.task_set.all %}
 			{% if not task.isCompleted %}
-			<li><span class="label label-default">{{ task.PM }}</span> <a href="{% url 'task_detail' tasklist.id task.id %}">{{ task.name }}</a> <span>{% if task.dueDate %}due {{ task.dueDate }}{% else %}no due date{% endif %}</span> <a class="task_edit btn btn-xs btn-info" href="{% url 'task_edit' tasklist.id task.id %}">Edit</a> <a class="task_complete btn btn-xs btn-warning" id="task_{{ task.id }}" aria-tasklistid="{{ tasklist.id }}" aria-taskid="{{ task.id }}">Done</a></li>
+			<li><span class="label label-default">{{ task.PM }}</span> <a href="{% url 'task_detail' tasklist.id task.id %}">{{ task.name }}</a> <span>{% if task.dueDate %}due {{ task.dueDate }}{% else %}no due date{% endif %}</span> <a class="task_edit btn btn-xs btn-info" href="{% url 'task_edit' tasklist.id task.id %}">Edit</a>
+			{% if task.can_be_completed %}<a class="task_complete btn btn-xs btn-warning" id="task_{{ task.id }}" aria-tasklistid="{{ tasklist.id }}" aria-taskid="{{ task.id }}">Done</a>
+			{% else %}
+			<a class="task_detail btn btn-xs btn-danger" href="{% url 'task_detail' tasklist.id task.id %}">Has Dependencies</a>
+			{% endif %}
+			</li>
 		  	{% endif %}
 		{% endfor %}
 		</ul>

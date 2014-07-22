@@ -10,15 +10,15 @@
 - Better styling
 - Implement Comment
 * Add ability to attach files (as part of Comments?)
-* UI enhancement: Calendar picklist
++ UI enhancement: Calendar picklist
 * Make AM a User
 + Mark tasks as complete from project detail page
 + Add login functionality
 + Add clone project functionality
 + Clicking label of PM name should filter projects or tasks by PM
 * Add MRR for projects
-* Calculate risk for projects based on how many fields are set up -- IE projects are at a higher risk if they have no start date/no end date, etc.
-* Task dependencies
++ Calculate risk for projects based on how many fields are set up -- IE projects are at a higher risk if they have no start date/no end date, etc.
++ Task dependencies
 + Make production settings (i.e database path)
 + 404 page
 + 500 page
@@ -29,7 +29,8 @@ webhook info:
 hit a url implementation.wpengine.com/web-hook
 send type of object and object id and unix timestamp
 + POST-based API
-
+* Improve task detail screen
+* Add edit task to tasklist detail screen
 
 Notes from actually spending a day entering data:
 * Description field could be better-used. And consistent. Some times it's required, others it's not.

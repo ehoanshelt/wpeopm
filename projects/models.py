@@ -128,6 +128,7 @@ class Task(models.Model):
 	description = models.TextField()
 	isCompleted = models.BooleanField()
 	completedDate = models.DateField(blank=True, null=True)
+	#dependsOn = models.ManyToManyField("self", symmetrical=False, blank=True, null=True)
 
 	def __unicode__(self):
 		return "%s (%s)" % (self.name, self.tasklist)
@@ -137,7 +138,31 @@ class Task(models.Model):
 	    if (not self.isCompleted) and (timezone.now().date() > self.dueDate):
 	    	return True
 	    return False
-	
+
+	@property
+	def can_be_completed(self):
+		"""
+		Returns True if all of the tasks this task depends on are completed.
+		"""
+		dependencies = self.task_set.all()
+		for d in dependencies:
+			if not d.dependsOn.isCompleted:
+				return False
+		return True
+
+class Dependency(models.Model):
+	"""
+	Handles dependencies of tasks.
+	"""
+	task = models.ForeignKey(Task, related_name="task_set")
+	dependsOn = models.ForeignKey(Task, related_name="dependency_set")
+
+	def __unicode__(self):
+		return "%s depends on %s" % (self.task.name, self.dependsOn.name)
+
+	class Meta:
+		verbose_name_plural = "dependencies"
+
 class Risk(models.Model):
 	"""
 	Risks associated with the project.

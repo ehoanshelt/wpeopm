@@ -60,3 +60,7 @@ ul ul {
 .tasklist-description-row {
 	padding-bottom: 5px;
 }
+
+ul.no-bullets {
+	list-style-type: none;
+}

@@ -8,26 +8,29 @@
 {% endblock %}
 
 {% block body %}
+
 <h2>Edit Task</h2>
 <form method="post" action="">{% csrf_token %}
+<div class="row">
+<div class="col-sm-7">
 {% if form.non_field_errors %}
 <div class="alert alert-danger">
 {{ form.non_field_errors }}
 </div>
 {% endif %}
-<div class="fieldWrapper form-group" style="width:50%">
+<div class="fieldWrapper form-group">
 	{% if form.tasklist.errors %}<div class="alert alert-danger">{{ form.tasklist.errors }}</div>{% endif %}
 	<label class="" for="id_name">Task List:</label>{{ form.tasklist|add_class:"form-control" }}
 </div>
-<div class="fieldWrapper form-group" style="width:50%">
+<div class="fieldWrapper form-group">
 	{% if form.name.errors %}<div class="alert alert-danger">{{ form.name.errors }}</div>{% endif %}
 	<label class="" for="id_description">Task Name:</label>{{ form.name|add_class:"form-control" }}
 </div>
-<div class="fieldWrapper form-group" style="width:50%">
+<div class="fieldWrapper form-group">
 	{% if form.PM.errors %}<div class="alert alert-danger">{{ form.PM.errors }}</div>{% endif %}
 	<label class="" for="id_description">Project Manager:</label>{{ form.PM|add_class:"form-control" }}
 </div>
-<div class="fieldWrapper form-group" style="width:50%">
+<div class="fieldWrapper form-group">
 	{% if form.startDate.errors %}<div class="alert alert-danger">{{ form.startDate.errors }}</div>{% endif %}
 	<label class="" for="id_startDate">Task Start Date:</label>
 	<div class="input-group date" id="startDate_datetimepicker" data-date="{{ task.startDate|date:"m-d-y" }}" data-date-format="MM-DD-YY">
@@ -35,7 +38,7 @@
 		<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 	</div>
 </div>
-<div class="fieldWrapper form-group" style="width:50%">
+<div class="fieldWrapper form-group">
 	{% if form.endDate.errors %}<div class="alert alert-danger">{{ form.endDate.errors }}</div>{% endif %}
 	<label class="" for="id_endDate">Task End Date:</label>
 	<div class="input-group date" id="endDate_datetimepicker" data-date="{{ task.endDate|date:"m-d-y" }}" data-date-format="MM-DD-YY">
@@ -43,7 +46,7 @@
 		<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 	</div>
 </div>
-<div class="fieldWrapper form-group" style="width:50%">
+<div class="fieldWrapper form-group">
 	{% if form.dueDate.errors %}<div class="alert alert-danger">{{ form.dueDate.errors }}</div>{% endif %}
 	<label class="" for="id_endDate">Task Due Date:</label>
 	<div class="input-group date" id="dueDate_datetimepicker" data-date="{{ task.dueDate|date:"m-d-y" }}" data-date-format="MM-DD-YY">
@@ -51,11 +54,11 @@
 		<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 	</div>
 </div>
-<div class="fieldWrapper form-group" style="width:50%">
+<div class="fieldWrapper form-group">
 	{% if form.description.errors %}<div class="alert alert-danger">{{ form.description.errors }}</div>{% endif %}
 	<label class="" for="id_description">Description:</label>{{ form.description|add_class:"form-control" }}
 </div>
-<div class="fieldWrapper form-group" style="width:50%">
+<div class="fieldWrapper form-group">
 	{% if form.completedDate.errors %}<div class="alert alert-danger">{{ form.completedDate.errors }}</div>{% endif %}
 	<label class="" for="id_completedDate">Task Completed Date:</label>
 	<div class="input-group date" id="completedDate_datetimepicker" data-date="{{ task.completedDate|date:"m-d-y" }}" data-date-format="MM-DD-YY">
@@ -63,8 +66,25 @@
 		<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 	</div>
 </div>
+
+</div>
+<div class="col-sm-5">
+{% if other_tasks %}
+<h3>Dependencies</h3>
+{% if form.dependsOn.errors %}<div class="alert alert-danger">{{ form.dependsOn.errors }}</div>{% endif %}
+<p>Check any tasks that this task depends on</p>
+<ul class="no-bullets">
+{% for ot in other_tasks %}
+	<li><input type="checkbox" {% if ot.id in rt_ids %}checked {% endif %}name="other-tasks" value="{{ ot.id }}" id="ot_checkbox_{{ ot.id }}"/><label for="ot_checkbox_{{ ot.id }}">{{ ot.name }}</label></li>
+{% endfor %}
+</ul>
+{% endif %}
 <button class="btn btn-primary" type="submit" value="submit">Submit</button>
+</div>
+</div>
 </form>
+
+
 {% endblock %}
 
 {% block body_js %}
