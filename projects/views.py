@@ -228,7 +228,7 @@ def task_complete(request, tasklist_id, task_id):
 	if not task.can_be_completed:
 		json_data = json.dumps({"HTTPRESPONSE":2})
 		return HttpResponse(json_data, mimetype="application/json")
-	task.isCompleted = True
+	task.status = 'C'
 	task.completedDate = timezone.now()
 	if task.endDate is None:
 		task.endDate = task.completedDate

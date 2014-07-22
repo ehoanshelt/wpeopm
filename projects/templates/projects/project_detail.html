@@ -49,12 +49,13 @@ Completed on {{ project.completedDate }}
 		{% if tasklist.task_set.all %}
 		<ul>
 		{% for task in tasklist.task_set.all %}
-			{% if not task.isCompleted %}
+			{% if not task.status == 'C' %}
 			<li><span class="label label-default">{{ task.PM }}</span> <a href="{% url 'task_detail' tasklist.id task.id %}">{{ task.name }}</a> <span>{% if task.dueDate %}due {{ task.dueDate }}{% else %}no due date{% endif %}</span> <a class="task_edit btn btn-xs btn-info" href="{% url 'task_edit' tasklist.id task.id %}">Edit</a>
-			{% if task.can_be_completed %}<a class="task_complete btn btn-xs btn-warning" id="task_{{ task.id }}" aria-tasklistid="{{ tasklist.id }}" aria-taskid="{{ task.id }}">Done</a>
-			{% else %}
-			<a class="task_detail btn btn-xs btn-danger" href="{% url 'task_detail' tasklist.id task.id %}">Has Dependencies</a>
-			{% endif %}
+				{% if task.can_be_completed %}
+				<a class="task_complete btn btn-xs btn-warning" id="task_{{ task.id }}" aria-tasklistid="{{ tasklist.id }}" aria-taskid="{{ task.id }}">Done</a>
+				{% else %}
+				<span class="label label-danger small-text">Has Dependencies</span>
+				{% endif %}
 			</li>
 		  	{% endif %}
 		{% endfor %}
@@ -171,8 +172,7 @@ Completed on {{ project.completedDate }}
 			success: function(result, textStatus, xmlhttprequest) {
 				code = $.parseJSON(xmlhttprequest.responseText).HTTPRESPONSE;
 				if (code == 1) {
-					$('#task_' + taskid).hide(); // hide Done button
-					$(this).parent().addClass('strike'); // strike out text
+					location.reload(); // going with reload to refresh dependencies
 				}
 			}
 		});

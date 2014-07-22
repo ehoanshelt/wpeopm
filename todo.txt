@@ -30,8 +30,8 @@ hit a url implementation.wpengine.com/web-hook
 send type of object and object id and unix timestamp
 + POST-based API
 + Improve task detail screen
-* Add edit task to tasklist detail screen
-* reload tasks upon task completion to resolve dependencies
++ Add edit task to tasklist detail screen
++ reload tasks upon task completion to resolve dependencies
 * move clone from views to utils for DRY
 + tasks/projects need "not started" "in progress" "completed" status
 

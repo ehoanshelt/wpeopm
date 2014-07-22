@@ -8,23 +8,26 @@
 
 {% block body %}
 
-	<h2>{{ tasklist.name }}</h2>
+<h2>{{ tasklist.name }}</h2>
 <div class="row">
 	<div class="col-sm-4"><span class="label label-info">{% if tasklist.project %}{{ tasklist.project.acctName }}{% else %}Template{% endif %}</span></div>
 </div>
 {% if tasklist.description %}
+<h3>Description</h3>
 <p>{{ tasklist.description }}</p>
 {% endif %}
 {% if tasklist.task_set.all %}
 <h3>Tasks</h3>
 {% for task in tasklist.task_set.all %}
 <div class="row {% if forloop.counter|divisibleby:2 %}even{% else %}odd{% endif %}">
-<div class="col-sm-2"><span class="label label-primary">{% if task.PM %}{{ task.PM }}{% endif %}</span></div>
-<div class="col-sm-2">{% if task.dueDate %}due {{ task.dueDate }}{% endif %}</div>
-<div class="col-sm-1"><span class="label label-success">{% if task.isCompleted %}Completed{% endif %}</span></div>
-<div class="col-sm-1"><span class="label label-danger">{% if task.is_past_due %}Overdue{% endif %}</span></div>
-<div class="col-sm-4"><a href="{% url 'task_detail' tasklist.id task.id %}">{{ task.name }}</a></div>
-
+	<div class="col-sm-2"><span class="label label-primary">{% if task.PM %}{{ task.PM }}{% endif %}</span></div>
+	<div class="col-sm-2">{% if task.dueDate %}due {{ task.dueDate }}{% endif %}</div>
+	<div class="col-sm-2"><span class="label label-success">{% if task.status == 'C' %}Completed{% endif %}</span></div>
+	<div class="col-sm-1"><span class="label label-danger">{% if task.is_past_due %}Overdue{% endif %}</span></div>
+</div>
+<div class="row {% if forloop.counter|divisibleby:2 %}even{% else %}odd{% endif %}">
+	<div class="col-sm-1"><a class="task_edit btn btn-xs btn-info" href="{% url 'task_edit' tasklist.id task.id %}">Edit</a></div>
+	<div class="col-sm-8"><a href="{% url 'task_detail' tasklist.id task.id %}">{{ task.name }}</a></div>
 </div>
 {% endfor %}
 {% endif %}

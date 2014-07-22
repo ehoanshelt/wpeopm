@@ -130,7 +130,6 @@ class Task(models.Model):
 	endDate = models.DateField(blank=True, null=True)
 	dueDate = models.DateField(blank=True, null=True)
 	description = models.TextField()
-	isCompleted = models.BooleanField()
 	completedDate = models.DateField(blank=True, null=True)
 	status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=DEFAULT_STATUS_CHOICE)
 
@@ -151,7 +150,7 @@ class Task(models.Model):
 		"""
 		dependencies = self.task_set.all()
 		for d in dependencies:
-			if not d.dependsOn.isCompleted:
+			if not d.dependsOn.status == 'C':
 				return False
 		return True
 
