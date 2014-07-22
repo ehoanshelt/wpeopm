@@ -24,5 +24,16 @@
 </div>
 <div class="row"><div class="col-sm-12">Project Manager: {% if task.PM %}{{ task.PM }}{% else %}None assigned{% endif %}</div></div>
 <div class="row"><div class="col-sm-12">{% if task.startDate %}{{ task.startDate }} - {{ task.endDate }}{% else %}No dates assigned{% endif %}</div></div>
-<p>{{ task.description }}</p>	
+{% if task.description %}
+<h3>Description</h3>
+<p>{{ task.description }}</p>
+{% endif %}
+{% if task.has_dependencies %}
+<h3>Dependencies</h3>
+<ul>
+{% for t in task.task_set.all %}
+<li><a href="{% url 'task_detail' task.tasklist.id t.dependsOn.id %}">{{ t.dependsOn.name }}</a></li>
+{% endfor %}
+</ul>
+{% endif %}
 {% endblock %}

@@ -135,9 +135,10 @@ class Task(models.Model):
 
 	@property
 	def is_past_due(self):
-	    if (not self.isCompleted) and (timezone.now().date() > self.dueDate):
-	    	return True
-	    return False
+		if self.dueDate:
+		    if (not self.isCompleted) and (timezone.now().date() > self.dueDate):
+		    	return True
+		return False
 
 	@property
 	def can_be_completed(self):
@@ -149,6 +150,13 @@ class Task(models.Model):
 			if not d.dependsOn.isCompleted:
 				return False
 		return True
+
+	@property
+	def has_dependencies(self):
+		"""
+		Returns True if there are any Dependency.task objects that have this as a key.
+		"""
+		return (len(Dependency.objects.filter(task=self)) > 0)
 
 class Dependency(models.Model):
 	"""

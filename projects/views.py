@@ -104,6 +104,7 @@ def project_clone(request, project_id):
 		new_tasklist.isDeleted = False
 		new_tasklist.save()
 		tasks = Task.objects.filter(tasklist=tasklist)
+		taskMap = {} # hold map of old to new task IDs to recreate dependencies on clone
 		for task in tasks:
 			new_task = Task()
 			new_task.created = timezone.now()
@@ -113,6 +114,15 @@ def project_clone(request, project_id):
 			new_task.description = task.description
 			new_task.isCompleted = False
 			new_task.save()
+			taskMap[task.id] = new_task.id
+	for key in taskMap:
+		dep = Dependency.objects.filter(task=key)
+		for d in dep:
+			new_dep = Dependency()
+			new_dep.task = Task.objects.get(pk=taskMap[key])
+			new_dep.dependsOn = Task.objects.get(pk=taskMap[d.dependsOn.id])
+			new_dep.save()
+
 	return redirect(reverse('project_edit', kwargs={'project_id': new_project.id}))
 
 @login_required
