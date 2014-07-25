@@ -61,6 +61,8 @@ class Project(models.Model):
 	customerLaunchDate = models.DateField(blank=True, null=True)
 	status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=DEFAULT_STATUS_CHOICE)
 
+	objects = GetOrNoneManager()
+
 	class Meta:
 		ordering = ["acctName"]
 

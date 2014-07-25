@@ -68,21 +68,17 @@ def project_detail(request, project_id):
 
 @login_required
 def project_edit(request, project_id=None):
-	if project_id:
-		project = get_object_or_404(Project, pk=project_id)
-	else:
+	project = Project.objects.get_or_none(pk=project_id)
+	if not project:
 		project = Project()
 		project.acctName = 'New Project'
 		project.created = timezone.now()
-	if request.POST:
-		form = ProjectForm(request.POST, instance=project)
-		if form.is_valid():
-			form.save()
-			notify_webhook('project', project.id)
-			return redirect('index')
-	else:
-		form = ProjectForm(instance=project)
-	
+	form = ProjectForm(request.POST or None, instance=project)
+	if form.is_valid():
+		form.save()
+		notify_webhook('project', project.id)
+		return redirect('index')
+
 	return render(request, 'projects/project_edit.html', {'form': form, 'project': project})
 
 @login_required
@@ -321,10 +317,7 @@ def tasklist_delete(request, project_id, tasklist_id):
 
 @login_required
 def tasklist_edit(request, project_id, tasklist_id=None):
-	if (project_id != '0'):
-		project = get_object_or_404(Project, pk=project_id)
-	else:
-		project = None
+	project = Project.objects.get_or_none(pk=project_id)
 	if tasklist_id:
 		tasklist = get_object_or_404(TaskList, pk=tasklist_id)
 	else:
@@ -336,7 +329,7 @@ def tasklist_edit(request, project_id, tasklist_id=None):
 			tasklist.isTemplate = False
 		else:
 			tasklist.isTemplate = True
-	if request.POST:
+	if request == "POST":
 		form = TaskListForm(request.POST, instance=tasklist)
 		if form.is_valid():
 			form.save()
