@@ -42,7 +42,7 @@ THIRD_PARTY_APPS = (
 
 if DEBUG:
     THIRD_PARTY_APPS += (
-        'debug_toolbar',
+#        'debug_toolbar',
 )
 
 MY_APPS = (

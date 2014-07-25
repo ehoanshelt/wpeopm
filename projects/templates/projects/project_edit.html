@@ -40,7 +40,7 @@
 	{% if form.startDate.errors %}<div class="alert alert-danger">{{ form.startDate.errors }}</div>{% endif %}
 	<label class="" for="id_startDate">Project Start Date:</label>
 	<div class="input-group date" id="startDate_datetimepicker" data-date="{{ project.startDate|date:"m-d-y" }}" data-date-format="MM-DD-YY">
-		<input class="form-control" type="text" value="{{ project.startDate|date:"m-d-y" }}">
+		<input class="form-control" type="text" id="id_startDate" name="startDate" value="{{ project.startDate|date:"m-d-y" }}">
 		<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 	</div>
 </div>
@@ -48,7 +48,7 @@
 	{% if form.endDate.errors %}<div class="alert alert-danger">{{ form.endDate.errors }}</div>{% endif %}
 	<label class="" for="id_endDate">Project End Date:</label>
 	<div class="input-group date" id="endDate_datetimepicker" data-date="{{ project.endDate|date:"m-d-y" }}" data-date-format="MM-DD-YY">
-		<input class="form-control" type="text" value="{{ project.endDate|date:"m-d-y" }}">
+		<input class="form-control" type="text" id="id_endDate" name="endDate" value="{{ project.endDate|date:"m-d-y" }}">
 		<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 	</div>
 </div>
@@ -60,7 +60,7 @@
 	{% if form.completedDate.errors %}<div class="alert alert-danger">{{ form.completedDate.errors }}</div>{% endif %}
 	<label class="" for="id_completedDate">Project Completed Date:</label>
 	<div class="input-group date" id="completedDate_datetimepicker" data-date="{{ project.completedDate|date:"m-d-y" }}" data-date-format="MM-DD-YY">
-		<input class="form-control" type="text" value="{{ project.completedDate|date:"m-d-y" }}">
+		<input class="form-control" type="text" id="id_completedDate" name="completedDate" value="{{ project.completedDate|date:"m-d-y" }}">
 		<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 	</div>
 </div>

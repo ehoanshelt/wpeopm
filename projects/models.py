@@ -49,19 +49,17 @@ class Project(models.Model):
 	The actual project.
 	"""
 	created = models.DateField(auto_now_add=True)
-	acctName = models.CharField(max_length=30)
+	acctName = models.CharField(max_length=30, default="New Project")
 	category = models.ForeignKey(Category)
 	PM = models.ForeignKey(User)
 	AM = models.CharField(max_length=30, blank=True, null=True)
 	startDate = models.DateField(blank=True, null=True)
 	endDate = models.DateField(blank=True, null=True)
 	completedDate = models.DateField(blank=True, null=True)
-	isArchived = models.BooleanField()
-	isDeleted = models.BooleanField()
+	isArchived = models.BooleanField(default=False)
+	isDeleted = models.BooleanField(default=False)
 	customerLaunchDate = models.DateField(blank=True, null=True)
 	status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=DEFAULT_STATUS_CHOICE)
-
-	objects = GetOrNoneManager()
 
 	class Meta:
 		ordering = ["acctName"]
