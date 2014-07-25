@@ -44,6 +44,6 @@ Notes from actually spending a day entering data:
 + Latest projects -- is this useful? We move at such a fast speed that it's mostly the same as active projects. Plus, the sorting on Latest projects is off.
 
 Reporting possibilities:
-* Project has a start date in the past but is not marked as In Progress
-* Project has a due date in the past but is not marked Complete
-* Project end date after due date
++ Project has a start date in the past but is not marked as In Progress
++ Project has a due date in the past but is not marked Complete
+x Project end date after due date

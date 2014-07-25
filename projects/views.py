@@ -92,6 +92,7 @@ def project_clone(request, project_id):
 	"""
 	project = get_object_or_404(Project, pk=project_id)
 	new_project = Project()
+	new_project.acctName = 'Cloned Project'
 	new_project.created = timezone.now()
 	new_project.category = project.category
 	new_project.PM = request.user
@@ -121,7 +122,7 @@ def project_clone(request, project_id):
 			new_task.name = task.name
 			new_task.PM = None
 			new_task.description = task.description
-			new_task.isCompleted = False
+			new_task.status = 'N'
 			new_task.save()
 			taskMap[task.id] = new_task.id
 	for key in taskMap:
