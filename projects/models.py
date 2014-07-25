@@ -12,6 +12,16 @@ from django.utils import timezone
 
 from rest_framework.authtoken.models import Token
 
+class GetOrNoneManager(models.Manager):
+	"""
+	Adds get_or_none method to objects
+	"""
+	def get_or_none(self, **kwargs):
+		try:
+			return self.get(**kwargs)
+		except self.model.DoesNotExist:
+			return None
+
 class Category(models.Model):
 	"""
 	The Category that Projects have.
@@ -167,6 +177,8 @@ class Dependency(models.Model):
 	"""
 	task = models.ForeignKey(Task, related_name="task_set")
 	dependsOn = models.ForeignKey(Task, related_name="dependency_set")
+
+	objects = GetOrNoneManager()
 
 	def __unicode__(self):
 		return "%s depends on %s" % (self.task.name, self.dependsOn.name)

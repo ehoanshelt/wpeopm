@@ -3,7 +3,7 @@
 
 {% block subnavlinks %}
 <li><a href="{% url 'task_add' tasklist.id %}">Add task</a></li>
-<li><a href="{% url 'project_detail' tasklist.project.id %}">Go to project detail</a></li>
+{% if tasklist.project.id > 0 %}<li><a href="{% url 'project_detail' tasklist.project.id %}">Go to project detail</a></li>{% endif %}
 {% endblock %}
 
 {% block body %}

@@ -194,40 +194,32 @@ def task_edit(request, tasklist_id, task_id=None):
 		task.created = timezone.now()
 		task.tasklist = tasklist
 	rt_ids = [rt.dependsOn.id for rt in task.task_set.all()]
-	if request.POST:
-		form = TaskForm(request.POST, instance=task)
-		if form.is_valid():
-			form.save()
-			otList = request.POST.getlist("other-tasks")
-			for ot in otList:
-				# add checked tasks
-				try:
-					dep = Dependency.objects.get(task__id=task.id, dependsOn__id=ot)
-				except:
-					dep = None
-				if not dep:
-					# we have to add the dependency because it's not there
-					dep = Dependency()
-					dep.task = task
-					do = get_object_or_404(Task, pk=ot)
-					dep.dependsOn = do
-					dep.save()
-			removed_tasks = list(set(rt_ids) - set(otList))	
-			# remove any tasks that were unchecked
-			for removed in removed_tasks:
+	form = TaskForm(request.POST or None, instance=task)
+	if form.is_valid():
+		form.save()
+		otList = request.POST.getlist("other-tasks")
+		for ot in otList:
+			# add checked tasks
+			dep = Dependency.objects.get_or_none(task__id=task.id, dependsOn__id=ot)
+			if not dep:
+				dep = Dependency()
+				dep.task = task
+				do - get_object_or_404(Task, pk=ot)
+				dep.dependsOn = do
+				dep.save()
+		removed_tasks = list(set(rt_ids) - set(otList))
+		# remove any tasks that were unchecked
+		for removed in removed_tasks:
+			r = Dependency.objects.get_or_none(task__id=task.id, dependsOn__id=ot)
+			if r:
+				r.delete()
+		notify_webhook('task', task.id)
+		if tasklist.project:
+			project_id = tasklist.project.id
+		else:
+			project_id = 0
+		return redirect('tasklist_detail', project_id=project_id, tasklist_id=task.tasklist.id)
 
-				try:
-					r = Dependency.objects.get(task__id=task.id, dependsOn__id=removed)
-				except:
-					r = None # invalid data, ignore
-				if r:
-					r.delete()
-		
-			notify_webhook('task', task.id)
-			return redirect('tasklist_detail', project_id=task.tasklist.project.id, tasklist_id=task.tasklist.id)
-	else:
-		form = TaskForm(instance=task)
-	
 	return render(request, 'projects/task_edit.html', {'form': form, 'task': task, 'other_tasks': other_tasks, 'rt_ids': rt_ids})
 
 @login_required
