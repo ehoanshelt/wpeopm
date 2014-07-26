@@ -326,25 +326,20 @@ def tasklist_edit(request, project_id, tasklist_id=None):
 		tasklist = get_object_or_404(TaskList, pk=tasklist_id)
 	else:
 		tasklist = TaskList()
-		tasklist.created = timezone.now()
-		tasklist.isDeleted = False
 		if project is not None:
 			tasklist.project = project
 			tasklist.isTemplate = False
 		else:
 			tasklist.isTemplate = True
-	if request == "POST":
-		form = TaskListForm(request.POST, instance=tasklist)
-		if form.is_valid():
-			form.save()
-			notify_webhook('tasklist', tasklist.id)
-			if project:
-				return redirect('project_detail', project_id=tasklist.project.id)
-			else:
-				return redirect('tasklist_manage')
-	else:
-		form = TaskListForm(instance=tasklist)
-	
+	form = TaskListForm(request.POST or None, instance=tasklist)
+	if form.is_valid():
+		form.save()
+		notify_webhook('tasklist', tasklist.id)
+		if project:
+			return redirect('project_detail', project_id=tasklist.project.id)
+		else:
+			return redirect('tasklist_manage')
+
 	return render(request, 'projects/tasklist_edit.html', {'form': form, 'project': project, 'tasklist': tasklist})
 
 @login_required
