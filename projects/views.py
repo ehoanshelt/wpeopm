@@ -204,7 +204,7 @@ def task_edit(request, tasklist_id, task_id=None):
 			if not dep:
 				dep = Dependency()
 				dep.task = task
-				do - get_object_or_404(Task, pk=ot)
+				do = get_object_or_404(Task, pk=ot)
 				dep.dependsOn = do
 				dep.save()
 		removed_tasks = list(set(rt_ids) - set(otList))
