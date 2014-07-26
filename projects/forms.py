@@ -30,6 +30,20 @@ class TaskListForm(forms.ModelForm):
 
 class TaskForm(forms.ModelForm):
 
+	def clean_endDate(self):
+		"""
+		Validates that the end date is not before the start date.
+		"""
+		if self.cleaned_data['endDate']:
+			if self.cleaned_data['startDate']:
+				if self.cleaned_data['startDate'] > self.cleaned_data['endDate']:
+					raise forms.ValidationError("Start date cannot be after end date.")
+		return self.cleaned_data['endDate']
+		
+	startDate = forms.DateField(input_formats=('%m/%d/%Y', '%m-%d-%y',), required=False)
+	endDate = forms.DateField(input_formats=('%m/%d/%Y', '%m-%d-%y',), required=False)
+	completedDate = forms.DateField(input_formats=('%m/%d/%Y', '%m-%d-%y',), required=False)
+
 	class Meta:
 		model = Task
 

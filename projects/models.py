@@ -61,6 +61,8 @@ class Project(models.Model):
 	customerLaunchDate = models.DateField(blank=True, null=True)
 	status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=DEFAULT_STATUS_CHOICE)
 
+	objects = GetOrNoneManager()
+
 	class Meta:
 		ordering = ["acctName"]
 
@@ -116,11 +118,11 @@ class TaskList(models.Model):
 	A list of tasks.
 	"""
 	created = models.DateField(auto_now_add=True)
-	name = models.CharField(max_length=50)
+	name = models.CharField(max_length=50, default='New Task List')
 	description = models.CharField(max_length=200, blank=True, null=True)
-	isTemplate = models.BooleanField()
+	isTemplate = models.BooleanField(default=False)
 	project = models.ForeignKey(Project, blank=True, null=True)
-	isDeleted = models.BooleanField()
+	isDeleted = models.BooleanField(default=False)
 
 	def __unicode__(self):
 		if self.project:
@@ -134,12 +136,12 @@ class Task(models.Model):
 	"""
 	created = models.DateField(auto_now_add=True)
 	tasklist = models.ForeignKey(TaskList)
-	name = models.CharField(max_length=50)
+	name = models.CharField(max_length=50, default='New Task')
 	PM = models.ForeignKey(User, blank=True, null=True)
 	startDate = models.DateField(blank=True, null=True)
 	endDate = models.DateField(blank=True, null=True)
 	dueDate = models.DateField(blank=True, null=True)
-	description = models.TextField()
+	description = models.TextField(default='New Task')
 	completedDate = models.DateField(blank=True, null=True)
 	status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=DEFAULT_STATUS_CHOICE)
 
