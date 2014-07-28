@@ -62,6 +62,14 @@
 	</div>
 </div>
 <div class="fieldWrapper form-group" style="width:50%">
+	{% if form.customerLaunchDate.errors %}<div class="alert alert-danger">{{ form.customerLaunchDate.errors }}</div>{% endif %}
+	<label class="" for="id_customerLaunchDate">Customer Launch Date:</label>
+	<div class="input-group date" id="customerLaunchDate_datetimepicker" data-date="{{ project.customerLaunchDate|date:"m-d-y" }}" data-date-format="MM-DD-YY">
+		<input class="form-control" type="text" id="id_customerLaunchDate" name="customerLaunchDate" value="{{ project.customerLaunchDate|date:"m-d-y" }}">
+		<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+	</div>
+</div>
+<div class="fieldWrapper form-group" style="width:50%">
 	{% if form.status.errors %}<div class="alert alert-danger">{{ form.status.errors }}</div>{% endif %}
 	<label class="" for="id_status">Project Status:</label>{{ form.status|add_class:"form-control" }}
 </div>
@@ -98,6 +106,9 @@
 			pickTime: false
 		});
 		$('#completedDate_datetimepicker').datetimepicker({
+			pickTime: false
+		});
+		$('#customerLaunchDate_datetimepicker').datetimepicker({
 			pickTime: false
 		});
 	});

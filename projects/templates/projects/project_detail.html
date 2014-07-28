@@ -15,7 +15,7 @@
 {% block body %}
 <h1>{{ project.acctName }}<span class="project-label small-text label label-primary" id="is_archived">{% if project.isArchived %}Archived{% endif %}</span><span class="project-label small-text label label-danger" id="is_deleted">{% if project.isDeleted %}Deleted{% endif %}</span></h1>
 <p>
-	<span class="h3">{{ project.category }}</span> - <span class="h4">Destination pod: {{ project.destPod }}</span>
+	<span class="h3">{{ project.category }}</span> - <span class="h4">Destination pod: {% if project.destPod %}{{ project.destPod }}{% else %}None{% endif %}</span>
 </p>
 <p>Project Manager: {{ project.PM }}</p>
 {% if project.AM %}

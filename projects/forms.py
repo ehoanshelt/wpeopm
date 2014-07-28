@@ -19,6 +19,7 @@ class ProjectForm(forms.ModelForm):
 	startDate = forms.DateField(input_formats=('%m/%d/%Y', '%m-%d-%y',), required=False)
 	endDate = forms.DateField(input_formats=('%m/%d/%Y', '%m-%d-%y',), required=False)
 	completedDate = forms.DateField(input_formats=('%m/%d/%Y', '%m-%d-%y',), required=False)
+	customerLaunchDate = forms.DateField(input_formats=('%m/%d/%Y', '%m-%d-%y',), required=False)
 
 	class Meta:
 		model = Project
