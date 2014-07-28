@@ -174,8 +174,7 @@ Completed on {{ project.completedDate }}
 			success: function(result, textStatus, xmlhttprequest) {
 				code = $.parseJSON(xmlhttprequest.responseText).HTTPRESPONSE;
 				if (code == 1) {
-					$('#complete_link').hide();
-					$('.completed').html('Project complete!');
+					location.reload()
 				}
 			}
 		});
