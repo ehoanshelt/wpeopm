@@ -58,6 +58,8 @@ Completed on {{ project.completedDate }}
 				<span class="label label-danger small-text">Has Dependencies</span>
 				{% endif %}
 			</li>
+			{% elif task.status == 'C' %}
+			<li><span class="label label-default">{% if task.PM %}{{ task.PM }}{% else %}Unassigned{% endif %}</span> <a href="{% url 'task_detail' tasklist.id task.id %}"><strike>{{ task.name }}</strike></a></li>
 		  	{% endif %}
 		{% endfor %}
 		</ul>
