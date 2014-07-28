@@ -1,9 +1,9 @@
 {% extends 'projects/base_template.html' %}
 {% load widget_tweaks %}
-{% block title %}Edit Comment{% endblock %}
+{% block title %}{{ add_or_edit }} Comment{% endblock %}
 
 {% block body %}
-<h2>Edit Comment</h2>
+<h2>{{ add_or_edit }} Comment</h2>
 <form method="post" action="">{% csrf_token %}
 {% if form.non_field_errors %}
 <div class="alert alert-danger">

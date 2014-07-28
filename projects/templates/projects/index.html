@@ -1,12 +1,11 @@
 {% extends 'projects/base_template.html' %}
 {% block title %}Home{% endblock %}
 {% block projectdetaillink %}{% endblock %}
-{% block projectname %}WPEOPM{% endblock %}
 
 {% block sidebar %}
 {% if PM_list %}
-<p><strong>Project Managers</strong></p>
-<ul>
+<strong>Project Managers</strong>
+<ul class="pm-list">
 	{% for PM in PM_list %}
 	<li><a href="{% url 'project_by_pm' PM.PM__username %}">{{ PM.PM__username }}</a></li>
 	{% endfor %}
@@ -29,20 +28,19 @@
 {% block body %}
 <h1>Active projects</h1>
 {% if active_project_list %}
-<ul>
+
 	{% for project in active_project_list %}
-	<li><a href="{% url 'project_detail' project.id %}">{{ project.acctName }}</a> <span class="label label-primary">{% if project.PM %}{{ project.PM }}{% else %}Unassigned{% endif %}</span> <span class="label label-{% if project.riskScore >= 2 %}danger{% elif project.riskScore > 0 %}warning{% else %}success{% endif %}">Risk Score: {{ project.riskScore }}</span></li>
+	<div class="row project-list-row  {% if forloop.counter|divisibleby:2 %}even{% else %}odd{% endif %}"><a href="{% url 'project_detail' project.id %}">{{ project.acctName }}</a> <span class="label label-primary">{% if project.PM %}{{ project.PM }}{% else %}Unassigned{% endif %}</span> <span class="label label-{% if project.riskScore >= 2 %}danger{% elif project.riskScore > 0 %}warning{% else %}success{% endif %}">Risk Score: {{ project.riskScore }}</span></div>
 	{% endfor %}
-</ul>
+
 {% else %}
 <p>There are no active projects.</p>
 {% endif %}
 {% if archived_project_list %}
 <h1>Archived projects</h1>
-<ul>
+
 	{% for project in archived_project_list %}
-	<li><a href="{% url 'project_detail' project.id %}">{{ project.acctName }}</a> <span class="label label-primary">{% if project.PM %}{{ project.PM }}{% else %}Unassigned{% endif %}</span></li>
+	<div class="row project-list-row {% if forloop.counter|divisibleby:2 %}even{% else %}odd{% endif %}"><a href="{% url 'project_detail' project.id %}">{{ project.acctName }}</a> <span class="label label-primary">{% if project.PM %}{{ project.PM }}{% else %}Unassigned{% endif %}</span></div>
 	{% endfor %}
-</ul>
 {% endif %}
 {% endblock %}

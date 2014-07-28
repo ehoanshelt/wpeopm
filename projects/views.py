@@ -70,12 +70,10 @@ def project_detail(request, project_id):
 def project_edit(request, project_id=None):
 	if project_id:
 		project = get_object_or_404(Project, pk=project_id)
+		add_or_edit = 'Edit'
 	else:
 		project = Project()
-	#project = Project.objects.get_or_none(pk=project_id)
-	#if not project:
-	#	project = Project()
-	#	project.acctName = 'New Project'
+		add_or_edit = 'Add'
 	form = ProjectForm(request.POST or None, instance=project)
 	if form.is_valid():
 		project = form.save()
@@ -83,7 +81,7 @@ def project_edit(request, project_id=None):
 		notify_webhook('project', project.id)
 		return redirect('index')
 
-	return render(request, 'projects/project_edit.html', {'form': form, 'project': project})
+	return render(request, 'projects/project_edit.html', {'form': form, 'project': project, 'add_or_edit': add_or_edit})
 
 @login_required
 def project_clone(request, project_id):
@@ -188,9 +186,11 @@ def task_edit(request, tasklist_id, task_id=None):
 	other_tasks = Task.objects.filter(tasklist=tasklist)
 	if task_id:
 		task = get_object_or_404(Task, pk=task_id)
+		add_or_edit = 'Edit'
 		other_tasks = other_tasks.filter(~Q(id=task_id))
 	else:
 		task = Task()
+		add_or_edit = 'Add'
 		task.created = timezone.now()
 		task.tasklist = tasklist
 	rt_ids = [rt.dependsOn.id for rt in task.task_set.all()]
@@ -220,7 +220,7 @@ def task_edit(request, tasklist_id, task_id=None):
 			project_id = 0
 		return redirect('tasklist_detail', project_id=project_id, tasklist_id=task.tasklist.id)
 
-	return render(request, 'projects/task_edit.html', {'form': form, 'task': task, 'other_tasks': other_tasks, 'rt_ids': rt_ids})
+	return render(request, 'projects/task_edit.html', {'form': form, 'task': task, 'other_tasks': other_tasks, 'rt_ids': rt_ids, 'add_or_edit': add_or_edit})
 
 @login_required
 def task_complete(request, tasklist_id, task_id):
@@ -324,8 +324,10 @@ def tasklist_edit(request, project_id, tasklist_id=None):
 	project = Project.objects.get_or_none(pk=project_id)
 	if tasklist_id:
 		tasklist = get_object_or_404(TaskList, pk=tasklist_id)
+		add_or_edit = 'Edit'
 	else:
 		tasklist = TaskList()
+		add_or_edit = 'Add'
 		if project is not None:
 			tasklist.project = project
 			tasklist.isTemplate = False
@@ -340,7 +342,7 @@ def tasklist_edit(request, project_id, tasklist_id=None):
 		else:
 			return redirect('tasklist_manage')
 
-	return render(request, 'projects/tasklist_edit.html', {'form': form, 'project': project, 'tasklist': tasklist})
+	return render(request, 'projects/tasklist_edit.html', {'form': form, 'project': project, 'tasklist': tasklist, 'add_or_edit': add_or_edit})
 
 @login_required
 def project_links(request, project_id):
@@ -358,8 +360,10 @@ def link_edit(request, project_id, link_id=None):
 	project = get_object_or_404(Project, pk=project_id)
 	if link_id:
 		link = get_object_or_404(Link, pk=link_id)
+		add_or_edit = 'Edit'
 	else:
 		link = Link()
+		add_or_edit = 'Add'
 		link.created = timezone.now()
 		link.project = project
 	if request.POST:
@@ -371,7 +375,7 @@ def link_edit(request, project_id, link_id=None):
 	else:
 		form = LinkForm(instance=link)
 	
-	return render(request, 'projects/link_edit.html', {'form': form, 'link': link})
+	return render(request, 'projects/link_edit.html', {'form': form, 'link': link, 'add_or_edit': add_or_edit})
 
 def f(x):
 	"""
@@ -411,8 +415,10 @@ def comment_edit(request, object_type, object_id, comment_id=None):
 		return_url = reverse('link_detail', kwargs={'project_id': link.project.id, 'link_id': object_id})
 	if comment_id:
 		comment = get_object_or_404(Comment, pk=comment_id)
+		add_or_edit = 'Edit'
 	else:
 		comment = Comment()
+		add_or_edit = 'Add'
 	comment.type_of_comment = parent_type
 	form = CommentForm(request.POST or None, instance=comment, parent_object=parent_type)
 	if form.is_valid():
@@ -428,7 +434,7 @@ def comment_edit(request, object_type, object_id, comment_id=None):
 		comment.save()
 		return redirect(return_url)
 
-	return render(request, 'projects/comment_edit.html', {'form': form})
+	return render(request, 'projects/comment_edit.html', {'form': form, 'add_or_edit': add_or_edit})
 
 @login_required
 def comment_detail(request, object_type, object_id, comment_id):

@@ -1,7 +1,9 @@
 {% extends 'projects/base_template.html' %}
 {% load staticfiles %}
 {% load widget_tweaks %}
-{% block title %}Edit Task{% endblock %}
+{% block title %}{{ add_or_edit }} Task{% endblock %}
+{% block projectdetaillink %}{% if task.tasklist.project %}{% url 'project_detail' task.tasklist.project.id %}{% else %}{% url 'tasklist_manage' %}{% endif %}{% endblock %}
+{% block projectname %}{% if task.tasklist.project %}{{ task.tasklist.project.acctName }}{% else %}Template{% endif %}{% endblock %}
 
 {% block head_styles %}
 <link rel="stylesheet" type="text/css" href="{% static 'projects/css/bootstrap-datetimepicker.min.css' %}">
@@ -9,7 +11,7 @@
 
 {% block body %}
 
-<h2>Edit Task</h2>
+<h2>{{ add_or_edit }} Task</h2>
 <form method="post" action="">{% csrf_token %}
 <div class="row">
 <div class="col-sm-7">
@@ -77,9 +79,9 @@
 <h3>Dependencies</h3>
 {% if form.dependsOn.errors %}<div class="alert alert-danger">{{ form.dependsOn.errors }}</div>{% endif %}
 <p>Check any tasks that this task depends on</p>
-<ul class="no-bullets">
+<ul class="no-bullets task-dependency-list">
 {% for ot in other_tasks %}
-	<li><input type="checkbox" {% if ot.id in rt_ids %}checked {% endif %}name="other-tasks" value="{{ ot.id }}" id="ot_checkbox_{{ ot.id }}"/><label for="ot_checkbox_{{ ot.id }}">{{ ot.name }}</label></li>
+	<li><input type="checkbox" {% if ot.id in rt_ids %}checked {% endif %}name="other-tasks" value="{{ ot.id }}" id="ot_checkbox_{{ ot.id }}"/><label class="checkbox-label" for="ot_checkbox_{{ ot.id }}">{{ ot.name }}</label></li>
 {% endfor %}
 </ul>
 {% endif %}

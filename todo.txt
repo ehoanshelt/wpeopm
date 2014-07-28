@@ -8,7 +8,7 @@
 * Implement Risk
 * Export project tasks to Google Calendar format
 - Better styling
-- Implement Comment
++ Implement Comment
 * Add ability to attach files (as part of Comments?)
 + UI enhancement: Calendar picklist
 * Make AM a User

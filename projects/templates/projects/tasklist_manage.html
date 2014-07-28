@@ -12,13 +12,13 @@
 {% if tasklist_template_list %}
 
 	{% for tasklist in tasklist_template_list %}
-<div class="tasklist-row row {% if forloop.counter|divisibleby:2 %}even{% else %}odd{% endif %}">
+<div class="tasklist-list-row row {% if forloop.counter|divisibleby:2 %}even{% else %}odd{% endif %}">
 	<div class="col-sm-3">{{ tasklist.name }}</div>
-	<div class="col-sm-1"><a class="btn btn-info btn-xs" href="{% url 'tasklist_edit' 0 tasklist.id %}">Edit Details</a></div>
-	<div class="col-sm-2"><a class="btn btn-warning btn-xs" href="{% url 'tasklist_tasks' tasklist.id %}">View/Add Tasks</a></div>
-	<div class="col-sm-2"><a class="btn btn-danger btn-xs delete_tasklist" aria-tasklistid="{{ tasklist.id }}" href="#">Delete Task List</a></div>
+	<div class="col-sm-9"><a class="btn btn-info btn-xs" href="{% url 'tasklist_edit' 0 tasklist.id %}">Edit Details</a>
+	<a class="btn btn-warning btn-xs" href="{% url 'tasklist_tasks' tasklist.id %}">View/Add Tasks</a>
+	<a class="btn btn-danger btn-xs delete_tasklist" aria-tasklistid="{{ tasklist.id }}" href="#">Delete Task List</a></div>
 </div>
-<div class="tasklist-description-row row {% if forloop.counter|divisibleby:2 %}even{% else %}odd{% endif %}"><div class="col-sm-12">{{ tasklist.description }}</div></div>
+<div class="tasklist-description-row row {% if forloop.counter|divisibleby:2 %}even{% else %}odd{% endif %}"><div class="col-sm-12 col-sm-offset-1"><div class="tasklist-description">{{ tasklist.description }}</div></div></div>
 		{% if tasklist.task_set.all %}
 		<ul>
 		{% for task in tasklist.task_set.all %}

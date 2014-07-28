@@ -1,9 +1,11 @@
 {% extends 'projects/base_template.html' %}
 {% load widget_tweaks %}
-{% block title %}Edit Task List{% endblock %}
+{% block title %}{{ add_or_edit }} Task List{% endblock %}
+{% block projectdetaillink %}{% if tasklist.project.id %}{% url 'project_detail' tasklist.project.id %}{% else %}{% url 'tasklist_manage' %}{% endif %}{% endblock %}
+{% block projectname %}{% if tasklist.project.id %}{{ tasklist.project.acctName }}{% else %}Template{% endif %}{% endblock %}
 
 {% block body %}
-<h2>Edit a Task List</h2>
+<h2>{{ add_or_edit }} Task List</h2>
 <form method="post" action="">{% csrf_token %}
 {% if form.non_field_errors %}
 <div class="alert alert-danger">

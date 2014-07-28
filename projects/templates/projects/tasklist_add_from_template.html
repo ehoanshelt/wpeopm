@@ -1,15 +1,16 @@
 {% extends 'projects/base_template.html' %}
 {% block projectdetaillink %}{% url 'project_detail' project.id %}{% endblock %}
+{% block projectname %}{{ project.acctName }}{% endblock %}
 {% block title %}Add Task List from Template{% endblock %}
 
 {% block body %}
 <h3>Available Template Task Lists</h1>
 <p>Use these task list templates to more easily add groups of related tasks to your project.</p>
 <form method="post" action="">{% csrf_token %}
-<ul>
+<ul class="tasklist-template-list">
 	{% for tasklist in tasklist_template_list %}
-		<li><input type="checkbox" name="templates" value="{{ tasklist.id }}" id="tasklist_checkbox_{{ tasklist.id }}"/><label for="tasklist_checkbox_{{ tasklist.id }}">{{ tasklist.name }}</label></li>
-		{% if tasklist.description %}<li>{{ tasklist.description }}</li>{% endif %}
+		<li><input type="checkbox" name="templates" value="{{ tasklist.id }}" id="tasklist_checkbox_{{ tasklist.id }}"/><label class="checkbox-label" for="tasklist_checkbox_{{ tasklist.id }}">{{ tasklist.name }}</label></li>
+		{% if tasklist.description %}<li class="tasklist-description">{{ tasklist.description }}</li>{% endif %}
 		{% if tasklist.task_set.all %}
 		<ul>
 		{% for task in tasklist.task_set.all %}
@@ -20,6 +21,6 @@
 	{% endfor %}
 </ul>
 
-<p><button type="submit" class="btn btn-primary" href="{% url 'tasklist_add_from_template' project.id %}">Add selected task lists</button></p>
+<p><button type="submit" class="btn btn-primary" href="{% url 'tasklist_add_from_template' project.id %}">Add selected task lists</button><a class="cancel-link" href="{% url 'project_detail' project.id %}">Cancel</a></p>
 </form>
 {% endblock %}
