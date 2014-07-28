@@ -1,6 +1,6 @@
 from django import forms
 
-from projects.models import Project, TaskList, Task, Link, Comment
+from projects.models import Category, Project, TaskList, Task, Link, Comment
 
 class ProjectForm(forms.ModelForm):
 
@@ -13,6 +13,8 @@ class ProjectForm(forms.ModelForm):
 				if self.cleaned_data['startDate'] > self.cleaned_data['endDate']:
 					raise forms.ValidationError("Start date cannot be after end date.")
 		return self.cleaned_data['endDate']
+
+	category = forms.ModelChoiceField(Category.objects.all(), empty_label=None)
 		
 	startDate = forms.DateField(input_formats=('%m/%d/%Y', '%m-%d-%y',), required=False)
 	endDate = forms.DateField(input_formats=('%m/%d/%Y', '%m-%d-%y',), required=False)

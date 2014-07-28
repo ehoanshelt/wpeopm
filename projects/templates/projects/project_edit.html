@@ -28,6 +28,11 @@
 	{% if form.category.errors %}<div class="alert alert-danger">{{ form.category.errors }}</div>{% endif %}
 	<label class="" for="id_category">Category:</label>{{ form.category|add_class:"form-control" }}
 </div>
+<div class="fieldWrapper form-group" style="width:50%">
+	{% if form.handoffType.errors %}<div class="alert alert-danger">{{ form.handoffType.errors }}</div>{% endif %}
+	<label class="" for="id_handoffType">Handoff Type:</label>{{ form.handoffType|add_class:"form-control" }}
+</div>
+<p class="helper-text"><strong>Handoff Type</strong> is defined as follows:<ul><li><strong>Warm</strong> handoff is when Onboarding has a call with the customer and Sales.</li><li><strong>Cold</strong> handoff is when Sales submits a ticket on behalf of the customer with no introduction.</li><li><strong>No handoff</strong> is anything else.</li></ul></p>
 <div class="fieldWrapper form-group" style="width:50%"> 
 	{% if form.PM.errors %}<div class="alert alert-danger">{{ form.PM.errors }}</div>{% endif %}
 	<label class="" for="id_PM">Project Manager:</label>{{ form.PM|add_class:"form-control" }}

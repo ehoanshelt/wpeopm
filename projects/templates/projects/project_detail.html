@@ -29,9 +29,10 @@ Completed on {{ project.completedDate }}
 	<div class="label label-{% if project.riskScore >= 2 %}danger{% elif project.riskScore > 0 %}warning{% else %}success{% endif %}">Risk Score: {{ project.riskScore }}</div>
 	<h4>Risk indicators</h4>
 	<div class="row">
-		<div class="col-sm-4"><strong>Last ticket response:</strong><span class="label label-{% if project.recentLastTicketResponseDate %}success{% else %}danger{% endif %}">{{ project.lastTicketResponseDate }}</span></div>
-		<div class="col-sm-4"><strong>Number of ZenDesk tickets:</strong><span class="label label-{% if project.otherTickets <= 2 %}success{% else %}danger{% endif %}">{{ project.otherTickets }}</span></div>
-		<div class="col-sm-4"><strong>Launch date:</strong><span class="label label-{% if project.customerLaunchDate %}success{% else %}danger{% endif %}">{{ project.customerLaunchDate }}</span></div>
+		<div class="col-sm-3"><strong>Handoff type</strong><span class="label label-{% if project.handoffType == "W" %}success{% elif project.handoffType == "C" %}info{% else %}danger{% endif %}">{{ project.handoffType }}</span></div>
+		<div class="col-sm-3"><strong>Last ticket response:</strong><span class="label label-{% if project.recentLastTicketResponseDate %}success{% else %}danger{% endif %}">{{ project.lastTicketResponseDate }}</span></div>
+		<div class="col-sm-3"><strong>Number of ZenDesk tickets:</strong><span class="label label-{% if project.otherTickets <= 2 %}success{% else %}danger{% endif %}">{{ project.otherTickets }}</span></div>
+		<div class="col-sm-3"><strong>Launch date:</strong><span class="label label-{% if project.customerLaunchDate %}success{% else %}danger{% endif %}">{{ project.customerLaunchDate }}</span></div>
 	</div>
 </p>
 <hr class="separator" />
@@ -44,9 +45,12 @@ Completed on {{ project.completedDate }}
 </div>
 </div>
 {% if project.tasklist_set.all %}
-<ul class="no-bullets">
+
 	{% for tasklist in project.tasklist_set.all %}
-		<li><a href="{% url 'tasklist_detail' project.id tasklist.id %}">{{ tasklist.name }}</a> <a class="tasklist_edit btn btn-xs btn-info" href="{% url 'tasklist_edit' project.id tasklist.id %}">Edit</a> <a class="tasklist_tasks_add btn btn-xs btn-success" href="{% url 'task_add' tasklist.id %}">Add task</a></li>
+	<div class="row">
+		<div class="col-sm-1"><a class="tasklist_edit btn btn-xs btn-info" href="{% url 'tasklist_edit' project.id tasklist.id %}">Edit</a> <a class="tasklist_tasks_add btn btn-xs btn-success" href="{% url 'task_add' tasklist.id %}">Add task</a></div>
+		<div class="col-sm-11"><a href="{% url 'tasklist_detail' project.id tasklist.id %}">{{ tasklist.name }}</a></div>
+	</div>
 		{% if tasklist.task_set.all %}
 		<ul>
 		{% for task in tasklist.task_set.all %}
@@ -65,7 +69,7 @@ Completed on {{ project.completedDate }}
 		</ul>
 		{% endif %}
 	{% endfor %}
-</ul>
+
 {% else %}
 <p>This project has no tasks.</p>
 {% endif %}
@@ -84,11 +88,14 @@ Completed on {{ project.completedDate }}
 	<div class="link-buttons col-sm-10"><a class="btn btn-primary" href="{% url 'link_add' project.id %}">Add link</a></div>
 </div>
 {% if project.link_set.all %}
-<ul class="no-bullets">
+
 	{% for link in project.link_set.all %} 
-		<li><a target="blank" href="{{ link.code }}">{{ link.name }}</a> <a class="link-edit btn btn-xs btn-info" href="{% url 'link_edit' project.id link.id %}">Edit</a> <a class="link-detail btn btn-xs btn-warning" href="{% url 'link_detail' project.id link.id %}">Detail</a></li>
+	<div class="row">
+		<div class="col-sm-1"><a class="link-edit btn btn-xs btn-info" href="{% url 'link_edit' project.id link.id %}">Edit</a> <a class="link-detail btn btn-xs btn-warning" href="{% url 'link_detail' project.id link.id %}">Detail</a></div>
+		<div class="col-sm-11"><a target="blank" href="{{ link.code }}">{{ link.name }}</a></div>
+	</div>
 	{% endfor %}
-</ul>
+
 {% else %}
 <p>This project has no links.</p>
 {% endif %}
@@ -98,11 +105,14 @@ Completed on {{ project.completedDate }}
 	<div class="comment-buttons col-sm-10"><a class="btn btn-primary" href="{% url 'comment_add' 'project' project.id %}">Add comment</a></div>
 </div>
 {% if project.comment_set.all %}
-<ul class="no-bullets">
+
 	{% for comment in project.comment_set.all %}
-		<li>{{ comment.description }} <a class="btn btn-xs btn-info" href="{% url 'comment_edit' 'project' project.id comment.id %}">Edit</a> <a class="btn btn-xs btn-warning" href="{% url 'comment_detail' 'project' project.id comment.id %}">Detail</a></li>
+	<div class="row">
+		<div class="col-sm-1"><a class="btn btn-xs btn-info" href="{% url 'comment_edit' 'project' project.id comment.id %}">Edit</a> <a class="btn btn-xs btn-warning" href="{% url 'comment_detail' 'project' project.id comment.id %}">Detail</a></div>
+		<div class="col-sm-11">{{ comment.description|linebreaks }} </div>
+	</div>
 	{% endfor %}
-</ul>
+
 {% else %}
 <p>This project has no comments.</p>
 {% endif %}

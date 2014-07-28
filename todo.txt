@@ -48,7 +48,7 @@ Reporting possibilities:
 + Project has a due date in the past but is not marked Complete
 x Project end date after due date
 
-* Add ability to view completed tasks.
++ Add ability to view completed tasks.
 * Convert newlines in comment boxes to HTML
 * Add destination pod
-* Add handoff type
++ Add handoff type

@@ -44,6 +44,14 @@ STATUS_CHOICES = (
 
 DEFAULT_STATUS_CHOICE = 'N'
 
+HANDOFF_CHOICES = (
+	('N', 'No Handoff'),
+	('C', 'Cold Handoff'),
+	('W', 'Warm Handoff'),
+)
+
+DEFAULT_HANDOFF_CHOICE = 'N'
+
 class Project(models.Model):
 	"""
 	The actual project.
@@ -60,6 +68,7 @@ class Project(models.Model):
 	isDeleted = models.BooleanField(default=False)
 	customerLaunchDate = models.DateField(blank=True, null=True)
 	status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=DEFAULT_STATUS_CHOICE)
+	handoffType = models.CharField(max_length=1, choices=HANDOFF_CHOICES, default=DEFAULT_HANDOFF_CHOICE)
 
 	objects = GetOrNoneManager()
 
