@@ -402,7 +402,7 @@ def comment_edit(request, object_type, object_id, comment_id=None):
 		return_url = reverse('project_detail', kwargs={'project_id': object_id})
 	if parent_type == 'T':
 		task = get_object_or_404(Task, pk=object_id)
-		return_url = reverse('task_detail', kwargs={'task_id': object_id})
+		return_url = reverse('task_detail', kwargs={'tasklist_id': task.tasklist.id, 'task_id': object_id})
 	if parent_type == 'R':
 		risk = get_object_or_404(Risk, pk=object_id)
 		return_url = reverse('risk_detail', kwargs={'risk_id': object_id})
@@ -411,6 +411,12 @@ def comment_edit(request, object_type, object_id, comment_id=None):
 		return_url = reverse('link_detail', kwargs={'project_id': link.project.id, 'link_id': object_id})
 	if comment_id:
 		comment = get_object_or_404(Comment, pk=comment_id)
+	else:
+		comment = Comment()
+	comment.type_of_comment = parent_type
+	form = CommentForm(request.POST or None, instance=comment, parent_object=parent_type)
+	if form.is_valid():
+		form.save()
 		if parent_type == 'P':
 			comment.project = project
 		if parent_type == 'T':
@@ -419,16 +425,9 @@ def comment_edit(request, object_type, object_id, comment_id=None):
 			comment.risk = risk
 		if parent_type == 'L':
 			comment.link = link
-	else:
-		comment = Comment()
-		comment.created = timezone.now()
-	if request.POST:
-		form = CommentForm(request.POST, instance=comment, parent_object=parent_type)
-		if form.is_valid():
-			form.save()
-			return redirect(return_url)
-	else:
-		form = CommentForm(instance=comment, parent_object=parent_type)
+		comment.save()
+		return redirect(return_url)
+
 	return render(request, 'projects/comment_edit.html', {'form': form})
 
 @login_required

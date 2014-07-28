@@ -35,8 +35,8 @@ Completed on {{ project.completedDate }}
 	</div>
 </p>
 <div class="row">
-<div class="col-md-2"><h3>Tasks</h3></div>
-<div class="col-md-10 task-buttons">
+<div class="col-sm-2"><h3>Tasks</h3></div>
+<div class="col-sm-10 task-buttons">
 	<button class="btn btn-warning" id="assign_all_tasks">Assign all tasks to project PM</button>
 	<a class="btn btn-primary" href="{% url 'tasklist_add' project.id %}">Add tasklist</a>
 	<a class="btn btn-success" href="{% url 'tasklist_add_from_template' project.id %}">Add tasklist from template</a>
@@ -75,8 +75,8 @@ Completed on {{ project.completedDate }}
 </ul>
 {% endcomment %}
 <div class="row">
-	<div class="col-md-2"><h3>Links</h3></div>
-	<div class="link-buttons col-md-10"><a class="btn btn-primary" href="{% url 'link_add' project.id %}">Add link</a></div>
+	<div class="col-sm-2"><h3>Links</h3></div>
+	<div class="link-buttons col-sm-10"><a class="btn btn-primary" href="{% url 'link_add' project.id %}">Add link</a></div>
 </div>
 {% if project.link_set.all %}
 <ul>
@@ -88,8 +88,8 @@ Completed on {{ project.completedDate }}
 <p>This project has no links.</p>
 {% endif %}
 <div class="row">
-	<div class="col-md-2"><h3>Comments</h3></div>
-	<div class="comment-buttons col-md-10"><a class="btn btn-primary" href="{% url 'comment_add' 'project' project.id %}">Add comment</a></div>
+	<div class="col-sm-2"><h3>Comments</h3></div>
+	<div class="comment-buttons col-sm-10"><a class="btn btn-primary" href="{% url 'comment_add' 'project' project.id %}">Add comment</a></div>
 </div>
 {% if project.comment_set.all %}
 <ul>

@@ -3,21 +3,30 @@
 {% block projectdetaillink %}{% url 'project_detail' link.project.id %}{% endblock %}
 {% block projectname %}{{ link.project.acctName }}{% endblock %}
 
+{% block subnavlinks %}
+<li><a href="{% url 'link_edit' link.project.id link.id %}">Edit link</a></li>
+<li><a href="{% url 'project_links' link.project.id %}">Show all links</a></li>
+{% endblock %}
+
 {% block body %}
-<h1>{{ link.name }}</h1>
+<div class="row">
+	<div class="h1 col-sm-4">{{ link.name }}</div>
+	<div class="col-sm-2"></div>
+	<div class="col-sm-2"></div>
+</div>
 {% if link.description %}
 <p>{{ link.description }}</p>
 {% endif %}
 <p><a target="blank" href="{{ link.code }}">{{ link.code }}</a></p>
+<div class="row">
+	<div class="col-sm-2"><h3>Comments</h3></div>
+	<div class="comment-buttons col-sm-10"><a class="btn btn-primary" href="{% url 'comment_add' 'link' link.id %}">Add comment</a></div>
+</div>
 {% if link.comment_set.all %}
-<h3>Comments</h3>
 <ul>
 	{% for comment in link.comment_set.all %}
 		<li>{{ comment.description }} <a class="btn btn-xs btn-info" href="{% url 'comment_edit' 'link' link.id comment.id %}">Edit</a> <a class="btn btn-xs btn-warning" href="{% url 'comment_detail' 'link' link.id comment.id %}">Detail</a></li>
 	{% endfor %}
 </ul>
 {% endif %}
-<p><a class="btn btn-info" href="{% url 'comment_add' 'link' link.id %}">Add comment</a></p>
-<p><a class="btn btn-primary" href="{% url 'link_edit' link.project.id link.id %}">Edit link</a></p>
-<p><a class="btn btn-success" href="{% url 'project_links' link.project.id %}">Show all links</a></p>
 {% endblock %}

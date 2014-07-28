@@ -241,7 +241,15 @@ class Comment(models.Model):
 	attachment = models.FileField(upload_to='uploads', blank=True, null=True)
 
 	def __unicode__(self):
-		return "%s (%s)" % (self.description, self.project)
+		if self.type_of_comment == 'P':
+			parent_name = self.project
+		elif self.type_of_comment == 'T':
+			parent_name = self.task
+		elif self.type_of_comment == 'L':
+			parent_name = self.link
+		else:
+			parent_name = ''
+		return "%s (%s)" % (self.description, parent_name)
 
 # Ensures API auth token is created for each user upon User creation
 @receiver(post_save, sender=get_user_model())
