@@ -32,11 +32,16 @@ def index(request):
 	PM_list = Project.objects.order_by('PM__username').values('PM__username').distinct()
 	AM_list = Project.objects.values_list('AM', flat=True).distinct()
 	AM_list = filter(None, AM_list)
+	today = datetime.date.today()
+	startOfWeek = today - datetime.timedelta(days=today.weekday())
+	endOfWeek = startOfWeek + datetime.timedelta(days=7)
+	projects_completed_this_week = Project.objects.filter(status='C', completedDate__gte=startOfWeek, completedDate__lte=endOfWeek).order_by('completedDate')
 	context = {
 		'active_project_list': active_project_list,
 		'archived_project_list': archived_project_list,
 		'PM_list': PM_list,
 		'AM_list': AM_list,
+		'projects_completed_this_week': projects_completed_this_week,
 	}
 	return render(request, 'projects/index.html', context)
 

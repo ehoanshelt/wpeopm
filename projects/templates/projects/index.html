@@ -36,6 +36,12 @@
 {% else %}
 <p>There are no active projects.</p>
 {% endif %}
+{% if projects_completed_this_week %}
+<h1>Completed This Week</h1>
+{% for project in projects_completed_this_week %}
+	<div class="row project-list-row {% if forloop.counter|divisibleby:2 %}even{% else %}odd{% endif %}"><a href="{% url 'project_detail' project.id %}">{{ project.acctName }}</a> <span class="label label-success">{{ project.completedDate }}</span></div>
+{% endfor %}
+{% endif %}
 {% if archived_project_list %}
 <h1>Archived projects</h1>
 
