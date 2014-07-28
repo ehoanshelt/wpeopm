@@ -58,6 +58,10 @@ ul ul {
 	background-color: #ddd;
 }
 
+.even, .odd {
+	padding-top: 6px;
+}
+
 .tasklist-row {
 	padding-top: 5px;
 }
@@ -106,4 +110,8 @@ hr.separator {
 .task-dependency-list {
 	margin-left: 0;
 	padding-left: 0;
+}
+
+.risk-label {
+	margin-left: 3px;
 }

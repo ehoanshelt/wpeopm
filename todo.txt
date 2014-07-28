@@ -49,6 +49,6 @@ Reporting possibilities:
 x Project end date after due date
 
 + Add ability to view completed tasks.
-* Convert newlines in comment boxes to HTML
-* Add destination pod
++ Convert newlines in comment boxes to HTML
++ Add destination pod
 + Add handoff type
