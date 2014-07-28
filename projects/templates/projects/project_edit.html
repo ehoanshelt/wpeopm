@@ -42,6 +42,10 @@
 	<label class="" for="id_AM">Account Manager:</label>{{ form.AM|add_class:"form-control" }}
 </div>
 <div class="fieldWrapper form-group" style="width:50%">
+	{% if form.destPod.errors %}<div class="alert alert-danger">{{ form.destPod.errors }}</div>{% endif %}
+	<label class="" for="id_destPod">Destination pod:</label>{{ form.destPod|add_class:"form-control" }}
+</div>
+<div class="fieldWrapper form-group" style="width:50%">
 	{% if form.startDate.errors %}<div class="alert alert-danger">{{ form.startDate.errors }}</div>{% endif %}
 	<label class="" for="id_startDate">Project Start Date:</label>
 	<div class="input-group date" id="startDate_datetimepicker" data-date="{{ project.startDate|date:"m-d-y" }}" data-date-format="MM-DD-YY">
