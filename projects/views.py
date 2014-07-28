@@ -79,7 +79,7 @@ def project_edit(request, project_id=None):
 		project = form.save()
 		project.save()
 		notify_webhook('project', project.id)
-		return redirect('index')
+		return redirect('project_detail', project.id)
 
 	return render(request, 'projects/project_edit.html', {'form': form, 'project': project, 'add_or_edit': add_or_edit})
 
@@ -286,7 +286,7 @@ def tasklist_add_from_template(request, project_id):
 					task.description = each_task.description
 					task.isCompleted = False
 					task.save()
-		return redirect('project_tasklists', project_id=project.id)
+		return redirect('project_detail', project_id=project.id)
 	tasklist_template_list = TaskList.objects.filter(isTemplate=True, isDeleted=False)
 	return render(request, 'projects/tasklist_add_from_template.html', {'project': project, 'tasklist_template_list': tasklist_template_list})
 
