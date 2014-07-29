@@ -464,4 +464,4 @@ def comment_detail(request, object_type, object_id, comment_id):
 		return_url = reverse('link_detail', kwargs={'project_id': link.project.id, 'link_id': object_id})
 	if comment_id:
 		comment = get_object_or_404(Comment, pk=comment_id)
-	return render(request, 'projects/comment_detail.html', {'comment': comment, 'project': project, 'task': task, 'risk': risk, 'link': link})
+	return render(request, 'projects/comment_detail.html', {'comment': comment, 'project': project, 'task': task, 'risk': risk, 'link': link, 'object_type': object_type, 'object_id': object_id})

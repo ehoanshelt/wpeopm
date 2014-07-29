@@ -1,8 +1,11 @@
 {% extends 'projects/base_template.html' %}
+{% load as_markdown %}
 {% block title %}Comment Detail{% endblock %}
 
+{% block subnavlinks %}<li><a href="{% url 'comment_edit' object_type object_id comment.id %}">Edit Comment</a></li>{% endblock %}
+
 {% block body %}
-<p>{{ comment.description }}</p>
+<p>{{ comment.description|as_markdown|safe }}</p>
 {% if comment.attachment %}
 <p>{{ comment.attachment }}</p>
 {% endif %}

@@ -52,3 +52,7 @@ x Project end date after due date
 + Convert newlines in comment boxes to HTML
 + Add destination pod
 + Add handoff type
+
+* Add "start project" button to project detail screen
+* Add ability to expand/contract comments on individual tasks
+* Add markdown to text boxes (specifically comments)

@@ -1,5 +1,9 @@
 {% extends 'projects/base_template.html' %}
+{% load as_markdown %}
 {% block title %}Task{% endblock %}
+
+{% block projectname %}{% if task.tasklist.project %}{{ task.tasklist.project.acctName }}{% else %}Template{% endif %}{% endblock %}
+{% block projectdetaillink %}{% if task.tasklist.project %}{% url 'project_detail' task.tasklist.project.id %}{% else %}{% url 'tasklist_manage' %}{% endif %}{% endblock %}
 
 {% block subnavlinks %}
 <li><a href="{% url 'task_edit' task.tasklist.id task.id %}">Edit this task</a></li>
@@ -46,9 +50,9 @@
 </div>
 {% if task.comment_set.all %}
 	{% for comment in task.comment_set.all %}
-		<div class="row">
-			<div class="col-sm-1"><a class="btn btn-xs btn-info" href="{% url 'comment_edit' 'task' task.id comment.id %}">Edit</a> <a class="btn btn-xs btn-warning" href="{% url 'comment_detail' 'task' task.id comment.id %}">Detail</a></div>
-			<div class="col-sm-11">{{ comment.description|linebreaks }} </div>
+		<div class="row {% if forloop.counter|divisibleby:2 %}even{% else %}odd{% endif %}">
+			<div class="col-sm-2"><a class="btn btn-xs btn-info" href="{% url 'comment_edit' 'task' task.id comment.id %}">Edit</a> <a class="btn btn-xs btn-warning" href="{% url 'comment_detail' 'task' task.id comment.id %}">Detail</a></div>
+			<div class="col-sm-10">{{ comment.description|as_markdown|safe }}</div>
 		</div>
 	{% endfor %}
 {% else %}

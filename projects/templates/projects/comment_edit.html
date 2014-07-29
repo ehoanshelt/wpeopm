@@ -10,6 +10,7 @@
 {{ form.non_field_errors }}
 </div>
 {% endif %}
+<div class="helper-text">Comments support <a href="https://daringfireball.net/projects/markdown/basics" target="_blank"><strong>Markdown</strong></a> syntax.</div>
 <div class="fieldWrapper form-group" style="width:50%">
 	{% if form.description.errors %}<div class="alert alert-danger">{{ form.description.errors }}</div>{% endif %}
 	{{ form.description|add_class:"form-control" }}

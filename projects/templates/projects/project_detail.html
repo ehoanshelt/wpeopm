@@ -1,4 +1,5 @@
 {% extends 'projects/base_template.html' %}
+{% load as_markdown %}
 {% load staticfiles %}
 {% block projectdetaillink %}#{% endblock %}
 {% block title %}Project detail - {{ project.acctName }}{% endblock %}
@@ -111,7 +112,7 @@ Completed on {{ project.completedDate }}
 	{% for comment in project.comment_set.all %}
 	<div class="row {% if forloop.counter|divisibleby:2 %}even{% else %}odd{% endif %}">
 		<div class="col-sm-2"><a class="btn btn-xs btn-info" href="{% url 'comment_edit' 'project' project.id comment.id %}">Edit</a> <a class="btn btn-xs btn-warning" href="{% url 'comment_detail' 'project' project.id comment.id %}">Detail</a></div>
-		<div class="col-sm-10">{{ comment.description|linebreaks }} </div>
+		<div class="col-sm-10">{{ comment.description|as_markdown|safe }} </div>
 	</div>
 	{% endfor %}
 
