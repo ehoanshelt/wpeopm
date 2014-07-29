@@ -1,58 +1,13 @@
-+ Ability to filter projects by PM
 ? Ability to filter projects by AM
-+ BUG - Selecting distinct AM names should discard empty strings
-+ BUG - can't add tasklist
-+ List tasks by due date
-+ Assign all tasks in project to project PM
-+ JSON API
 * Implement Risk
 * Export project tasks to Google Calendar format
 - Better styling
-+ Implement Comment
 * Add ability to attach files (as part of Comments?)
-+ UI enhancement: Calendar picklist
 * Make AM a User
-+ Mark tasks as complete from project detail page
-+ Add login functionality
-+ Add clone project functionality
-+ Clicking label of PM name should filter projects or tasks by PM
 * Add MRR for projects
-+ Calculate risk for projects based on how many fields are set up -- IE projects are at a higher risk if they have no start date/no end date, etc.
-+ Task dependencies
-+ Make production settings (i.e database path)
-+ 404 page
-+ 500 page
-+ Turn DEBUG off
 * sign on with WPEngine email
-+ webhooks (see below):
-webhook info:
-hit a url implementation.wpengine.com/web-hook
-send type of object and object id and unix timestamp
-+ POST-based API
-+ Improve task detail screen
-+ Add edit task to tasklist detail screen
-+ reload tasks upon task completion to resolve dependencies
 * move clone from views to utils for DRY
-+ tasks/projects need "not started" "in progress" "completed" status
-
 Notes from actually spending a day entering data:
 * Description field could be better-used. And consistent. Some times it's required, others it's not.
-+ Add a tasklist screen does not have any indication telling me what I'm doing.
-+ Would be nice to add tasks to tasklist by clicking a button on project detail.
-+ There is no way to get to the project from the tasklist detail page.
 * Cloning projects is the way to go. Maybe parlay this into project templates?
-+ Latest projects -- is this useful? We move at such a fast speed that it's mostly the same as active projects. Plus, the sorting on Latest projects is off.
-
-Reporting possibilities:
-+ Project has a start date in the past but is not marked as In Progress
-+ Project has a due date in the past but is not marked Complete
-x Project end date after due date
-
-+ Add ability to view completed tasks.
-+ Convert newlines in comment boxes to HTML
-+ Add destination pod
-+ Add handoff type
-
-* Add "start project" button to project detail screen
 * Add ability to expand/contract comments on individual tasks
-+ Add markdown to text boxes (specifically comments)

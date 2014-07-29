@@ -115,3 +115,11 @@ hr.separator {
 .risk-label {
 	margin-left: 3px;
 }
+
+.expandable {
+	display: none;
+}
+
+.expandable-indicator {
+	
+}

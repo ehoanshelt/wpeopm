@@ -67,7 +67,18 @@ Completed on {{ project.completedDate }}
 				{% endif %}
 			</li>
 			{% elif task.status == 'C' %}
-			<li><span class="label label-default">{% if task.PM %}{{ task.PM }}{% else %}Unassigned{% endif %}</span> <a href="{% url 'task_detail' tasklist.id task.id %}"><strike>{{ task.name }}</strike></a></li>
+			<li><span class="label label-default">{% if task.PM %}{{ task.PM }}{% else %}Unassigned{% endif %}</span> <a href="{% url 'task_detail' tasklist.id task.id %}"><strike>{{ task.name }}</strike></a>
+			{% comment %}
+			{% if task.comment_set.all %}
+			<span class="expandable-indicator"> + </span>
+			<ul class="expandable">
+				{% for task_comment in task.comment_set.all %}
+				<li>{{ task_comment.description|as_markdown|safe }}</li>
+				{% endfor %}
+			</ul>
+			{% endif %}
+			{% endcomment %}
+			</li>
 		  	{% endif %}
 		{% endfor %}
 		</ul>
@@ -97,6 +108,16 @@ Completed on {{ project.completedDate }}
 	<div class="row {% if forloop.counter|divisibleby:2 %}even{% else %}odd{% endif %}">
 		<div class="col-sm-2"><a class="link-edit btn btn-xs btn-info" href="{% url 'link_edit' project.id link.id %}">Edit</a> <a class="link-detail btn btn-xs btn-warning" href="{% url 'link_detail' project.id link.id %}">Detail</a></div>
 		<div class="col-sm-10"><a target="blank" href="{{ link.code }}">{{ link.name }}</a></div>
+		{% comment %}
+		{% if link.comment_set.all %}
+			<span class="expandable-indicator"> + </span>
+			<ul class="expandable">
+				{% for link_comment in link.comment_set.all %}
+				<li>{{ link_comment.description|as_markdown|safe }}</li>
+				{% endfor %}
+			</ul>
+		{% endif %}
+		{% endcomment %}
 	</div>
 	{% endfor %}
 
@@ -222,6 +243,19 @@ Completed on {{ project.completedDate }}
 			}
 		});
 	});
+
+	{% comment %}
+	$('.expandable-indicator').click(function () {
+		var $content = $(this).find(">:first-child");
+		$content.slideToggle(500, function() {
+			// execute this after slideToggle is done
+			$('.expandable-indicator').text(function () {
+				// change text based on condition
+				return $content.is(":visible") ? "-" : "+";
+			});
+		});
+	});
+	{% endcomment %}
 
 </script>
 {% endblock %}
