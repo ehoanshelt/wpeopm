@@ -7,7 +7,8 @@
 
 {% block subnavlinks %}
 	<li><a href="{% url 'project_edit' project.id %}">Edit</a></li>
-	{% if not project.isCompleted %}<li id="complete_link"><a id="mark_complete" href="#">Mark Complete</a></li>{% endif %}
+	{% if project.status == 'N' %}<li id="start_link"><a id="start_project" href="#">Start Project</a></li>{% endif %}
+	{% if not project.isCompleted and project.status == 'I' %}<li id="complete_link"><a id="mark_complete" href="#">Mark Complete</a></li>{% endif %}
 	{% if not project.isArchived %}<li id="archive_link"><a id="archive_project" href="#">Archive</a></li>{% endif %}
 	{% if not project.isDeleted %}<li id="delete_link"><a id="delete_project" href="#">Delete</a></li>{% endif %}
 	<li id="clone_link"><a id="clone_project" href="{% url 'project_clone' project.id %}">Clone</a></li>
@@ -138,6 +139,19 @@ Completed on {{ project.completedDate }}
 	            xhr.setRequestHeader("X-CSRFToken", csrftoken);
 	        }
 	    }
+	});
+
+	$('#start_project').click(function() {
+		$.ajax({
+			type: "POST",
+			url: "/projects/{{ project.id }}/start/",
+			success: function (result, textStatus, xmlhttprequest) {
+				code = $.parseJSON(xmlhttprequest.responseText).HTTPRESPONSE;
+				if (code == 1) {
+					location.reload();
+				}
+			}
+		});
 	});
 
 	$('#archive_project').click(function() {

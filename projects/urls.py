@@ -13,6 +13,8 @@ urlpatterns = patterns('',
 	url(r'^(?P<project_id>\d+)/edit/$', views.project_edit, name='project_edit'),
 	# /projects/5/complete/ -- AJAX ONLY --
 	url(r'^(?P<project_id>\d+)/complete/$', views.project_complete, name='project_complete'),
+	# /projects/5/start/ -- AJAX ONLY --
+	url(r'^(?P<project_id>\d+)/start/$', views.project_start, name='project_start'),
 	# /projects/5/archive/ -- AJAX ONLY --
 	url(r'^(?P<project_id>\d+)/archive/$', views.project_archive, name='project_archive'),
 	# /projects/5/delete/ -- AJAX ONLY --

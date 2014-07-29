@@ -139,6 +139,19 @@ def project_clone(request, project_id):
 	return redirect(reverse('project_edit', kwargs={'project_id': new_project.id}))
 
 @login_required
+def project_start(request, project_id):
+	if not request.is_ajax():
+		return HttpResponseForbidden()
+	project = get_object_or_404(Project, pk=project_id)
+	project.status = 'I'
+	if project.startDate is None:
+		project.startDate = timezone.now()
+	project.save()
+	notify_webhook('project', project.id)
+	json_data = json.dumps({"HTTPRESPONSE":1})
+	return HttpResponse(json_data, mimetype="application/json")
+
+@login_required
 def project_complete(request, project_id):
 	if not request.is_ajax():
 		return HttpResponseForbidden()
