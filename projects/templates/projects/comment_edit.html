@@ -1,6 +1,8 @@
 {% extends 'projects/base_template.html' %}
 {% load widget_tweaks %}
 {% block title %}{{ add_or_edit }} Comment{% endblock %}
+{% block projectdetaillink %}{% url 'project_detail' project_id %}{% endblock %}
+{% block projectname %}{{ acctName }}{% endblock %}
 
 {% block body %}
 <h2>{{ add_or_edit }} Comment</h2>

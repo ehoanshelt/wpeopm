@@ -1,9 +1,11 @@
 {% extends 'projects/base_template.html' %}
 {% block title %}Task List{% endblock %}
+{% block projectname %}{% if tasklist.project.id %}{{ tasklist.project.acctName }}{% else %}Template{% endif %}{% endblock %}
+{% block projectdetaillink %}{% if tasklist.project.id %}{% url 'project_detail' tasklist.project.id %}{% else %}{% url 'tasklist_manage' %}{% endif %}{% endblock %}
 
 {% block subnavlinks %}
 <li><a href="{% url 'task_add' tasklist.id %}">Add task</a></li>
-{% if tasklist.project.id > 0 %}<li><a href="{% url 'project_detail' tasklist.project.id %}">Go to project detail</a></li>{% endif %}
+{% if tasklist.project.id  %}<li><a href="{% url 'project_detail' tasklist.project.id %}">Go to project detail</a></li>{% endif %}
 {% endblock %}
 
 {% block body %}

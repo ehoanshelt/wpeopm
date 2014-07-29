@@ -408,15 +408,23 @@ def comment_edit(request, object_type, object_id, comment_id=None):
 	link = None
 	if parent_type == 'P':
 		project = get_object_or_404(Project, pk=object_id)
+		project_id = project.id
+		acctName = project.acctName
 		return_url = reverse('project_detail', kwargs={'project_id': object_id})
 	if parent_type == 'T':
 		task = get_object_or_404(Task, pk=object_id)
+		project_id = task.tasklist.project.id
+		acctName = task.tasklist.project.acctName
 		return_url = reverse('task_detail', kwargs={'tasklist_id': task.tasklist.id, 'task_id': object_id})
 	if parent_type == 'R':
 		risk = get_object_or_404(Risk, pk=object_id)
+		project_id = risk.project.id
+		acctName = risk.project.acctName
 		return_url = reverse('risk_detail', kwargs={'risk_id': object_id})
 	if parent_type == 'L':
 		link = get_object_or_404(Link, pk=object_id)
+		project_id = link.project.id
+		acctName = link.project.acctName
 		return_url = reverse('link_detail', kwargs={'project_id': link.project.id, 'link_id': object_id})
 	if comment_id:
 		comment = get_object_or_404(Comment, pk=comment_id)
@@ -439,7 +447,7 @@ def comment_edit(request, object_type, object_id, comment_id=None):
 		comment.save()
 		return redirect(return_url)
 
-	return render(request, 'projects/comment_edit.html', {'form': form, 'add_or_edit': add_or_edit})
+	return render(request, 'projects/comment_edit.html', {'form': form, 'add_or_edit': add_or_edit, 'project_id': project_id, 'acctName': acctName})
 
 @login_required
 def comment_detail(request, object_type, object_id, comment_id):

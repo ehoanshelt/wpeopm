@@ -55,4 +55,4 @@ x Project end date after due date
 
 * Add "start project" button to project detail screen
 * Add ability to expand/contract comments on individual tasks
-* Add markdown to text boxes (specifically comments)
++ Add markdown to text boxes (specifically comments)

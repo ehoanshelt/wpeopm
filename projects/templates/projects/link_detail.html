@@ -27,8 +27,8 @@
 
 	{% for comment in link.comment_set.all %}
 	<div class="row">
-		<div class="col-sm-1"><a class="btn btn-xs btn-info" href="{% url 'comment_edit' 'link' link.id comment.id %}">Edit</a> <a class="btn btn-xs btn-warning" href="{% url 'comment_detail' 'link' link.id comment.id %}">Detail</a></div>
-		<div class="col-sm-11">{{ comment.description|as_markdown|safe }} </div>
+		<div class="col-sm-2"><a class="btn btn-xs btn-info" href="{% url 'comment_edit' 'link' link.id comment.id %}">Edit</a> <a class="btn btn-xs btn-warning" href="{% url 'comment_detail' 'link' link.id comment.id %}">Detail</a></div>
+		<div class="col-sm-10">{{ comment.description|as_markdown|safe }} </div>
 	</div>
 	{% endfor %}
 
