@@ -27,8 +27,8 @@ def ssl_login(request, *args, **kwargs):
 def index(request):
 	if not request.user.is_authenticated():
 		return render(request, 'projects/home.html', {})
-	active_project_list = Project.objects.filter(isDeleted=False).filter(~Q(status='C')).order_by('acctName')
-	archived_project_list = Project.objects.filter(isArchived=True, isDeleted=False).order_by('acctName')
+	active_project_list = Project.objects.filter(isDeleted=False).filter(~Q(status='C')).extra(select={'lower_name':'lower(acctName)'}).order_by('lower_name')
+	archived_project_list = Project.objects.filter(isArchived=True, isDeleted=False).extra(select={'lower_name':'lower(acctName)'}).order_by('lower_name')
 	PM_list = Project.objects.order_by('PM__username').values('PM__username').distinct()
 	AM_list = Project.objects.values_list('AM', flat=True).distinct()
 	AM_list = filter(None, AM_list)
