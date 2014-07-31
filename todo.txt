@@ -12,5 +12,5 @@ Notes from actually spending a day entering data:
 * Cloning projects is the way to go. Maybe parlay this into project templates?
 * Add ability to expand/contract comments on individual tasks
 + There is no ability, anywhere, to delete tasks.
-* Add ability to preview comments before submitting (due to the Markdown thing)
++ Add ability to preview comments before submitting (due to the Markdown thing)
 + ignore upper/lowercase when alphabetizing projects

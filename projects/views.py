@@ -1,5 +1,6 @@
 import datetime
 import json
+import markdown
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -492,3 +493,13 @@ def comment_detail(request, object_type, object_id, comment_id):
 	if comment_id:
 		comment = get_object_or_404(Comment, pk=comment_id)
 	return render(request, 'projects/comment_detail.html', {'comment': comment, 'project': project, 'task': task, 'risk': risk, 'link': link, 'object_type': object_type, 'object_id': object_id})
+
+@login_required
+def markdown_preview(request):
+	if not request.is_ajax():
+		return HttpResponseForbidden()
+	text = request.POST.get('text', '')
+	if text == '':
+		return HttpResponse('')
+	html = markdown.markdown(text)
+	return HttpResponse(html)

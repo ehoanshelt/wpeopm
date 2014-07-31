@@ -7,6 +7,8 @@ urlpatterns = patterns('',
 	url(r'^$', views.index, name='index'),
 	# /projects/audit/
 	url(r'^audit/$', views.audit, name='audit'),
+	# /projects/comment/markdown/ -- AJAX ONLY --
+	url(r'^comment/markdown/$', views.markdown_preview, name='markdown_preview'),
 	# /projects/5/
 	url(r'^(?P<project_id>\d+)/$', views.project_detail, name='project_detail'),
 	# /projects/5/edit/

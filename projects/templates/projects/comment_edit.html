@@ -1,4 +1,5 @@
 {% extends 'projects/base_template.html' %}
+{% load staticfiles %}
 {% load widget_tweaks %}
 {% block title %}{{ add_or_edit }} Comment{% endblock %}
 {% block projectdetaillink %}{% url 'project_detail' project_id %}{% endblock %}
@@ -6,6 +7,8 @@
 
 {% block body %}
 <h2>{{ add_or_edit }} Comment</h2>
+<div class="row">
+<div class="col-sm-6">
 <form method="post" action="">{% csrf_token %}
 {% if form.non_field_errors %}
 <div class="alert alert-danger">
@@ -13,15 +16,58 @@
 </div>
 {% endif %}
 <div class="helper-text">Comments support <a href="https://daringfireball.net/projects/markdown/basics" target="_blank"><strong>Markdown</strong></a> syntax.</div>
-<div class="fieldWrapper form-group" style="width:50%">
+<div class="fieldWrapper form-group">
 	{% if form.description.errors %}<div class="alert alert-danger">{{ form.description.errors }}</div>{% endif %}
 	{{ form.description|add_class:"form-control" }}
 </div>
-<div class="fieldWrapper form-group" style="width:50%">
+<div class="fieldWrapper form-group">
 	{% if form.attachment.errors %}<div class="alert alert-danger">{{ form.attachment.errors }}</div>{% endif %}
 	<label class="" for="id_name">Attachment: (doesn't work yet)</label>{{ form.attachment|add_class:"form-control" }}
 </div>
 
-<button class="btn btn-primary" type="submit" value="submit">Submit</button> 
+<button class="btn btn-primary" type="submit" value="submit">Submit</button>
 </form>
+</div>
+<div class="col-sm-6">
+    <button class="btn btn-info markdown-preview">Preview</button>
+    <div class="row">
+        <div id="id_markdown_preview"></div>
+    </div>
+</div>
+</div>
+{% csrf_token %}
+{% endblock %}
+
+{% block body_js %}
+<script src="{% static 'projects/js/jquery.cookie.js' %}"></script>
+<script type="text/javascript">
+
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    $.ajaxSetup({
+        // add the CSRF token to the request header by default for all POST requests
+        beforeSend: function(xhr, settings) {
+            var csrftoken = $.cookie('csrftoken');
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+
+
+    $('.markdown-preview').click(function() {
+        var raw = $('#id_description').val()
+        $.ajax({
+            type: "POST",
+            url: "/projects/comment/markdown/",
+            data: {"text": raw},
+            success: function(result, textStatus, xmlhttprequest) {
+                $('#id_markdown_preview').html(unescape(xmlhttprequest.responseText)); 
+            }
+        });
+    });
+</script>
 {% endblock %}
