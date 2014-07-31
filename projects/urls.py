@@ -41,6 +41,8 @@ urlpatterns = patterns('',
 	url(r'^tasklist/(?P<tasklist_id>\d+)/task/(?P<task_id>\d+)/edit/$', views.task_edit, name='task_edit'),
 	# /projects/tasklist/5/task/2/complete/ -- AJAX ONLY --
 	url(r'^tasklist/(?P<tasklist_id>\d+)/task/(?P<task_id>\d+)/complete/$', views.task_complete, name='task_complete'),
+	# /projects/tasklist/5/task/2/delete/ -- AJAX ONLY --
+	url(r'^tasklist/(?P<tasklist_id>\d+)/task/(?P<task_id>\d+)/delete/$', views.task_delete, name='task_delete'),
 	# /projects/5/tasklists/
 	url(r'^(?P<project_id>\d+)/tasklists/$', views.project_tasklists, name='project_tasklists'),
 	# /projects/5/tasklist/2/

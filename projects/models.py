@@ -10,8 +10,6 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
 
-from rest_framework.authtoken.models import Token
-
 class GetOrNoneManager(models.Manager):
 	"""
 	Adds get_or_none method to objects
@@ -260,9 +258,3 @@ class Comment(models.Model):
 		else:
 			parent_name = ''
 		return "%s (%s)" % (self.description, parent_name)
-
-# Ensures API auth token is created for each user upon User creation
-@receiver(post_save, sender=get_user_model())
-def create_auth_token(sender, instance=None, created=False, **kwargs):
-	if created:
-		Token.objects.create(user=instance)

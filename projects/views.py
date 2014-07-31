@@ -13,7 +13,7 @@ from django.utils import timezone
 from projects.decorators import secure_required
 from projects.forms import ProjectForm, TaskListForm, TaskForm, LinkForm, CommentForm
 from projects.models import Category, STATUS_CHOICES, Project, TaskList, Task, Dependency, Risk, Link, Comment
-from projects.utils import notify_webhook
+from projects.utils import JsonHttpResponse, notify_webhook
 
 @secure_required
 def ssl_login(request, *args, **kwargs):
@@ -148,8 +148,7 @@ def project_start(request, project_id):
 		project.startDate = timezone.now()
 	project.save()
 	notify_webhook('project', project.id)
-	json_data = json.dumps({"HTTPRESPONSE":1})
-	return HttpResponse(json_data, mimetype="application/json")
+	return JsonHttpResponse({"HTTPRESPONSE":1})
 
 @login_required
 def project_complete(request, project_id):
@@ -162,8 +161,7 @@ def project_complete(request, project_id):
 		project.endDate = project.completedDate
 	project.save()
 	notify_webhook('project', project.id)
-	json_data = json.dumps({"HTTPRESPONSE":1})
-	return HttpResponse(json_data, mimetype="application/json")
+	return JsonHttpResponse({"HTTPRESPONSE":1})
 
 @login_required
 def project_archive(request, project_id):
@@ -173,8 +171,7 @@ def project_archive(request, project_id):
 	project.isArchived = True
 	project.save()
 	notify_webhook('project', project.id)
-	json_data = json.dumps({"HTTPRESPONSE":1})
-	return HttpResponse(json_data, mimetype="application/json")
+	return JsonHttpResponse({"HTTPRESPONSE":1})
 
 @login_required
 def project_delete(request, project_id):
@@ -184,8 +181,7 @@ def project_delete(request, project_id):
 	project.isDeleted = True
 	project.save()
 	notify_webhook('project', project.id)
-	json_data = json.dumps({"HTTPRESPONSE":1})
-	return HttpResponse(json_data, mimetype="application/json")
+	return JsonHttpResponse({"HTTPRESPONSE":1})
 
 @login_required
 def tasklist_tasks(request, tasklist_id):
@@ -256,6 +252,16 @@ def task_complete(request, tasklist_id, task_id):
 	notify_webhook('task', task.id)
 	json_data = json.dumps({"HTTPRESPONSE":1})
 	return HttpResponse(json_data, mimetype="application/json")
+
+@login_required
+def task_delete(request, tasklist_id, task_id):
+	if not request.is_ajax():
+		return HttpResponseForbidden()
+	task = get_object_or_404(Task, pk=task_id)
+	if task.has_dependencies:
+		return JsonHttpResponse({"HTTPRESPONSE":2})
+	task.delete()
+	return JsonHttpResponse({"HTTPRESPONSE":1})
 
 @login_required
 def all_tasks_to_project_pm(request, project_id):

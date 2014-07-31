@@ -62,8 +62,9 @@ Completed on {{ project.completedDate }}
 			<li><span class="label label-default">{% if task.PM %}{{ task.PM }}{% else %}Unassigned{% endif %}</span> <a href="{% url 'task_detail' tasklist.id task.id %}">{{ task.name }}</a> <span>{% if task.dueDate %}due {{ task.dueDate }}{% else %}no due date{% endif %}</span> <a class="task_edit btn btn-xs btn-info" href="{% url 'task_edit' tasklist.id task.id %}">Edit</a>
 				{% if task.can_be_completed %}
 				<a class="task_complete btn btn-xs btn-warning" id="task_{{ task.id }}" aria-tasklistid="{{ tasklist.id }}" aria-taskid="{{ task.id }}">Done</a>
+				<a class="task-delete btn btn-xs btn-danger" id="id_task_delete_{{ task.id }}" aria-tasklistid="{{ tasklist.id }}" aria-taskid="{{ task.id }}">Delete</a>
 				{% else %}
-				<span class="label label-danger small-text">Has Dependencies</span>
+				<span class="label label-primary small-text">Has Dependencies</span>
 				{% endif %}
 			</li>
 			{% elif task.status == 'C' %}
@@ -141,6 +142,24 @@ Completed on {{ project.completedDate }}
 {% else %}
 <p>This project has no comments.</p>
 {% endif %}
+<div class="modal fade" id="id_cancel_task_modal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				<h4 class="modal-title">Delete Task</h4>
+			</div>
+			<div class="modal-body">
+				<p>Are you sure you want to delete this task? This cannot be undone!<span class="modal-task-title"></span></p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary" id="id_task_delete">Delete task</button>
+			</div>
+		</div>
+	</div>
+</div>
+
 {% csrf_token %}
 {% endblock %}
 
@@ -226,6 +245,30 @@ Completed on {{ project.completedDate }}
 				code = $.parseJSON(xmlhttprequest.responseText).HTTPRESPONSE;
 				if (code == 1) {
 					location.reload(); // going with reload to refresh dependencies
+				}
+			}
+		});
+	});
+
+	$('.task-delete').click(function() {
+		var tasklistid = $(this).attr('aria-tasklistid');
+		var taskid = $(this).attr('aria-taskid');
+		// display modal
+		$('#id_cancel_task_modal').modal();
+		$('#id_task_delete').attr('aria-tasklistid', tasklistid);
+		$('#id_task_delete').attr('aria-taskid', taskid);
+	});
+
+	$('#id_task_delete').click(function() {
+		var tasklistid = $(this).attr('aria-tasklistid');
+		var taskid = $(this).attr('aria-taskid');
+		$.ajax({
+			type: "POST",
+			url: "/projects/tasklist/" + tasklistid + "/task/" + taskid + "/delete/",
+			success: function(result, textStatus, xmlhttprequest) {
+				code = $.parseJSON(xmlhttprequest.responseText).HTTPRESPONSE;
+				if (code == 1) {
+					location.reload();
 				}
 			}
 		});
