@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, include, url
 from django.conf.urls.static import static
-
 from django.contrib import admin
+from django.views.generic import TemplateView
 
 from rest_framework import routers
 from restapi import views
@@ -25,4 +25,5 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^login/$', 'projects.views.ssl_login', name='login_view'),
     url(r'^logout/$', 'django.contrib.auth.views.logout', name='logout_view'),
+    url(r'^release-notes/$', TemplateView.as_view(template_name='projects/release_notes.html'), name='release_notes'),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

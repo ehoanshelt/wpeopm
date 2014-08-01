@@ -33,6 +33,7 @@
 			    		<li><a href="/admin/">Admin</a></li>
 			    	</ul>
 			    	<ul class="nav navbar-nav navbar-right">
+			    		<li><a href="{% url 'release_notes' %}">Release Notes</a></li>
 			    		<li>
 			    			{% if user.is_authenticated %}
 			    			<a href="{% url 'logout_view' %}">Logout</a>
