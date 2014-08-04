@@ -3,6 +3,7 @@ import datetime
 import json
 import markdown
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.views import login
@@ -28,6 +29,10 @@ def ssl_login(request, *args, **kwargs):
 
 def index(request):
 	if not request.user.is_authenticated():
+
+		autherror = request.GET.get('autherror', None)
+		if autherror is not None:
+			messages.add_message(request, messages.ERROR, 'Error logging in. Please try again.')
 		return render(request, 'projects/home.html', {})
 	active_project_list = Project.objects.filter(isDeleted=False).filter(~Q(status='C')).extra(select={'lower_name':'lower(acctName)'}).order_by('lower_name')
 	archived_project_list = Project.objects.filter(isArchived=True, isDeleted=False).extra(select={'lower_name':'lower(acctName)'}).order_by('lower_name')

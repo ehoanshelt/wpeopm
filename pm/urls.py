@@ -26,4 +26,5 @@ urlpatterns = patterns('',
     url(r'^login/$', 'projects.views.ssl_login', name='login_view'),
     url(r'^logout/$', 'django.contrib.auth.views.logout', name='logout_view'),
     url(r'^release-notes/$', TemplateView.as_view(template_name='projects/release_notes.html'), name='release_notes'),
+    url('', include('social.apps.django_app.urls', namespace='social')),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

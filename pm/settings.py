@@ -33,17 +33,18 @@ DEFAULT_APPS = (
 
 THIRD_PARTY_APPS = (
     'mathfilters',
-    'south',
     'piston',
     'rest_framework',
     'rest_framework.authtoken',
+    'social.apps.django_app.default',
+    'south',
     'sslserver',
     'widget_tweaks',
 )
 
-if DEBUG:
-    THIRD_PARTY_APPS += (
-        'debug_toolbar',
+
+THIRD_PARTY_APPS += (
+    'debug_toolbar',
 	'django_extensions',
 )
 
@@ -61,6 +62,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # Social auth
+    'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
 )
 
 ROOT_URLCONF = 'pm.urls'
@@ -109,3 +112,36 @@ REST_FRAMEWORK = {
 }
 
 HTTPS_SUPPORT = True
+
+# Context processors
+import django.conf.global_settings as DEFAULT_SETTINGS
+TEMPLATE_CONTEXT_PROCESSORS = DEFAULT_SETTINGS.TEMPLATE_CONTEXT_PROCESSORS + (
+    'social.apps.django_app.context_processors.backends',
+    'social.apps.django_app.context_processors.login_redirect',
+)
+
+# python-social-auth settings
+
+AUTHENTICATION_BACKENDS = (
+    'social.backends.google.GoogleOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
+SOCIAL_AUTH_LOGIN_ERROR_URL = '/'
+SOCIAL_AUTH_SESSION_EXPIRATION = False
+
+SOCIAL_AUTH_WHITELISTED_DOMAINS = ['wpengine.com']
+
+SOCIAL_AUTH_PIPELINE = (
+    'social.pipeline.social_auth.social_details',
+    'social.pipeline.social_auth.social_uid',
+    'social.pipeline.social_auth.auth_allowed',
+    'social.pipeline.social_auth.social_user',
+    'social.pipeline.user.get_username',
+    'social.pipeline.social_auth.associate_by_email',
+    'social.pipeline.user.create_user',
+    'social.pipeline.social_auth.associate_user',
+    'social.pipeline.social_auth.load_extra_data',
+    'social.pipeline.user.user_details'
+)

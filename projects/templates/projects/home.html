@@ -2,7 +2,19 @@
 {% block title %}Home{% endblock %}
 
 {% block body %}
+{% if messages %}
+<div class="row">
+    <div class="alert alert-danger">
+        <ul class="no-bullets">
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endif %}
+
 You must log in to access the system.
 
-Please <a href="{% url 'projects.views.ssl_login' %}">log in</a> or request access.
+Please <a href="{% url 'social:begin' 'google-oauth2' %}">log in</a> or request access.
 {% endblock %}

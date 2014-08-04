@@ -1,5 +1,5 @@
 {% extends "projects/base_template.html" %}
 {% block title %}Logged out{% endblock %}
 {% block body %}
-You are now logged out.
+You are now logged out. <a href="{% url 'social:begin' 'google-oauth2' %}">Click here to log in</a>.
 {% endblock %}
