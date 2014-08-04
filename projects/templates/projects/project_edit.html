@@ -74,6 +74,10 @@
 	<label class="" for="id_status">Project Status:</label>{{ form.status|add_class:"form-control" }}
 </div>
 <div class="fieldWrapper form-group" style="width:50%">
+	{% if form.customerEngaged.errors %}<div class="alert alert-danger">{{ form.customerEngaged.errors }}</div>{% endif %}
+	<label class="" for="id_customerEngaged">Is Customer Engaged?:</label>{{ form.customerEngaged|add_class:"form-control" }}
+</div>
+<div class="fieldWrapper form-group" style="width:50%">
 	{% if form.completedDate.errors %}<div class="alert alert-danger">{{ form.completedDate.errors }}</div>{% endif %}
 	<label class="" for="id_completedDate">Project Completed Date:</label>
 	<div class="input-group date" id="completedDate_datetimepicker" data-date="{{ project.completedDate|date:"m-d-y" }}" data-date-format="MM-DD-YY">

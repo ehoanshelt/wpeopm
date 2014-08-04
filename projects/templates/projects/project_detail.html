@@ -33,10 +33,11 @@ Completed on {{ project.completedDate }}
 	<div class="label label-{% if project.riskScore >= 2 %}danger{% elif project.riskScore > 0 %}warning{% else %}success{% endif %}">Risk Score: {{ project.riskScore }}</div>
 	<h4>Risk indicators</h4>
 	<div class="row">
-		<div class="col-sm-3"><strong>Handoff type:</strong><span class="risk-label label label-{% if project.handoffType == "W" %}success">Warm{% elif project.handoffType == "C" %}info">Cold{% else %}danger">None{% endif %}</span></div>
+		<div class="col-sm-2"><strong>Customer engaged:</strong><span class="risk-label label label-{% if project.customerEngaged %}success">Yes{% else %}danger">No{% endif %}</span></div>
+		<div class="col-sm-2"><strong>Handoff type:</strong><span class="risk-label label label-{% if project.handoffType == "W" %}success">Warm{% elif project.handoffType == "C" %}info">Cold{% else %}danger">None{% endif %}</span></div>
 		<div class="col-sm-3"><strong>Last ticket response:</strong><span class="risk-label label label-{% if project.recentLastTicketResponseDate %}success{% else %}danger{% endif %}">{{ project.lastTicketResponseDate }}</span></div>
 		<div class="col-sm-3"><strong>Number of ZenDesk tickets:</strong><span class="risk-label label label-{% if project.otherTickets <= 2 %}success{% else %}danger{% endif %}">{{ project.otherTickets }}</span></div>
-		<div class="col-sm-3"><strong>Launch date:</strong><span class="risk-label label label-{% if project.customerLaunchDate %}success{% else %}danger{% endif %}">{{ project.customerLaunchDate }}</span></div>
+		<div class="col-sm-2"><strong>Launch date:</strong><span class="risk-label label label-{% if project.customerLaunchDate %}success{% else %}danger{% endif %}">{{ project.customerLaunchDate }}</span></div>
 	</div>
 </p>
 <hr class="separator" />

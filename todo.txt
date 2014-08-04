@@ -16,3 +16,7 @@ Notes from actually spending a day entering data:
 + ignore upper/lowercase when alphabetizing projects
 
 + Add "release notes" page
+* Account Managers list is still not unique
+* Filter by AM page now necessary due to weekly sync-up
+* Implement risk score correctly
+

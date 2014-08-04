@@ -1,6 +1,6 @@
 stunnel4 stunnel/dev_https &
-python manage.py runserver &
-HTTPS=1 python manage.py runserver 8001
+python manage.py runserver_plus &
+HTTPS=1 python manage.py runserver_plus 8001
 
 # see http://stackoverflow.com/questions/8023126/ for how this works
 

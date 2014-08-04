@@ -48,6 +48,12 @@ HANDOFF_CHOICES = (
 	('W', 'Warm Handoff'),
 )
 
+HANDOFF_CHOICE_DICT = {
+	'N': 'No Handoff',
+	'C': 'Cold Handoff',
+	'W': 'Warm Handoff',
+}
+
 DEFAULT_HANDOFF_CHOICE = 'N'
 
 class Project(models.Model):
@@ -67,6 +73,7 @@ class Project(models.Model):
 	customerLaunchDate = models.DateField(blank=True, null=True)
 	status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=DEFAULT_STATUS_CHOICE)
 	handoffType = models.CharField(max_length=1, choices=HANDOFF_CHOICES, default=DEFAULT_HANDOFF_CHOICE)
+	customerEngaged = models.BooleanField(default=True)
 	destPod = models.CharField(max_length=6, blank=True, null=True)
 
 	objects = GetOrNoneManager()
@@ -106,6 +113,7 @@ class Project(models.Model):
 		** Customer has not responded to a ticket in the past two days
 		** Customer has more than two tickets open in ZenDesk
 		** Customer has not provided a launch date
+		** Customer is not engaged
 
 		The more conditions are True, the more the customer needs attention
 
@@ -114,7 +122,8 @@ class Project(models.Model):
 		conditions = [
 			(self.recentLastTicketResponseDate),
 			(self.otherTickets > 2),
-			(self.customerLaunchDate is None)
+			(self.customerLaunchDate is None),
+			(self.customerEngaged == False),
 		]
 		return len(conditions) - sum(bool(x) for x in conditions) # returns 0..n..len(conditions)
 

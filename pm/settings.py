@@ -32,6 +32,7 @@ DEFAULT_APPS = (
 )
 
 THIRD_PARTY_APPS = (
+    'mathfilters',
     'south',
     'piston',
     'rest_framework',
@@ -42,7 +43,8 @@ THIRD_PARTY_APPS = (
 
 if DEBUG:
     THIRD_PARTY_APPS += (
-#        'debug_toolbar',
+        'debug_toolbar',
+	'django_extensions',
 )
 
 MY_APPS = (

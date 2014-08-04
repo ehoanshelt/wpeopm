@@ -1,0 +1,139 @@
+{% extends "projects/base_template.html" %}
+{% load get_item %}
+{% load mathfilters %}
+{% load staticfiles %}
+
+{% comment %}
+
+Type of charts to put here:
+
+* Active migrations by category
+* Handoff type v. engagement
+Projects in pipeline / projects in progress / projects completed
+
+{% endcomment %}
+
+{% block head_styles %}
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+    google.load("visualization", "1", {packages:["corechart"]});
+    google.setOnLoadCallback(drawCharts);
+    function drawCharts() {
+        // Active Migrations by Category - 3D Pie Chart
+        var dataMigTypeActive = google.visualization.arrayToDataTable([
+                ['Type', 'Number'],
+                {% for element in projects_category_active %}
+                ['{{ element.category__name }}', {{ element.category__count }}],
+                {% endfor %}
+             ]);
+        var optionsMigTypeActive = {
+            title: 'Active Migrations by Category',
+            is3D: true,
+            //colors: ['#2e4559', '#f7483b', '#ecf0f1', '#03d9fa', '#737373']
+        };
+        var chartMigTypeActive = new google.visualization.PieChart(document.getElementById('id_migTypeActiveChart'));
+        chartMigTypeActive.draw(dataMigTypeActive, optionsMigTypeActive);
+
+        // Migrations by Category (This Month) - 3D Pie Chart
+        var dataMigTypeMonth = google.visualization.arrayToDataTable([
+                ['Type', 'Number'],
+                {% for element in projects_category_month %}
+                ['{{ element.category__name }}', {{ element.category__count }}],
+                {% endfor %}
+             ]);
+        var optionsMigTypeMonth = {
+            title: 'Migrations by Category - Month',
+            is3D: true,
+        };
+        var chartMigTypeMonth = new google.visualization.PieChart(document.getElementById('id_migTypeMonthChart'));
+        chartMigTypeMonth.draw(dataMigTypeMonth, optionsMigTypeMonth);
+
+        // Migrations by Category (This Quarter) - 3D Pie Chart
+        var dataMigTypeQuarter = google.visualization.arrayToDataTable([
+                ['Type', 'Number'],
+                {% for element in projects_category_quarter %}
+                ['{{ element.category__name }}', {{ element.category__count }}],
+                {% endfor %}
+             ]);
+        var optionsMigTypeQuarter = {
+            title: 'Migrations by Category - Quarter',
+            is3D: true,
+        };
+        var chartMigTypeQuarter = new google.visualization.PieChart(document.getElementById('id_migTypeQuarterChart'));
+        chartMigTypeQuarter.draw(dataMigTypeQuarter, optionsMigTypeQuarter);
+
+
+        // Handoff type vs. engagement
+        var dataHandoff = google.visualization.arrayToDataTable([
+                ['Type of Handoff', 'Engaged', 'Not Engaged', { role: 'annotation' }],
+                {% for hc, e, u in handoff_engagement %}
+                ['{{ hc }}', {{ e }}, {{ u }}, ''],
+                {% endfor %}
+            ]);
+
+        var optionsHandoff = {
+            height: 400,
+            bar: { groupWidth: '75%' },
+            isStacked: true,
+        };
+
+        var chartHandoff = new google.visualization.BarChart(document.getElementById('id_handoffChart'));
+        chartHandoff.draw(dataHandoff, optionsHandoff);
+
+        // Projects summary
+        var dataSummary = google.visualization.arrayToDataTable([
+                ['Projects', 'In Pipeline', 'In Progress', 'Completed', { role: 'annotation' }],
+                ['', 12, {{ projects_summary.inProgress }}, {{ projects_summary.completed }}, ''],
+            ]);
+
+        var optionsSummary = {
+            title: 'Projects summary',
+            bar: { groupWidth: '75%' },
+            isStacked: true,
+        }
+
+        var chartSummary = new google.visualization.BarChart(document.getElementById('id_summaryChart'));
+        chartSummary.draw(dataSummary, optionsSummary);
+
+
+    }
+</script>
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <h2>What Onboarding Is Working On</h2>
+        <div id="id_summaryChart"></div>
+        <ul>
+            <li>Projects <strong>In Pipeline</strong> are expected to close this week by Sales</li>
+            <li>Projects <strong>In Progress</strong> are actively being worked by Onboarding</li>
+            <li>Projects <strong>Completed</strong> have been launched</li>
+        </ul>
+    </div>
+    <div class="row">
+        <h2>Migrations by Category</h2>
+        <div class="chart col-sm-4">
+            <div id="id_migTypeActiveChart" style="width: 100%; height: 500px;"></div>
+        </div>
+        <div class="chart col-sm-4">
+            <div id="id_migTypeMonthChart" style="width: 100%; height: 500px;"></div>
+        </div>
+        <div class="chart col-sm-4">
+            <div id="id_migTypeQuarterChart" style="width: 100%; height: 500px;"></div>
+        </div>
+    </div>
+    <div class="row">
+        <h2>Customer Engagement by Handoff Type</h2>
+        <div id="id_handoffChart"></div>
+        <div>
+        <strong>Types of Handoff</strong>
+        <ul>
+            <li><strong>Warm Handoff</strong>: Onboarding had a pre-implementation call with the customer</li>
+            <li><strong>Cold Handoff</strong>: A ticket was submitted on behalf of the customer to Onboarding</li>
+            <li><strong>No Handoff</strong>: Onboarding had to reach out to the customer post-signup</li>
+        </ul>
+        <p>An <strong>engaged customer</strong> is defined as a customer who shared their launch plan with Onboarding for at least one installation.</p>
+        </div>
+    </div>
+    
+{% endblock %}

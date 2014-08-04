@@ -1,3 +1,4 @@
+import calendar
 import datetime
 import json
 import markdown
@@ -6,14 +7,14 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.views import login
 from django.core.urlresolvers import reverse
-from django.db.models import Q
+from django.db.models import Count, Q
 from django.http import HttpResponse, HttpResponseForbidden, HttpResponseNotFound
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 
 from projects.decorators import secure_required
 from projects.forms import ProjectForm, TaskListForm, TaskForm, LinkForm, CommentForm
-from projects.models import Category, STATUS_CHOICES, Project, TaskList, Task, Dependency, Risk, Link, Comment
+from projects.models import Category, HANDOFF_CHOICE_DICT, STATUS_CHOICES, Project, TaskList, Task, Dependency, Risk, Link, Comment
 from projects.utils import JsonHttpResponse, notify_webhook
 
 @secure_required
@@ -56,6 +57,60 @@ def audit(request):
 	active_projects = Project.objects.filter(isDeleted=False).filter(~Q(status='C')).order_by('acctName')
 	today = datetime.datetime.now()
 	return render(request, 'projects/audit.html', {'active_projects': active_projects, 'today': today})
+
+def dashboard(request):
+	"""
+	Dashboard view for charts.
+	"""
+	# start off with a bunch of date calculations to build the graphs with
+	now = datetime.datetime.now()
+	thisMonth = now.month
+	thisYear = now.year
+	firstOfThisMonth = datetime.date(thisYear, thisMonth, 1)
+	lastDayThisMonth = calendar.monthrange(thisYear, thisMonth)[1]
+	lastOfThisMonth = datetime.date(thisYear, thisMonth, lastDayThisMonth)
+	if thisMonth < 4:
+		firstMonthThisQuarter = 1
+		lastMonthThisQuarter = 3
+	elif thisMonth < 7:
+		firstMonthThisQuarter = 4
+		lastMonthThisQuarter = 6
+	elif thisMonth < 10:
+		firstMonthThisQuarter = 7
+		lastMonthThisQuarter = 9
+	else:
+		firstMonthThisQuarter = 10
+		lastMonthThisQuarter = 12
+	firstOfThisQuarter = datetime.date(thisYear, firstMonthThisQuarter, 1)
+	lastDayThisQuarter = calendar.monthrange(thisYear, lastMonthThisQuarter)[1]
+	lastOfThisQuarter = datetime.date(thisYear, lastMonthThisQuarter, lastDayThisQuarter)
+
+	# Chart 1 -- Active projects by category
+	projects_category_active = Project.objects.values('category__name').filter(isDeleted=False).filter(~Q(status='C')).order_by().annotate(Count('category'))
+	projects_category_month = Project.objects.values('category__name').filter(isDeleted=False, created__gte=firstOfThisMonth, created__lte=lastOfThisMonth).order_by().annotate(Count('category'))
+	projects_category_quarter = Project.objects.values('category__name').filter(isDeleted=False, created__gte=firstOfThisQuarter, created__lte=lastOfThisQuarter).order_by().annotate(Count('category'))
+
+	# Chart 2 -- Handoff type vs. customer engagement
+	handoff_engagement = []
+	for hc in HANDOFF_CHOICE_DICT:
+		engaged = Project.objects.filter(handoffType=hc, customerEngaged=True).count()
+		unengaged = Project.objects.filter(handoffType=hc, customerEngaged=False).count()
+		handoff_engagement.append((HANDOFF_CHOICE_DICT[hc], engaged, unengaged))
+
+	# Chart 3 -- Projects summary
+	inProgress = Project.objects.filter(isDeleted=False, status='I').count()
+	completed = Project.objects.filter(isDeleted=False, status='C').count()
+	projects_summary = {'inProgress': inProgress, 'completed': completed}
+
+	return render(request, 'projects/dashboard.html', 
+		{
+			'projects_category_active': projects_category_active,
+			'projects_category_month': projects_category_month,
+			'projects_category_quarter': projects_category_quarter,
+			'handoff_engagement': handoff_engagement,
+			'projects_summary': projects_summary,
+		}
+	)
 
 @login_required
 def project_by_pm(request, pm_name):
