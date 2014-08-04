@@ -31,7 +31,7 @@ DEFAULT_APPS = (
     'django.contrib.staticfiles',
 )
 
-THIRD_PARTY_APPS = (
+THIRD_PARTY_APPS += (
     'mathfilters',
     'piston',
     'rest_framework',
@@ -40,12 +40,6 @@ THIRD_PARTY_APPS = (
     'south',
     'sslserver',
     'widget_tweaks',
-)
-
-
-THIRD_PARTY_APPS += (
-    'debug_toolbar',
-	'django_extensions',
 )
 
 MY_APPS = (
