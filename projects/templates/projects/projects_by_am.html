@@ -1,0 +1,27 @@
+{% extends "projects/base_template.html" %}
+{% block title %}{{ AM }}'s accounts{% endblock %}
+{% block projectname %}{{ AM }}{% endblock %}
+
+{% block body %}
+<h2>{{ AM }}'s accounts</h2>
+{% if not project_list %}
+<p>There are no accounts for this AM.</p>
+{% else %}
+<div class="row">
+	<div class="col-sm-3"><strong>Account Name</strong></div>
+	<div class="col-sm-3"><strong>Category</strong></div>
+	<div class="col-sm-2"><strong>Start Date</strong></div>
+	<div class="col-sm-2"><strong>End Date</strong></div>
+	<div class="col-sm-2"><strong>PM</strong></div>
+</div>
+{% for project in project_list %}
+<div class="row {% if forloop.counter|divisibleby:2 %}even{% else %}odd{% endif %}">
+	<div class="col-sm-3"><a href="{% url 'project_detail' project.id %}">{{ project.acctName }}</a> <span class="label label-{% if project.riskScore >= 2 %}danger{% elif project.riskScore > 0 %}warning{% else %}success{% endif %}">Risk Score: {{ project.riskScore }}</span></div>
+	<div class="col-sm-3">{{ project.category }}</div>
+	<div class="col-sm-2">{{ project.startDate }}</div>
+	<div class="col-sm-2">{{ project.endDate }}</div>
+	<div class="col-sm-2">{{ project.PM.username }}</div>
+</div>
+{% endfor %}
+{% endif %}
+{% endblock %}

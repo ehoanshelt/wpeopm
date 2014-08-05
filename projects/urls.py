@@ -28,7 +28,9 @@ urlpatterns = patterns('',
 	# /projects/add/
 	url(r'^add/$', views.project_edit, name='project_add'),
 	# /projects/PM/matthew/
-	url(r'^PM/(?P<pm_name>\w+)/$', views.project_by_pm, name='project_by_pm'),
+	url(r'^PM/(?P<pm_name>[-\w]+)/$', views.project_by_pm, name='project_by_pm'),
+	# /projects/AM/matthew/
+	url(r'^AM/(?P<am_name>[-\w]+)/$', views.project_by_am, name='project_by_am'),
 	# /projects/PM/matthew/tasks/
 	url(r'^PM/(?P<pm_name>\w+)/tasks/$', views.tasks_by_pm, name='tasks_by_pm'),
 	# /projects/5/all_tasks_to_project_pm/

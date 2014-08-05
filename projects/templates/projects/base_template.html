@@ -30,7 +30,7 @@
 			    		<li><a href="{% url 'index' %}">Dashboard</a></li>
 			    		<li><a href="{% url 'tasklist_manage' %}">Task List Templates</a></li>
 			    		<li><a href="{% url 'audit' %}">Audit</a></li>
-			    		<li><a href="/admin/">Admin</a></li>
+			    		{% if user.is_staff %}<li><a href="/admin/">Admin</a></li>{% endif %}
 			    	</ul>
 			    	<ul class="nav navbar-nav navbar-right">
 			    		<li><a href="{% url 'release_notes' %}">Release Notes</a></li>

@@ -37,7 +37,7 @@ def index(request):
 	active_project_list = Project.objects.filter(isDeleted=False).filter(~Q(status='C')).extra(select={'lower_name':'lower(acctName)'}).order_by('lower_name')
 	archived_project_list = Project.objects.filter(isArchived=True, isDeleted=False).extra(select={'lower_name':'lower(acctName)'}).order_by('lower_name')
 	PM_list = Project.objects.order_by('PM__username').values('PM__username').distinct()
-	AM_list = Project.objects.values_list('AM', flat=True).distinct()
+	AM_list = Project.objects.order_by('AM').values_list('AM', flat=True).distinct()
 	AM_list = filter(None, AM_list)
 	today = datetime.date.today()
 	startOfWeek = today - datetime.timedelta(days=today.weekday())
@@ -121,6 +121,11 @@ def dashboard(request):
 def project_by_pm(request, pm_name):
 	project_list = Project.objects.filter(PM__username=pm_name).order_by('acctName')
 	return render(request, 'projects/projects_by_pm.html', {'PM': pm_name, 'project_list': project_list})
+
+@login_required
+def project_by_am(request, am_name):
+	project_list = Project.objects.filter(AM=am_name).order_by('acctName')
+	return render(request, 'projects/projects_by_am.html', {'AM': am_name, 'project_list': project_list})
 
 @login_required
 def tasks_by_pm(request, pm_name):

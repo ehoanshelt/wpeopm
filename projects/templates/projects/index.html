@@ -13,9 +13,9 @@
 {% endif %}
 {% if AM_list %}
 <p><strong>Account Managers</strong></p>
-<ul>
+<ul class="am-list">
 	{% for AM in AM_list %}
-	<li>{{ AM }}</li>
+	<li><a href="{% url 'project_by_am' AM %}">{{ AM }}</a></li>
 	{% endfor %}
 </ul>
 {% endif %}

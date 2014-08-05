@@ -29,6 +29,7 @@ Projects in pipeline / projects in progress / projects completed
         var optionsMigTypeActive = {
             title: 'Active Migrations by Category',
             is3D: true,
+            legend: {'position': 'bottom'},
             //colors: ['#2e4559', '#f7483b', '#ecf0f1', '#03d9fa', '#737373']
         };
         var chartMigTypeActive = new google.visualization.PieChart(document.getElementById('id_migTypeActiveChart'));
@@ -44,6 +45,7 @@ Projects in pipeline / projects in progress / projects completed
         var optionsMigTypeMonth = {
             title: 'Migrations by Category - Month',
             is3D: true,
+            legend: {'position': 'bottom'},
         };
         var chartMigTypeMonth = new google.visualization.PieChart(document.getElementById('id_migTypeMonthChart'));
         chartMigTypeMonth.draw(dataMigTypeMonth, optionsMigTypeMonth);
@@ -58,6 +60,7 @@ Projects in pipeline / projects in progress / projects completed
         var optionsMigTypeQuarter = {
             title: 'Migrations by Category - Quarter',
             is3D: true,
+            legend: {'position': 'bottom'},
         };
         var chartMigTypeQuarter = new google.visualization.PieChart(document.getElementById('id_migTypeQuarterChart'));
         chartMigTypeQuarter.draw(dataMigTypeQuarter, optionsMigTypeQuarter);
