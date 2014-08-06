@@ -123,3 +123,14 @@ hr.separator {
 .expandable-indicator {
 	
 }
+
+.comment_holder{
+	font-size:15px;	
+}
+
+.comment_count{
+	margin-left: -10px;
+	color: #fff;
+	font-size: 9px;
+	position: absolute;	
+}
