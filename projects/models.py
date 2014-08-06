@@ -127,6 +127,11 @@ class Project(models.Model):
 		]
 		return len(conditions) - sum(bool(x) for x in conditions) # returns 0..n..len(conditions)
 
+	@property
+	def numComments(self):
+		""" Returns the number of comments on this project. """
+		return self.comment_set.all().count()
+
 	def __unicode__(self):
 		return "%s (%s)" % (self.acctName, self.category)
 
@@ -190,6 +195,11 @@ class Task(models.Model):
 		"""
 		return (len(Dependency.objects.filter(task=self)) > 0)
 
+	@property
+	def numComments(self):
+		""" Returns the number of comments on this project. """
+		return self.comment_set.all().count()
+
 class Dependency(models.Model):
 	"""
 	Handles dependencies of tasks.
@@ -221,6 +231,11 @@ class Risk(models.Model):
 
 	def __unicode__(self):
 		return "%s (%s)" % (self.name, self.project)
+		
+	@property
+	def numComments(self):
+		""" Returns the number of comments on this project. """
+		return self.comment_set.all().count()
 
 class Link(models.Model):
 	"""
@@ -234,6 +249,11 @@ class Link(models.Model):
 
 	def __unicode__(self):
 		return "%s (%s)" % (self.name, self.project)
+
+	@property
+	def numComments(self):
+		""" Returns the number of comments on this project. """
+		return self.comment_set.all().count()
 
 COMMENT_CHOICES = (
 	('P', 'Project'),

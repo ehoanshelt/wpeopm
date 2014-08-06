@@ -1,4 +1,4 @@
-? Ability to filter projects by AM
++ Ability to filter projects by AM
 * Implement Risk
 * Export project tasks to Google Calendar format
 - Better styling
@@ -17,10 +17,11 @@ Notes from actually spending a day entering data:
 
 + Add "release notes" page
 + Account Managers list is still not unique
-* Filter by AM page now necessary due to weekly sync-up
++ Filter by AM page now necessary due to weekly sync-up
 * Implement risk score correctly
 * Project "due today" button for tasks
 * Finish expanding comments
 * Add comment count next to item if there are comments
 * Tie in to migration checklist?
 * Last ticket response time doesn't reflect accurately in the risk score
+* Make link to overdrive something that automatically happens

@@ -60,7 +60,7 @@ Completed on {{ project.completedDate }}
 		<ul>
 		{% for task in tasklist.task_set.all %}
 			{% if not task.status == 'C' %}
-			<li><span class="label label-default">{% if task.PM %}{{ task.PM }}{% else %}Unassigned{% endif %}</span> <a href="{% url 'task_detail' tasklist.id task.id %}">{{ task.name }}</a> <span>{% if task.dueDate %}due {{ task.dueDate }}{% else %}no due date{% endif %}</span> <a class="task_edit btn btn-xs btn-info" href="{% url 'task_edit' tasklist.id task.id %}">Edit</a>
+			<li><span class="label label-default">{% if task.PM %}{{ task.PM }}{% else %}Unassigned{% endif %}</span> <a href="{% url 'task_detail' tasklist.id task.id %}">{{ task.name }} {% if task.numComments > 0 %}({{ task.numComments }} comment{{ task.numComments|pluralize:"s" }}){% endif %}</a> <span>{% if task.dueDate %}due {{ task.dueDate }}{% else %}no due date{% endif %}</span> <a class="task_edit btn btn-xs btn-info" href="{% url 'task_edit' tasklist.id task.id %}">Edit</a>
 				{% if task.can_be_completed %}
 				<a class="task_complete btn btn-xs btn-warning" id="task_{{ task.id }}" aria-tasklistid="{{ tasklist.id }}" aria-taskid="{{ task.id }}">Done</a>
 				<a class="task-delete btn btn-xs btn-danger" id="id_task_delete_{{ task.id }}" aria-tasklistid="{{ tasklist.id }}" aria-taskid="{{ task.id }}">Delete</a>

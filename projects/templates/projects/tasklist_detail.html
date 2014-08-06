@@ -35,7 +35,7 @@
         <a class="task-delete btn btn-xs btn-danger" id="id_task_delete_{{ task.id }}" aria-tasklistid="{{ tasklist.id }}" aria-taskid="{{ task.id }}">Delete</a>
         {% endif %}
     </div>
-	<div class="col-sm-10"><a href="{% url 'task_detail' tasklist.id task.id %}">{{ task.name }}</a></div>
+	<div class="col-sm-10"><a href="{% url 'task_detail' tasklist.id task.id %}">{{ task.name }} {% if task.numComments > 0 %}({{ task.numComments }} comment{{ task.numComments|pluralize:"s" }}){% endif %}</a></div>
 </div>
 {% endfor %}
 {% endif %}
