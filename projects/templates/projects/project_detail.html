@@ -69,7 +69,7 @@ Completed on {{ project.completedDate }}
 				{% endif %}
 			</li>
 			{% elif task.status == 'C' %}
-			<li><span class="label label-default">{% if task.PM %}{{ task.PM }}{% else %}Unassigned{% endif %}</span> <a href="{% url 'task_detail' tasklist.id task.id %}"><strike>{{ task.name }}</strike></a>
+			<li><span class="label label-default">{% if task.PM %}{{ task.PM }}{% else %}Unassigned{% endif %}</span> <a href="{% url 'task_detail' tasklist.id task.id %}"><strike>{{ task.name }}</strike>  {% if task.numComments > 0 %}({{ task.numComments }} comment{{ task.numComments|pluralize:"s" }}){% endif %}</a>
 			{% comment %}
 			{% if task.comment_set.all %}
 			<span class="expandable-indicator"> + </span>
