@@ -119,12 +119,12 @@ def dashboard(request):
 
 @login_required
 def project_by_pm(request, pm_name):
-	project_list = Project.objects.filter(PM__username=pm_name).order_by('acctName')
+	project_list = Project.objects.filter(PM__username=pm_name).filter(~Q(status='C')).order_by('acctName')
 	return render(request, 'projects/projects_by_pm.html', {'PM': pm_name, 'project_list': project_list})
 
 @login_required
 def project_by_am(request, am_name):
-	project_list = Project.objects.filter(AM=am_name).order_by('acctName')
+	project_list = Project.objects.filter(AM=am_name).filter(~Q(status='C')).order_by('acctName')
 	return render(request, 'projects/projects_by_am.html', {'AM': am_name, 'project_list': project_list})
 
 @login_required

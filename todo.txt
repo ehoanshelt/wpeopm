@@ -21,7 +21,7 @@ Notes from actually spending a day entering data:
 * Implement risk score correctly
 * Project "due today" button for tasks
 * Finish expanding comments
-* Add comment count next to item if there are comments
++ Add comment count next to item if there are comments
 * Tie in to migration checklist?
 * Last ticket response time doesn't reflect accurately in the risk score
 * Make link to overdrive something that automatically happens
