@@ -13,6 +13,7 @@ li {
 
 ul li {
 	margin-left: 15px;
+	list-style-type: none;
 }
 
 ul ul {
